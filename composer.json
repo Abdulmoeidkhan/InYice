@@ -1,8 +1,8 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "InYive",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Invoicing System for Travel Agencies.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
