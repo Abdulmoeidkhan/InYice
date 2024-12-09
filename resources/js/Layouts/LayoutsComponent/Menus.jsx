@@ -42,11 +42,9 @@ export const menuItems = [
 ];
 
 const App = () => {
-    let location = useLocation();
 
     return (
         <Menu
-            theme="dark"
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
             items={menuItems}
