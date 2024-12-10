@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
     DashboardOutlined,
     HomeOutlined,
     InfoCircleOutlined,
 } from '@ant-design/icons';
 import { Menu } from 'antd';
-import { NavLink, useLocation } from "react-router";
+import { NavLink } from "react-router";
 
 
 
@@ -22,7 +22,6 @@ export const menuItems = [
     {
         key: '/Home',
         icon: <HomeOutlined />,
-        label: 'Home',
         label: (
             <NavLink to="/Home">
                 Home
@@ -32,7 +31,6 @@ export const menuItems = [
     {
         key: '/About',
         icon: <InfoCircleOutlined />,
-        label: 'About',
         label: (
             <NavLink to="/About">
                 About
@@ -48,6 +46,7 @@ const App = () => {
             mode="inline"
             defaultSelectedKeys={[location.pathname]}
             items={menuItems}
+
         />
     );
 };

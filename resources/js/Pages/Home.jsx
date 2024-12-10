@@ -35,7 +35,8 @@ const App = () => {
                 style={{
                     margin: '24px 16px',
                     padding: 24,
-                    minHeight: 1000,
+                    height: 1200,
+                    minHeight: 800,
                     background: colorBgContainer,
                     borderRadius: borderRadiusLG,
                 }}
