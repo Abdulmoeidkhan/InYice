@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined, MoonOutlined, HolderOutlined, SunFilled, SettingOutlined } from '@ant-design/icons';
-import { Button, theme, Flex, Dropdown, Avatar, Tooltip, Switch, Layout } from 'antd';
+import { UserOutlined, MoonOutlined, HolderOutlined, SunFilled, SettingOutlined } from '@ant-design/icons';
+import { theme, Flex, Dropdown, Avatar, Switch, Layout } from 'antd';
 const { Header } = Layout;
 
 
-const App = ({ setIsDarkMode, collapsed, setCollapsed }) => {
+const App = ({ setIsDarkMode, collapsedWidth }) => {
 
     const onChangeTheme = () => {
         setIsDarkMode((previousValue) => !previousValue);
@@ -42,49 +42,23 @@ const App = ({ setIsDarkMode, collapsed, setCollapsed }) => {
     ];
 
     return (
-        <Header
-            style={{
-                padding: 0,
-                background: colorBgContainer,
-            }}
-
-        >
-            <Flex justify={'space-between'} align={'center'} >
-                <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => setCollapsed(!collapsed)}
-                    style={{
-                        fontSize: '16px',
-                        width: 64,
-                        height: 64,
-                    }}
-                />
-                <Flex gap="small" justify={'flex-start'} align={'center'} flex="0 0 8rem">
-                    <Switch
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Flex justify={'space-between'} align={'center'}>
+                <div style={{ fontSize: '16px', width: 64, height: 64 }}></div>
+                <Flex gap={collapsedWidth ? "large" : "middle"} align={'center'}
+                    justify={'flex-start'} flex={collapsedWidth ? "0 0 12rem" : "0 0 9rem"}>
+                    <Switch defaultChecked onChange={onChangeTheme}
                         checkedChildren={<MoonOutlined />}
-                        unCheckedChildren={<SunFilled />}
-                        onChange={onChangeTheme}
-                        defaultChecked
-                    />
+                        unCheckedChildren={<SunFilled />} />
                     <HolderOutlined />
-                    <Dropdown
-                        menu={{
-                            items,
-                        }}
-                        placement="bottomRight"
-                        arrow
-                    >
-                        {/* <Tooltip title="Ant User" placement="left"> */}
-                            <Avatar
-                                src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
-                                icon={<UserOutlined />}
-                            />
-                        {/* </Tooltip> */}
+                    <Dropdown arrow placement="bottomRight" menu={{ items }}>
+                        <Avatar icon={<UserOutlined />}
+                            src="https://api.dicebear.com/7.x/miniavs/svg?seed=1"
+                        />
                     </Dropdown>
                 </Flex>
             </Flex>
-        </Header>
+        </Header >
     );
 };
 export default App;

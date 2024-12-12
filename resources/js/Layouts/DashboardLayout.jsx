@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { UserOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import { ConfigProvider, Layout, theme, FloatButton, Avatar, Flex, Segmented, Affix, Button } from 'antd';
+import React, { useState } from 'react';
+import { ConfigProvider, Layout, theme, FloatButton } from 'antd';
+import { SettingOutlined, CommentOutlined } from '@ant-design/icons';
 import { Outlet } from "react-router";
 import Menus from './LayoutsComponent/Menus';
 import Headers from './LayoutsComponent/Headers';
-const { Sider, Footer } = Layout;
+import Footers from './LayoutsComponent/Footers';
+const { Sider } = Layout;
 
 
 
@@ -19,23 +20,31 @@ const App = () => {
 
 
     return (
-        <ConfigProvider
-            theme={{
-                algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
-            }}>
+        <ConfigProvider theme={{
+            algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
+        }}>
             <Layout>
                 <Sider
-                    trigger={null}
                     collapsible
                     breakpoint='md'
                     collapsed={collapsed}
                     collapsedWidth={collapsedWidth}
+                    onCollapse={() => setCollapsed(!collapsed)}
+                    zeroWidthTriggerStyle={{ display: 'none' }}
                     theme='light'
-                    // style={{ height: '100%' }}
+                    style={{
+                        overflow: 'auto',
+                        height: '100vh',
+                        position: 'fixed',
+                        insetInlineStart: 0,
+                        top: 0,
+                        bottom: 0,
+                        scrollbarWidth: 'thin',
+                        scrollbarGutter: 'stable',
+                    }}
                     onBreakpoint={(broker) => {
                         broker ? setCollapsedWidth(0) : setCollapsedWidth(80);
-                    }}
-                >
+                    }}>
                     <div style={{
                         height: 32,
                         margin: 16,
@@ -44,68 +53,20 @@ const App = () => {
                     }} />
                     <Menus />
                 </Sider>
-                <Layout>
-                    <Headers setIsDarkMode={setIsDarkMode} collapsed={collapsed} setCollapsed={setCollapsed} />
+                <Layout style={collapsedWidth ? { transition: 'padding 200ms', paddingLeft: collapsed ? 80 : 200 } : {}}>
+                    <Headers setIsDarkMode={setIsDarkMode} collapsedWidth={collapsedWidth}/>
                     <Outlet />
-                    <FloatButton.BackTop visibilityHeight={100} />
-                    {!collapsedWidth &&
-                        <Footer>
-                            <Affix offsetBottom={10}>
-                                <Flex gap="small" align="center" vertical>
-                                    <Segmented
-                                        options={[
-                                            // {
-                                            //     label: (
-                                            //         <div
-                                            //             style={{
-                                            //                 padding: 4,
-                                            //             }}
-                                            //         >
-                                            //             <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-                                            //             <div>User 1</div>
-                                            //         </div>
-                                            //     ),
-                                            //     value: 'user1',
-                                            // },
-                                            // {
-                                            //     label: (
-                                            //         <div
-                                            //             style={{
-                                            //                 padding: 4,
-                                            //             }}
-                                            //         >
-                                            //             <Avatar
-                                            //                 style={{
-                                            //                     backgroundColor: '#f56a00',
-                                            //                 }}
-                                            //             >
-                                            //                 K
-                                            //             </Avatar>
-                                            //             <div>User 2</div>
-                                            //         </div>
-                                            //     ),
-                                            //     value: 'user2',
-                                            // },
-                                            {
-                                                label: (
-                                                    <Button
-                                                        type="text"
-                                                        icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                                                        onClick={() => setCollapsed(!collapsed)}
-                                                        style={{
-                                                            fontSize: '16px',
-                                                            height: 64,
-                                                        }}
-                                                    />
-                                                ),
-                                                value: 'user3',
-                                            },
-                                        ]}
-                                    />
-                                </Flex>
-                            </Affix>
-                        </Footer>
-                    }
+                    <FloatButton.Group
+                        trigger="click"
+                        style={{ insetInlineEnd: 24 }}
+                        icon={<SettingOutlined />}
+                    >
+                        <FloatButton.BackTop visibilityHeight={100} />
+                        <FloatButton />
+                        <FloatButton />
+                        <FloatButton icon={<CommentOutlined />} />
+                    </FloatButton.Group>
+                    <Footers collapsedWidth={collapsedWidth} collapsed={collapsed} setCollapsed={setCollapsed} />
                 </Layout>
             </Layout>
         </ConfigProvider >
