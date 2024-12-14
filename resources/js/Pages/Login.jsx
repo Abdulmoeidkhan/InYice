@@ -1,0 +1,253 @@
+import React, { useState, useEffect } from 'react';
+import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Flex, Card, theme, message } from 'antd';
+import axios from 'axios';
+
+const App = () => {
+    const [activeTabKey, setActiveTabKey] = useState('signIn');
+    const [messageApi, contextHolder] = message.useMessage();
+    const [isLoading, setIsLoading] = useState(false);
+    const key = 'updatable';
+
+    const onTabChange = (key) => {
+        setActiveTabKey(key);
+    };
+
+    const tabListNoTitle = [
+        {
+            key: 'signIn',
+            label: 'Sign In',
+        },
+        {
+            key: 'signUp',
+            label: 'Sign Up',
+        }
+    ];
+
+    const onFinishFailed = ({ values, errorFields, outOfDate }) => {
+        messageApi.error('Submit failed!', 2, () => console.log('Received values of form: ', values, errorFields, outOfDate));
+    };
+
+    const requestSubmitFunction = (route, values) => {
+        const domanWithPort = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}` : '');
+        messageApi.open({
+            key,
+            type: 'loading',
+            content: 'Validating Your Request...',
+        });
+        axios.post(`${domanWithPort}/api/${route}`, values)
+            .then(function (response) {
+                messageApi.open({
+                    key,
+                    type: 'success',
+                    content: `${response.data.message}`,
+                    duration: 2,
+                    onClose: console.log(response),
+                });
+            })
+            .catch(function (error) {
+                messageApi.open({
+                    key,
+                    type: 'error',
+                    content: 'SomeThing Went Wrong Please try Again Later!',
+                    duration: 2,
+                    onClose: console.log(error),
+                });
+            });
+
+    }
+    const onFinishSignIn = (values) => {
+        requestSubmitFunction('login', values)
+        // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
+    };
+
+    const onFinishSignUp = (values) => {
+        requestSubmitFunction('register', values)
+        // messageApi.success('Sign Up Successfully!', 2, () => console.log('Received values of form: ', values));
+    };
+
+    const SubmitButton = ({ form, children }) => {
+        const [submittable, setSubmittable] = useState(false);
+
+        // Watch all values
+        const values = Form.useWatch([], form);
+        useEffect(() => {
+            form
+                .validateFields({
+                    validateOnly: true,
+                })
+                .then(() => setSubmittable(true))
+                .catch(() => setSubmittable(false));
+        }, [form, values]);
+        return (
+            <Button type="primary" htmlType="submit" disabled={!submittable}>
+                {children}
+            </Button>
+        );
+    };
+
+    const LogInForm = () => {
+        const [form] = Form.useForm();
+
+        return (
+            <Form
+                name="login"
+                form={form}
+                initialValues={{
+                    remember: true,
+                }}
+                style={{
+                    maxWidth: '100vw',
+                }}
+                onFinish={onFinishSignIn}
+                onFinishFailed={onFinishFailed}
+
+            >
+                <Form.Item disabled={isLoading}
+                    name="email"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email in proper Format!',
+                            type: 'email',
+                            min: 3
+                        },
+                    ]}
+                >
+                    <Input allowClear showCount prefix={<MailOutlined />} placeholder="Email Address" />
+                </Form.Item>
+                <Form.Item disabled={isLoading}
+                    name="password"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Password of atleast 8 Character!',
+                            min: 8
+                        },
+                    ]}
+                >
+                    <Input.Password allowClear prefix={<LockOutlined />} type="password" placeholder="Password" />
+                </Form.Item>
+                <Form.Item disabled={isLoading}>
+                    <Flex justify="space-between" align="center">
+                        <Form.Item disabled={isLoading} name="remember" valuePropName="checked" noStyle>
+                            <Checkbox>Remember me</Checkbox>
+                        </Form.Item>
+                        <a href="">Forgot password</a>
+                    </Flex>
+                </Form.Item>
+
+                <Form.Item disabled={isLoading}>
+                    <SubmitButton form={form}>Sign In</SubmitButton>
+                </Form.Item>
+            </Form>
+        )
+    }
+
+    const SignUpForm = () => {
+        const [form] = Form.useForm();
+
+        return (
+            <Form
+                name="signUp"
+                form={form}
+                initialValues={{
+                    remember: true,
+                }}
+                style={{
+                    maxWidth: '100vw',
+                }}
+                onFinish={onFinishSignUp}
+                onFinishFailed={onFinishFailed}
+            >
+                <Form.Item disabled={isLoading}
+                    name="name"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Name!',
+                            type: 'string',
+                            min: 3
+                        },
+                    ]}
+                >
+                    <Input allowClear prefix={<UserOutlined />} placeholder="John Doe" />
+                </Form.Item>
+                <Form.Item disabled={isLoading}
+                    name="email"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email!',
+                            type: 'email',
+                            min: 5
+                        },
+                    ]}
+                >
+                    <Input allowClear prefix={<MailOutlined />} placeholder="Abc@xyz.com" />
+                </Form.Item>
+                <Form.Item disabled={isLoading}
+                    name="password"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Password of atleast 8 Character!',
+                            min: 8
+                        },
+                    ]}
+                    help="Should be combination of numbers & alphabets (min 8 character)"
+                >
+                    <Input.Password allowClear showCount prefix={<LockOutlined />} type="password" placeholder="Password..." />
+                </Form.Item>
+                <Form.Item disabled={isLoading}
+                    hasFeedback
+                    name="c_password"
+                    dependencies={['password']}
+                    help="Should be same as Password "
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Confirm Password of atleast 8 Character!',
+                            min: 8
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The new password that you entered do not match!'));
+                            },
+                        }),
+                    ]}
+
+                >
+                    <Input.Password allowClear showCount prefix={<CheckOutlined />} type="password" placeholder="Confirm Password..." />
+                </Form.Item>
+                <Form.Item disabled={isLoading} >
+                    <SubmitButton form={form}>Sign Up</SubmitButton>
+                </Form.Item>
+            </Form>
+        )
+    }
+
+    const contentListNoTitle = {
+        signIn: <LogInForm />,
+        signUp: <SignUpForm />,
+    };
+
+
+    return (
+        <Flex align='center' justify='center'>
+            {contextHolder}
+            <Card hoverable style={{ minWidth: 300, width: '80vw', maxWidth: 500, backgroundColor: '#fff' }} tabProps={{ centered: true }} tabList={tabListNoTitle} activeTabKey={activeTabKey} onTabChange={onTabChange} >
+                {contentListNoTitle[activeTabKey]}
+            </Card>
+        </Flex>
+    );
+};
+export default App;

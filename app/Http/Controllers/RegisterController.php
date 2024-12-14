@@ -53,7 +53,7 @@ class RegisterController extends BaseApiController
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
+            return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
         }
     }
 
@@ -73,7 +73,7 @@ class RegisterController extends BaseApiController
 
             return $this->sendResponse($success, 'User Data.');
         } else {
-            return $this->sendError('User Not Found.', ['User' => 'Unauthorised']);
+            return $this->sendError('User Not Found.', ['User' => 'Invalid Credentials']);
         }
     }
 }
