@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { UserOutlined, MoonOutlined, HolderOutlined, SunFilled, SettingOutlined } from '@ant-design/icons';
-import { theme, Flex, Dropdown, Avatar, Switch, Layout } from 'antd';
+import { UserOutlined, MoonOutlined, HolderOutlined, SunFilled, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { theme, Flex, Dropdown, Avatar, Switch, Layout, Button } from 'antd';
+import { useAuth } from '../../utils/hooks/useAuth';
 const { Header } = Layout;
 
 
 const App = ({ setIsDarkMode, collapsedWidth }) => {
 
+    const { logOut } = useAuth();
     const onChangeTheme = () => {
         setIsDarkMode((previousValue) => !previousValue);
     };
@@ -38,6 +40,11 @@ const App = ({ setIsDarkMode, collapsedWidth }) => {
             label: 'Settings',
             icon: <SettingOutlined />,
             extra: '⌘S',
+        },
+        {
+            key: '5',
+            label: (<Button onClick={logOut} danger type="link">LogOut</Button>),
+            icon: <LogoutOutlined style={{ color: '#f81d22' }} />,
         },
     ];
 

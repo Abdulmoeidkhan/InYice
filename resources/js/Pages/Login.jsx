@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex, Card, theme, message } from 'antd';
+import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Input, Flex, Card, theme, message, Spin } from 'antd';
+import { useAuth } from "../utils/hooks/useAuth";
 import axios from 'axios';
 
 const App = () => {
     const [activeTabKey, setActiveTabKey] = useState('signIn');
-    const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
+    const { logIn } = useAuth();
+    const [messageApi, contextHolder] = message.useMessage();
+
     const key = 'updatable';
 
     const onTabChange = (key) => {
@@ -37,6 +40,7 @@ const App = () => {
         });
         axios.post(`${domanWithPort}/api/${route}`, values)
             .then(function (response) {
+                logIn(response.data.data)
                 messageApi.open({
                     key,
                     type: 'success',
@@ -44,24 +48,28 @@ const App = () => {
                     duration: 2,
                     onClose: console.log(response),
                 });
+                setIsLoading(false);
             })
             .catch(function (error) {
                 messageApi.open({
                     key,
                     type: 'error',
-                    content: 'SomeThing Went Wrong Please try Again Later!',
+                    content: `SomeThing Went Wrong,${error.response.data.data.error}`,
                     duration: 2,
                     onClose: console.log(error),
                 });
+                setIsLoading(false);
             });
 
     }
     const onFinishSignIn = (values) => {
+        setIsLoading(true);
         requestSubmitFunction('login', values)
         // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
     };
 
     const onFinishSignUp = (values) => {
+        setIsLoading(true);
         requestSubmitFunction('register', values)
         // messageApi.success('Sign Up Successfully!', 2, () => console.log('Received values of form: ', values));
     };
@@ -78,10 +86,10 @@ const App = () => {
                 })
                 .then(() => setSubmittable(true))
                 .catch(() => setSubmittable(false));
-        }, [form, values]);
+        }, [form, values, isLoading]);
         return (
             <Button type="primary" htmlType="submit" disabled={!submittable}>
-                {children}
+                {isLoading ? <Spin indicator={<LoadingOutlined spin />} size="small" /> : children}
             </Button>
         );
     };
@@ -101,7 +109,7 @@ const App = () => {
                 }}
                 onFinish={onFinishSignIn}
                 onFinishFailed={onFinishFailed}
-
+                disabled={isLoading}
             >
                 <Form.Item disabled={isLoading}
                     name="email"
@@ -161,6 +169,7 @@ const App = () => {
                 }}
                 onFinish={onFinishSignUp}
                 onFinishFailed={onFinishFailed}
+                disabled={isLoading}
             >
                 <Form.Item disabled={isLoading}
                     name="name"
