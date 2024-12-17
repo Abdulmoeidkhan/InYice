@@ -34,6 +34,7 @@ class RegisterController extends BaseApiController
             $user = User::create($input);
             $success['token'] =  $user->createToken($user->name)->plainTextToken;
             $success['name'] =  $user->name;
+            $success['email'] =  $user->email;
 
             return $this->sendResponse($success, 'User register successfully.');
         }
@@ -50,6 +51,7 @@ class RegisterController extends BaseApiController
             $user = Auth::user();
             $success['token'] =  $user->createToken($user->name)->plainTextToken;
             $success['name'] =  $user->name;
+            $success['email'] =  $user->email;
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {
