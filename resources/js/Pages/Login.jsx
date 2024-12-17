@@ -40,7 +40,6 @@ const App = () => {
         });
         axios.post(`${domanWithPort}/api/${route}`, values)
             .then(function (response) {
-                logIn(response.data.data)
                 messageApi.open({
                     key,
                     type: 'success',
@@ -48,6 +47,7 @@ const App = () => {
                     duration: 2,
                     onClose: console.log(response),
                 });
+                logIn(response.data.data)
                 setIsLoading(false);
             })
             .catch(function (error) {
