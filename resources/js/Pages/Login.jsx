@@ -31,14 +31,15 @@ const App = () => {
         messageApi.error('Submit failed!', 2, () => console.log('Received values of form: ', values, errorFields, outOfDate));
     };
 
-    const requestSubmitFunction = (route, values) => {
-        const domanWithPort = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}` : '');
+    const requestSubmitFunction = async (route, values) => {
+        // const domanWithPort = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}` : '');
+        const domanWithPort = import.meta.env.VITE_API_URL;
         messageApi.open({
             key,
             type: 'loading',
             content: 'Validating Your Request...',
         });
-        axios.post(`${domanWithPort}/api/${route}`, values)
+        await axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
                 messageApi.open({
                     key,

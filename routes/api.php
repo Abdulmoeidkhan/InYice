@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(RegisterController::class)->group(function () {
     Route::post('register', 'register');
-    Route::post('login', 'login');
-    Route::post('logout', 'logout');
+    Route::post('login', 'login')->name('login');
+    Route::post('logout', 'logout')->middleware(['auth:sanctum']);
 });
 
-Route::middleware('auth:sanctum')->group( function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::resource('users', UsersController::class);
 });

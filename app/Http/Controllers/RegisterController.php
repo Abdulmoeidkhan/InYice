@@ -16,7 +16,7 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request):JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -66,16 +66,13 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout(Request $request): JsonResponse
-    {
-        if (Auth::user()) {
-            $user = Auth::user();
-            $success['token'] =  $user->createToken($user->name)->plainTextToken;
-            $success['name'] =  $user->name;
-
-            return $this->sendResponse($success, 'User Data.');
+    public function logout(Request $request)
+    { 
+        if ($user && $user->email == $request->email) {
+            $request->user()->currentAccessToken()->delete();
+            return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
         } else {
-            return $this->sendError('User Not Found.', ['User' => 'Invalid Credentials']);
+            return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);
         }
     }
 }

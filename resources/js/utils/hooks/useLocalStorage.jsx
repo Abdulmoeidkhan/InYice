@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useLocalStorage = (keyName, defaultValue) => {
+export const useLocalStorage = (keyName, defaultValue = null) => {
     const [storedValue, setStoredValue] = useState(() => {
         try {
             const value = window.localStorage.getItem(keyName);
@@ -14,7 +14,7 @@ export const useLocalStorage = (keyName, defaultValue) => {
             return defaultValue;
         }
     });
-    const setUser = (key=keyName, newValue) => {
+    const setUser = (key = keyName, newValue) => {
         console.log(newValue);
         try {
             window.localStorage.setItem(key, JSON.stringify(newValue));
