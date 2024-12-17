@@ -44,21 +44,25 @@ const App = () => {
                     key,
                     type: 'success',
                     content: `${response.data.message}`,
-                    duration: 2,
-                    onClose: console.log(response),
+                    duration: 1,
+                    onClose: () => {
+                        console.log(response);
+                        setIsLoading(false);
+                        logIn(response.data.data);
+                    },
                 });
-                logIn(response.data.data)
-                setIsLoading(false);
             })
             .catch(function (error) {
                 messageApi.open({
                     key,
                     type: 'error',
                     content: `SomeThing Went Wrong,${error.response.data.data.error}`,
-                    duration: 2,
-                    onClose: console.log(error),
+                    duration: 1,
+                    onClose: () => {
+                        console.log(error);
+                        setIsLoading(false);
+                    },
                 });
-                setIsLoading(false);
             });
 
     }
