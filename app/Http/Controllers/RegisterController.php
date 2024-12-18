@@ -66,9 +66,12 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout(Request $request)
-    { 
-        if ($user && $user->email == $request->email) {
+    public function logout(Request $request):JsonResponse
+    {
+        // return response()->json($request->user(), 200);
+        // $user = auth::user()->tokens;
+        // return $request->user()->currentAccessToken()->plainTextToken;
+        if ($request->user()) {
             $request->user()->currentAccessToken()->delete();
             return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
         } else {

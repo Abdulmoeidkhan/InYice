@@ -258,7 +258,7 @@ const App = () => {
     return (
         <Flex align='center' justify='center'>
             {contextHolder}
-            <Card hoverable style={{ minWidth: 300, width: '80vw', maxWidth: 500, backgroundColor: '#fff' }} tabProps={{ centered: true }} tabList={tabListNoTitle} activeTabKey={activeTabKey} onTabChange={onTabChange} >
+            <Card hoverable style={{ minWidth: 300, width: '80vw', maxWidth: 500, }} tabProps={{ centered: true }} tabList={tabListNoTitle} activeTabKey={activeTabKey} onTabChange={onTabChange} >
                 {contentListNoTitle[activeTabKey]}
             </Card>
         </Flex>

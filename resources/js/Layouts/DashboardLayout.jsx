@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ConfigProvider, Layout, theme, FloatButton } from 'antd';
 import { SettingOutlined, CommentOutlined } from '@ant-design/icons';
 import { Outlet } from "react-router";
 import Menus from './LayoutsComponent/Menus';
 import Headers from './LayoutsComponent/Headers';
 import Footers from './LayoutsComponent/Footers';
+import { useLocalStorage } from '../utils/hooks/useLocalStorage';
 const { Sider } = Layout;
 
 
@@ -13,7 +14,8 @@ const { Sider } = Layout;
 const App = () => {
     const [collapsed, setCollapsed] = useState(true);
     const [collapsedWidth, setCollapsedWidth] = useState(80);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [darkMode, setTheme] = useLocalStorage("darkMode");
+    const [isDarkMode, setIsDarkMode] = useState(darkMode || false);
 
     const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -46,8 +48,8 @@ const App = () => {
         dot.style.transition = 'all 1s ease-out';
         holder.appendChild(dot);
         return dot;
-      };
-      
+    };
+
     // Inset Effect
     const showInsetEffect = (node, { event, component }) => {
         if (component !== 'Button') {
@@ -70,7 +72,7 @@ const App = () => {
         });
     };
 
-
+    useEffect(() => { setTheme('darkMode', isDarkMode) }, [isDarkMode])
     return (
         <ConfigProvider theme={{
             algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
@@ -106,7 +108,7 @@ const App = () => {
                     <Menus />
                 </Sider>
                 <Layout style={collapsedWidth ? { transition: 'padding 200ms', paddingLeft: collapsed ? 80 : 200 } : {}}>
-                    <Headers setIsDarkMode={setIsDarkMode} collapsedWidth={collapsedWidth} />
+                    <Headers isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} collapsedWidth={collapsedWidth} />
                     <Outlet />
                     <FloatButton.Group
                         trigger="click"

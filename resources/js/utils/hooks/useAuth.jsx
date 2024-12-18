@@ -4,18 +4,18 @@ import { useLocalStorage } from "./useLocalStorage";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useLocalStorage("user", null);
+    const [user, setUser] = useLocalStorage("inyiceuser", null);
     const navigate = useNavigate();
 
     // call this function when you want to authenticate the user
     const logIn = async (data) => {
-        setUser("user", data);
+        setUser("inyiceuser", data);
         navigate("/");
     };
 
     // call this function to sign out logged in user
     const logOut = () => {
-        setUser("user", null);
+        setUser("inyiceuser", null);
         navigate("/signIn", { replace: true });
     };
 

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { ConfigProvider, Layout, theme, Watermark, Flex, Divider } from 'antd';
 import { Outlet } from "react-router";
+import { useLocalStorage } from '../utils/hooks/useLocalStorage';
 
 const { Content, Sider } = Layout;
 
 
 const App = () => {
-    const { defaultAlgorithm } = theme;
     const [collapsed, setCollapsed] = useState(false);
+    const [darkMode] = useLocalStorage("darkMode");
+    const [isDarkMode] = useState(darkMode || false);
 
+    const { defaultAlgorithm, darkAlgorithm } = theme;
 
     // Prepare effect holder
     const createHolder = (node) => {
@@ -64,7 +67,7 @@ const App = () => {
 
     return (
         <ConfigProvider theme={{
-            algorithm: defaultAlgorithm,
+            algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
             token: {
                 colorPrimaryBg: '#1677ff',
             },

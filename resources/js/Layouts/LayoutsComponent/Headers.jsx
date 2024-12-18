@@ -6,8 +6,8 @@ import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
 const { Header } = Layout;
 
 
-const App = ({ setIsDarkMode, collapsedWidth }) => {
-    const [user] = useLocalStorage("user");
+const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
+    const [user] = useLocalStorage("inyiceuser");
     const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
     const key = 'updatable';
@@ -28,17 +28,19 @@ const App = ({ setIsDarkMode, collapsedWidth }) => {
             type: 'loading',
             content: 'Logging You Out...',
         });
-        await axios.post(`${domanWithPort}/logout`, values,{headers: {
-            'Authorization': 'Bearer ' + user.token
-          }})
+        await axios.post(`${domanWithPort}/logout`, {}, {
+            headers: {
+                'Authorization': `Bearer ${user.token}`,
+            }
+        })
             .then(function (response) {
                 messageApi.open({
                     key,
-                    type: 'warning',
+                    type: 'success',
                     content: `${response.data.message}`,
                     duration: 1,
                     onClose: () => {
-                        console.log(response);
+                        // console.log(response);
                         setIsLoading(false);
                         logOut()
                     },
@@ -48,7 +50,7 @@ const App = ({ setIsDarkMode, collapsedWidth }) => {
                 messageApi.open({
                     key,
                     type: 'error',
-                    content: `SomeThing Went Wrong,${error.response.data.data.error}`,
+                    content: `SomeThing Went Wrong,${error.response.data.message}`,
                     duration: 1,
                     onClose: () => {
                         console.log(error);
@@ -85,7 +87,7 @@ const App = ({ setIsDarkMode, collapsedWidth }) => {
         },
         {
             key: '5',
-            label: (<Button onClick={() => logoutFunction(user.email)} danger type="link" disabled={isLoading}>LogOut</Button>),
+            label: (<Button onClick={() => logoutFunction({ 'email': user.email })} danger type="link" disabled={isLoading}>LogOut</Button>),
             icon: <LogoutOutlined style={{ color: '#f81d22' }} />,
         },
     ];
@@ -97,7 +99,8 @@ const App = ({ setIsDarkMode, collapsedWidth }) => {
                 <div style={{ fontSize: '16px', width: 64, height: 64 }}></div>
                 <Flex gap={collapsedWidth ? "large" : "middle"} align={'center'}
                     justify={'flex-start'} flex={collapsedWidth ? "0 0 12rem" : "0 0 9rem"}>
-                    <Switch defaultChecked onChange={onChangeTheme}
+                    <Switch onChange={onChangeTheme}
+                        defaultChecked={!isDarkMode}
                         checkedChildren={<MoonOutlined />}
                         unCheckedChildren={<SunFilled />} />
                     <HolderOutlined />
