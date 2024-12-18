@@ -17,6 +17,7 @@ const App = () => {
     const [darkMode, setTheme] = useLocalStorage("darkMode");
     const [isDarkMode, setIsDarkMode] = useState(darkMode || false);
 
+
     const { defaultAlgorithm, darkAlgorithm } = theme;
 
 
@@ -76,6 +77,9 @@ const App = () => {
     return (
         <ConfigProvider theme={{
             algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
+            // token: {
+            //     colorPrimaryBg: '#1677ff',
+            // },
         }} wave={{ showEffect: showInsetEffect }}>
             <Layout>
                 <Sider

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserOutlined, MoonOutlined, HolderOutlined, SunFilled, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, MoonFilled, HolderOutlined, SunFilled, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
 import { theme, Flex, Dropdown, Avatar, Switch, Layout, Button, message } from 'antd';
 import { useAuth } from '../../utils/hooks/useAuth';
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
@@ -101,7 +101,7 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
                     justify={'flex-start'} flex={collapsedWidth ? "0 0 12rem" : "0 0 9rem"}>
                     <Switch onChange={onChangeTheme}
                         defaultChecked={!isDarkMode}
-                        checkedChildren={<MoonOutlined />}
+                        checkedChildren={<MoonFilled />}
                         unCheckedChildren={<SunFilled />} />
                     <HolderOutlined />
                     <Dropdown arrow placement="bottomRight" menu={{ items }}>
