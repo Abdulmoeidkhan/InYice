@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex, Card, theme, message, Spin } from 'antd';
+import { Button, Checkbox, Form, Input, Flex, Card, message, Spin } from 'antd';
 import { useAuth } from "../utils/hooks/useAuth";
 import axios from 'axios';
 
