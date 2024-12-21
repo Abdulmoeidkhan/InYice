@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex} from 'antd';
+import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex } from 'antd';
 import Lists from '../Components/Lists/Lists';
 const { Content } = Layout;
 
@@ -50,17 +50,13 @@ const App = () => {
                     borderRadius: borderRadiusLG,
                 }}
             >
-                <Flex gap="middle" vertical>
+                <Flex gap="middle" vertical >
                     <h1>Dashboard</h1>
-                    <Flex gap="middle" justify={'center'} align={'space-evenly'}>
-                        <Lists listTitle="Users"/>
-                        <Space
-                            direction="vertical"
-                            size="middle"
-                            style={{
-                                display: 'flex',
-                                width: '100%',
-                            }}>
+                    <Flex gap="middle" style={{ width: '100%' }} justify='space-evenly' wrap>
+                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
+                            <Lists listTitle="Users" route={'users'} searchKeys={['name', 'email']} />
+                        </Flex>
+                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle'>
                             <h2>Users</h2>
                             <List
                                 itemLayout="horizontal"
@@ -75,7 +71,7 @@ const App = () => {
                                     </List.Item>
                                 )}
                             />
-                        </Space>
+                        </Flex>
                     </Flex>
                 </Flex>
             </Content>

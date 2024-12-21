@@ -10,16 +10,10 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
     const [user] = useLocalStorage("inyiceuser");
     const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
+
+    // Log Out Function Start
     const key = 'updatable';
-
     const { logOut } = useAuth();
-    const onChangeTheme = () => {
-        setIsDarkMode((previousValue) => !previousValue);
-    };
-
-    const {
-        token: { colorBgContainer },
-    } = theme.useToken();
 
     const logoutFunction = async (values) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
@@ -32,38 +26,49 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
             headers: {
                 'Authorization': `Bearer ${user.token}`,
             }
-        })
-            .then(function (response) {
-                messageApi.open({
-                    key,
-                    type: 'success',
-                    content: `${response.data.message}`,
-                    duration: 1,
-                    onClose: () => {
-                        // console.log(response);
-                        setIsLoading(false);
-                        logOut()
-                    },
-                });
-            })
-            .catch(function (error) {
-                messageApi.open({
-                    key,
-                    type: 'error',
-                    content: `SomeThing Went Wrong,${error.response.data.message}`,
-                    duration: 1,
-                    onClose: () => {
-                        console.log(error);
-                        setIsLoading(false);
-                    },
-                });
+        }).then(function (response) {
+            messageApi.open({
+                key,
+                type: 'success',
+                content: `${response.data.message}`,
+                duration: 1,
+                onClose: () => {
+                    // console.log(response);
+                    setIsLoading(false);
+                    logOut()
+                },
             });
+        }).catch(function (error) {
+            messageApi.open({
+                key,
+                type: 'error',
+                content: `SomeThing Went Wrong,${error.response.data.message}`,
+                duration: 1,
+                onClose: () => {
+                    console.log(error);
+                    setIsLoading(false);
+                },
+            });
+        });
     }
+    // Log Out Function End
 
+    // Theme Change Function Start
+    const onChangeTheme = () => {
+        setIsDarkMode((previousValue) => !previousValue);
+    };
+
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
+    // Theme Change Function End
+
+
+    // Items Data Start
     const items = [
         {
             key: '1',
-            label: `Hi ${(user.name).charAt(0).toUpperCase() + (user.name).slice(1)} !`,
+            label: `Hi ${(user.name).charAt(0).toUpperCase() + (user.name).slice(1)}!`,
             disabled: true,
         },
         {
@@ -91,6 +96,7 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
             icon: <LogoutOutlined style={{ color: '#f81d22' }} />,
         },
     ];
+    // Items Data End   
 
     return (
         <Header style={{ padding: 0, background: colorBgContainer }}>

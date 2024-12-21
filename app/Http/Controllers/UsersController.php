@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\BaseApiController as BaseApiController;
 use App\Http\Resources\UserResource;
 use App\Models\User as ModelsUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class UsersController extends Controller
+class UsersController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index():JsonResponse
     {
         $users = ModelsUser::all();
-        return $users; 
-        // return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
+        // $users = [...$users,...ModelsUser::all()]; Just For Adding More Users ((Testing))
+        // return $users; 
+        return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
     }
 
     /**

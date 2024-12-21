@@ -14,25 +14,25 @@ export const menuItems = [
         key: '/',
         icon: <DashboardOutlined />,
         label: (
-            <NavLink to="/">
+            <NavLink to="/client/">
                 Dashboard
             </NavLink>
         )
     },
     {
-        key: '/Home',
+        key: '/home',
         icon: <HomeOutlined />,
         label: (
-            <NavLink to="/Home">
+            <NavLink to="/client/home">
                 Home
             </NavLink>
         )
     },
     {
-        key: '/About',
+        key: '/about',
         icon: <InfoCircleOutlined />,
         label: (
-            <NavLink to="/About">
+            <NavLink to="/client/about">
                 About
             </NavLink>
         )

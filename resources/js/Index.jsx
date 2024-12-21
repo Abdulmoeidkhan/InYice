@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children }) => {
     const { user } = useAuth();
     if (!user) {
         // user is not authenticated
-        return <Navigate to="/signIn" />;
+        return <Navigate to="/client/signin" />;
     }
     return children;
 };
@@ -20,8 +20,8 @@ const ProtectedRoute = ({ children }) => {
 const UnProtectedRoute = ({ children }) => {
     const { user } = useAuth();
     if (user) {
-        // user is not authenticated
-        return <Navigate to="/" />;
+        // user is authenticated
+        return <Navigate to="/client" />;
     }
     return children;
 };
@@ -30,12 +30,12 @@ const App = () => {
     return (
         <AuthProvider>
             <Routes>
-                <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+                <Route path="/client" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/Home" element={<Home />} />
-                    <Route path="/About" element={<About />} />
+                    <Route path="/client/home" element={<Home />} />
+                    <Route path="/client/about" element={<About />} />
                 </Route>
-                <Route path="/signIn" element={<UnProtectedRoute><SignUpLayout /></UnProtectedRoute>}>
+                <Route path="/client/signin" element={<UnProtectedRoute><SignUpLayout /></UnProtectedRoute>}>
                     <Route index element={<Login />} />
                 </Route>
             </Routes>
