@@ -6,7 +6,7 @@ import { useLocalStorage } from '../utils/hooks/useLocalStorage';
 const { Content, Sider } = Layout;
 
 
-const App = () => {
+const App = (props) => {
     const [collapsed, setCollapsed] = useState(false);
     const [darkMode] = useLocalStorage("darkMode");
     const [isDarkMode] = useState(darkMode || false);
@@ -89,6 +89,7 @@ const App = () => {
                     <Content>
                         <Flex align='center' justify='center' style={{ width: collapsed ? '100vw' : '50vw', height: '100vh' }}>
                             <Outlet />
+                            {props.children}
                         </Flex>
                     </Content>
                 </Layout>

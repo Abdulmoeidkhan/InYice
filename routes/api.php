@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\UsersController;
 // use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,4 +19,6 @@ Route::controller(RegisterController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('users', UsersController::class);
+    Route::resource('usersRoles', RolesController::class);
+    Route::resource('usersPermissions', PermissionsController::class);
 });

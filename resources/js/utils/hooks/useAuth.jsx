@@ -10,12 +10,16 @@ export const AuthProvider = ({ children }) => {
     // call this function when you want to authenticate the user
     const logIn = async (data) => {
         setUser("inyiceuser", data);
+        if (data) {
+            window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
+        }
         navigate("/client");
     };
 
     // call this function to sign out logged in user
     const logOut = () => {
         setUser("inyiceuser", null);
+        window.axios.defaults.headers.common['Authorization'] = '';
         navigate("/client/signin", { replace: true });
     };
 

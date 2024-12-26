@@ -51,26 +51,13 @@ const App = () => {
                 }}
             >
                 <Flex gap="middle" vertical >
-                    <h1>Dashboard</h1>
+                    <h1>Admin Dashboard</h1>
                     <Flex gap="middle" style={{ width: '100%' }} justify='space-evenly' wrap>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Users" route='users' searchKeys={['name', 'email']} />
+                            <Lists listTitle="Roles" route='usersRoles' searchKeys={['name', 'display_name']} addButton='true'/>
                         </Flex>
-                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle'>
-                            <h2>Users</h2>
-                            <List
-                                itemLayout="horizontal"
-                                dataSource={data}
-                                renderItem={(item, index) => (
-                                    <List.Item>
-                                        <List.Item.Meta
-                                            avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                                            title={item.title}
-                                            description=""
-                                        />
-                                    </List.Item>
-                                )}
-                            />
+                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
+                            <Lists listTitle="Permissions" route='usersPermissions' searchKeys={['name', 'display_name']} addButton='true'/>
                         </Flex>
                     </Flex>
                 </Flex>

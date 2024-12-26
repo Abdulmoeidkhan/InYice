@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ConfigProvider, Layout, theme, FloatButton } from 'antd';
-import { SettingOutlined, CommentOutlined } from '@ant-design/icons';
+import { SettingOutlined, CommentOutlined, CompressOutlined, ExpandOutlined } from '@ant-design/icons';
 import { Outlet } from "react-router";
 import Menus from './LayoutsComponent/Menus';
 import Headers from './LayoutsComponent/Headers';
@@ -15,10 +15,12 @@ const App = () => {
     const [collapsed, setCollapsed] = useState(true);
     const [collapsedWidth, setCollapsedWidth] = useState(80);
     const [darkMode, setTheme] = useLocalStorage("darkMode");
+    const [compactMode, setCompactMode] = useLocalStorage("compactMode");
     const [isDarkMode, setIsDarkMode] = useState(darkMode || false);
+    const [isCompactMode, setIsCompactMode] = useState(compactMode || false);
 
 
-    const { defaultAlgorithm, darkAlgorithm } = theme;
+    const { defaultAlgorithm, darkAlgorithm, compactAlgorithm } = theme;
 
 
     // Prepare effect holder
@@ -74,9 +76,10 @@ const App = () => {
     };
 
     useEffect(() => { setTheme('darkMode', isDarkMode) }, [isDarkMode])
+    useEffect(() => { setCompactMode('compactMode', isCompactMode) }, [isCompactMode])
     return (
         <ConfigProvider theme={{
-            algorithm: isDarkMode ? darkAlgorithm : defaultAlgorithm,
+            algorithm: isDarkMode ? (isCompactMode ? [darkAlgorithm, compactAlgorithm] : darkAlgorithm) : (isCompactMode ? [defaultAlgorithm, compactAlgorithm] : defaultAlgorithm),
             // token: {
             //     colorPrimaryBg: '#1677ff',
             // },
@@ -99,6 +102,7 @@ const App = () => {
                         bottom: 0,
                         scrollbarWidth: 'thin',
                         scrollbarGutter: 'stable',
+                        zIndex: 1000,
                     }}
                     onBreakpoint={(broker) => {
                         broker ? setCollapsedWidth(0) : setCollapsedWidth(80);
@@ -123,6 +127,7 @@ const App = () => {
                         <FloatButton />
                         <FloatButton />
                         <FloatButton icon={<CommentOutlined />} />
+                        <FloatButton icon={isCompactMode ? <ExpandOutlined /> : <CompressOutlined />} onClick={() => setIsCompactMode((isCompactMode) => !isCompactMode)} />
                     </FloatButton.Group>
                     <Footers collapsedWidth={collapsedWidth} collapsed={collapsed} setCollapsed={setCollapsed} />
                 </Layout>

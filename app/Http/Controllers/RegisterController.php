@@ -16,7 +16,7 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request): JsonResponse
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -45,7 +45,7 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request): JsonResponse
+    public function login(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
@@ -66,7 +66,7 @@ class RegisterController extends BaseApiController
      *
      * @return \Illuminate\Http\Response
      */
-    public function logout(Request $request):JsonResponse
+    public function logout(Request $request)
     {
         // return response()->json($request->user(), 200);
         // $user = auth::user()->tokens;

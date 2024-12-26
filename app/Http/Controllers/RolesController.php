@@ -3,21 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseApiController as BaseApiController;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
-use App\Models\User as ModelsUser;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
-class UsersController extends BaseApiController
+class RolesController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = ModelsUser::all();
-        // $users = [...$users,...ModelsUser::all()]; Just For Adding More Users ((Testing))
-        // return $users; 
-        return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
+        $roles = Role::all();
+        return $this->sendResponse(UserResource::collection($roles), 'Roles retrieved successfully.');
     }
 
     /**
@@ -33,7 +32,22 @@ class UsersController extends BaseApiController
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'display_name' => 'string|min:3',
+            'description' => 'string|min:10',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        } else {
+            try {
+                $newRole = Role::create($validator->validated());
+                return $this->sendResponse($newRole, 'Role saved successfully.');
+            } catch (\Illuminate\Database\QueryException $ex) {
+                return $this->sendError('Database Error.', $ex->getMessage());
+            }
+        }
     }
 
     /**

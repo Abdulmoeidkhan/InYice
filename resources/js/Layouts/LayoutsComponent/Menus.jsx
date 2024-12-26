@@ -3,6 +3,8 @@ import {
     DashboardOutlined,
     HomeOutlined,
     InfoCircleOutlined,
+    TeamOutlined,
+    AuditOutlined 
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { NavLink } from "react-router";
@@ -37,12 +39,30 @@ export const menuItems = [
             </NavLink>
         )
     },
+    {
+        key: '/users',
+        icon: <TeamOutlined />,
+        label: (
+            <NavLink to="/client/users">
+                Users
+            </NavLink>
+        )
+    },
+    {
+        key: '/admin',
+        icon: <AuditOutlined />,
+        label: (
+            <NavLink to="/client/admin">
+                Admin
+            </NavLink>
+        )
+    },
 ];
 
 const App = () => {
 
     return (
-        <Menu mode="inline" items={menuItems} style={{ border: 'none' }}
+        <Menu mode="inline" items={menuItems} style={{ border: 'none'}}
             defaultSelectedKeys={[location.pathname]} />
     );
 };

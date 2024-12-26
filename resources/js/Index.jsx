@@ -5,6 +5,8 @@ import Home from "./Pages/Home";
 import Dashboard from "./Pages/Dashboard";
 import About from "./Pages/About";
 import Login from "./Pages/Login";
+import Users from "./Pages/Users";
+import Admin from "./Pages/Admin";
 import { useAuth, AuthProvider } from "./utils/hooks/useAuth";
 
 
@@ -32,14 +34,16 @@ const App = () => {
             <Routes>
                 <Route path="/client" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                     <Route index element={<Dashboard />} />
-                    <Route path="/client/home" element={<Home />} />
-                    <Route path="/client/about" element={<About />} />
+                    <Route path="home" element={<Home />} />
+                    <Route path="about" element={<About />} />
+                    <Route path="users" element={<Users />} />
+                    <Route path="admin" element={<Admin />} />
                 </Route>
                 <Route path="/client/signin" element={<UnProtectedRoute><SignUpLayout /></UnProtectedRoute>}>
                     <Route index element={<Login />} />
                 </Route>
             </Routes>
-        </AuthProvider>
+        </AuthProvider >
     );
 };
 
