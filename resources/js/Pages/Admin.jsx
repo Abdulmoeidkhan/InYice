@@ -56,7 +56,9 @@ const App = () => {
                     <h1>Admin Dashboard</h1>
                     <Flex gap="middle" style={{ width: '100%' }} justify='space-evenly' wrap>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Roles" route='usersRoles' searchKeys={['name', 'display_name']} parentState={refreshData} setParentState={setRefreshData} >
+                            <Lists listTitle="Roles" route='usersRoles' 
+                            // searchKeys={['name', 'display_name']}
+                             parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}>
                                 <FormModal addFunction={addData} title='Roles' route='usersRoles' parentState={refreshData} setParentState={setRefreshData}>
                                     <Form.Item
                                         label='Role Name'
@@ -89,8 +91,10 @@ const App = () => {
                             </Lists>
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Permissions" route='usersPermissions' searchKeys={['name', 'display_name']} >
-                                <FormModal addFunction={addData} title='Permissions' route='usersPermissions'>
+                            <Lists listTitle="Permissions" route='usersPermissions' 
+                            // searchKeys={['name', 'display_name']}
+                             parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}>
+                                <FormModal addFunction={addData} title='Permissions' route='usersPermissions' parentState={refreshData} setParentState={setRefreshData}>
                                     <Form.Item
                                         label='Permissions Name'
                                         name="name"

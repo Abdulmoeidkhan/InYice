@@ -8,42 +8,10 @@ const App = ({ collapsedWidth, collapsed, setCollapsed }) => {
         <>
             {!collapsedWidth &&
                 <Footer style={{ padding: 0 }}>
-                    <Affix offsetBottom={10}>
-                        <Flex gap="small" align="center" vertical>
+                    {/* <Affix offsetBottom={10}>
+                        <Flex gap="middle" justify='flex-end'>
                             <Segmented
                                 options={[
-                                    // {
-                                    //     label: (
-                                    //         <div
-                                    //             style={{
-                                    //                 padding: 4,
-                                    //             }}
-                                    //         >
-                                    //             <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-                                    //             <div>User 1</div>
-                                    //         </div>
-                                    //     ),
-                                    //     value: 'user1',
-                                    // },
-                                    // {
-                                    //     label: (
-                                    //         <div
-                                    //             style={{
-                                    //                 padding: 4,
-                                    //             }}
-                                    //         >
-                                    //             <Avatar
-                                    //                 style={{
-                                    //                     backgroundColor: '#f56a00',
-                                    //                 }}
-                                    //             >
-                                    //                 K
-                                    //             </Avatar>
-                                    //             <div>User 2</div>
-                                    //         </div>
-                                    //     ),
-                                    //     value: 'user2',
-                                    // },
                                     {
                                         label: (
                                             <Button type="text"
@@ -54,12 +22,12 @@ const App = ({ collapsedWidth, collapsed, setCollapsed }) => {
                                                     height: 64,
                                                 }} />
                                         ),
-                                        value: 'user3',
+                                        value: 'menu',
                                     },
                                 ]}
                             />
                         </Flex>
-                    </Affix>
+                    </Affix> */}
                 </Footer>
             }</>)
 }

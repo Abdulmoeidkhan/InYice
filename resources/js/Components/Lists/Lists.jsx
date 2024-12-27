@@ -14,6 +14,34 @@ const App = (props) => {
     const [searchValue, setSearchValue] = useState('');
 
 
+    const dataRestructuring = (dataArrayOfObject, identifier) => {
+        let convertedDataArrayOfObject = [];
+        dataArrayOfObject.map((valueOfObj) => {
+            switch (identifier) {
+                case 'usersRoles':
+                    convertedDataArrayOfObject.push({
+                        id: valueOfObj.id,
+                        firstItem: valueOfObj.name,
+                        secondItem: valueOfObj.display_name,
+                        thirdItem: valueOfObj.description
+                    })
+                    break;
+                case 'usersPermissions':
+                    convertedDataArrayOfObject.push({
+                        id: valueOfObj.id,
+                        firstItem: valueOfObj.name,
+                        secondItem: valueOfObj.display_name,
+                        thirdItem: valueOfObj.description
+                    })
+                    break;
+                default:
+                    break;
+            }
+        })
+        return convertedDataArrayOfObject;
+    }
+
+
     // Load Full Data & Initiate Request via UseEffect Start
     const loadData = async () => {
         if (loading) {
@@ -23,7 +51,9 @@ const App = (props) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         await axios.get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
-                setData(response.data.data);
+                let convertedData = dataRestructuring(response.data.data, props.route)
+                console.log(response.data.data)
+                setData(convertedData);
                 setLoading(false);
             })
             .catch(function (error) {
@@ -43,7 +73,8 @@ const App = (props) => {
     const searchFuse = (value) => {
         const options = {
             includeScore: true,
-            keys: [...props.searchKeys],
+            // keys: [...props.searchKeys],
+            keys: ['firstItem','secondItem'],
         }
         setLoading(true);
 
@@ -138,12 +169,12 @@ const App = (props) => {
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => (
-                            <List.Item key={item.email} actions={actions}>
+                            <List.Item key={item.id} actions={actions}>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item.id}`} />}
-                                    title={<a href="https://ant.design">{item.name}</a>}
-                                    description={item.email} />
-                                <div>Content</div>
+                                    avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item.id}`} /> : ''}
+                                    title={props.withUri ? <a href="https://ant.design">{item.secondItem}</a> : item.secondItem}
+                                    description={item.thirdItem} />
+                                {/* <div>{`${item.thirdItem}`}</div> */}
                             </List.Item>
                         )} />
                 </InfiniteScroll>

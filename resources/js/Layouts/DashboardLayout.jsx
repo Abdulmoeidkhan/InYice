@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ConfigProvider, Layout, theme, FloatButton } from 'antd';
-import { SettingOutlined, CommentOutlined, CompressOutlined, ExpandOutlined } from '@ant-design/icons';
+import { SettingOutlined, CommentOutlined, CompressOutlined, ExpandOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { Outlet } from "react-router";
 import Menus from './LayoutsComponent/Menus';
 import Headers from './LayoutsComponent/Headers';
@@ -120,16 +120,19 @@ const App = () => {
                     <Outlet />
                     <FloatButton.Group
                         trigger="click"
-                        style={{ insetInlineEnd: 24 }}
+                        style={collapsedWidth > 0 ? { insetInlineEnd: 30 } : { insetInlineEnd: 30, bottom: 100 }}
                         icon={<SettingOutlined />}
                     >
                         <FloatButton.BackTop visibilityHeight={100} />
+                        {/* <FloatButton />
                         <FloatButton />
-                        <FloatButton />
-                        <FloatButton icon={<CommentOutlined />} />
+                        <FloatButton icon={<CommentOutlined />} /> */}
                         <FloatButton icon={isCompactMode ? <ExpandOutlined /> : <CompressOutlined />} onClick={() => setIsCompactMode((isCompactMode) => !isCompactMode)} />
                     </FloatButton.Group>
-                    <Footers collapsedWidth={collapsedWidth} collapsed={collapsed} setCollapsed={setCollapsed} />
+                    {collapsedWidth < 80 && <FloatButton.Group style={{ insetInlineEnd: 30 }}>
+                        <FloatButton icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} onClick={() => setCollapsed((collapsed) => !collapsed)} />
+                    </FloatButton.Group>}
+                    {/* <Footers collapsedWidth={collapsedWidth} collapsed={collapsed} setCollapsed={setCollapsed} /> */}
                 </Layout>
             </Layout>
         </ConfigProvider >
