@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Divider, List, Skeleton, Space, Input, Button, Flex, Segmented } from 'antd';
 import { EditOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Modal from '../Modal/Modal';
 import Fuse from 'fuse.js';
 
 const { Search } = Input;
@@ -35,7 +34,7 @@ const App = (props) => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [props.parentState]);
 
     // Load Full Data & Initiate Request via UseEffect End
 
@@ -72,26 +71,6 @@ const App = (props) => {
     // }
 
 
-    // Add Request Function Functions Start
-    const addData = async (values) => {
-        const domanWithPort = import.meta.env.VITE_API_URL;
-        await axios.post(`${domanWithPort}/${props.route}`, values)
-            .then(function (response) {
-                console.log(response)
-                loadData();
-            })
-            .catch(function (error) {
-                setLoading(false);
-            });
-    };
-
-
-    // useEffect(() => {
-    //     loadData();
-    // }, []);
-
-    // Add Roles And Permission Functions End
-
 
     // Rerender for data Storing And Searching Start
     useEffect(() => {
@@ -126,7 +105,8 @@ const App = (props) => {
         <>
             <Flex align='center' justify='space-between' gap='middle' style={{ width: '100%' }}>
                 <h2>{props.listTitle}</h2>
-                {props.addButton && <Modal addFunction={addData} title={props.listTitle} />}
+                {props.children}
+                {/* {props.addButton && <FormModal addFunction={addData} title={props.listTitle} />} */}
             </Flex>
             <Search allowClear placeholder={`Search ${props.listTitle}`} onSearch={(searchValue) => setSearchValue(searchValue)} enterButton="Search" size="large" />
             <div
