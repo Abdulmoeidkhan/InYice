@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex, Form, Input } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Lists from '../Components/Lists/Lists';
 import FormModal from '../Components/Modal/FormModal';
 const { Content } = Layout;
@@ -15,8 +16,8 @@ const App = () => {
     const [refreshData, setRefreshData] = useState(false);
 
 
-    // Add Request Functions Start Comp <FormModal>
-    const addData = (values, route) => {
+    // Add/Update/Delete Request Functions Start Comp <FormModal>
+    const addData = (values, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
@@ -27,7 +28,29 @@ const App = () => {
             });
     };
 
-    // Add Request Functions End Comp <FormModal>
+    const updateData = (values, route, id) => {
+        const domanWithPort = import.meta.env.VITE_API_URL;
+        return axios.put(`${domanWithPort}/${route}/${id}`, values)
+            .then(function (response) {
+                return response
+            })
+            .catch(function (error) {
+                return Promise.reject(error);
+            });
+    };
+
+    const deleteData = (value, route, id) => {
+        const domanWithPort = import.meta.env.VITE_API_URL;
+        return axios.delete(`${domanWithPort}/${route}/${id}`)
+            .then(function (response) {
+                return response
+            })
+            .catch(function (error) {
+                return Promise.reject(error);
+            });
+    };
+
+    // Add/Update/Delete Request Functions End Comp <FormModal>
 
     return (
         <Layout style={{
@@ -56,73 +79,61 @@ const App = () => {
                     <h1>Admin Dashboard</h1>
                     <Flex gap="middle" style={{ width: '100%' }} justify='space-evenly' wrap>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Roles" route='usersRoles' 
-                            // searchKeys={['name', 'display_name']}
-                             parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}>
-                                <FormModal addFunction={addData} title='Roles' route='usersRoles' parentState={refreshData} setParentState={setRefreshData}>
-                                    <Form.Item
-                                        label='Role Name'
-                                        name="name"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input Role name!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Display Name"
-                                        name="display_name"
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message: 'Please input Display name of Role!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item name="description" label="Description">
-                                        <Input type="textarea" />
-                                    </Form.Item>
-                                </FormModal>
+                            <Lists
+                                listTitle="Roles"
+                                route='usersRoles'
+                                parentState={refreshData}
+                                setParentState={setRefreshData}
+                                withPicture={false}
+                                withUri={false}
+                                deleteComponentEssentials={{ func: deleteData }}
+                                editComponentEssentials={{
+                                    func: updateData, frm:
+                                        [
+                                            { label: 'Role Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Role name!' }] },
+                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Role!' }] },
+                                            { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Role!' }] }
+                                        ]
+                                }}>
+                                <FormModal
+                                    workingFunction={addData}
+                                    buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
+                                    title='Roles'
+                                    route='usersRoles'
+                                    parentState={refreshData}
+                                    setParentState={setRefreshData}
+                                    frm={[
+                                        { label: 'Role Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Role name!' }] },
+                                        { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Role!' }] },
+                                        { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Role!' }] }
+                                    ]} />
                             </Lists>
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Permissions" route='usersPermissions' 
-                            // searchKeys={['name', 'display_name']}
-                             parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}>
-                                <FormModal addFunction={addData} title='Permissions' route='usersPermissions' parentState={refreshData} setParentState={setRefreshData}>
-                                    <Form.Item
-                                        label='Permissions Name'
-                                        name="name"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please input Permissions name!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item
-                                        label="Display Name"
-                                        name="display_name"
-                                        rules={[
-                                            {
-                                                required: false,
-                                                message: 'Please input Display name of Permissions!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item name="description" label="Description">
-                                        <Input type="textarea" />
-                                    </Form.Item>
-                                </FormModal>
+                            <Lists listTitle="Permissions" route='usersPermissions'
+                                parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}
+                                deleteComponentEssentials={{ func: deleteData }}
+                                editComponentEssentials={{
+                                    func: updateData, frm:
+                                        [
+                                            { label: 'Permissions Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Permissions name!' }] },
+                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Permissions!' }] },
+                                            { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Permissions!' }] }
+                                        ]
+                                }}>
+                                <FormModal
+                                    workingFunction={addData}
+                                    buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
+                                    title='Permissions'
+                                    route='usersPermissions'
+                                    parentState={refreshData}
+                                    setParentState={setRefreshData}
+                                    frm={[
+                                        { label: 'Permissions Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Permissions name!' }] },
+                                        { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Permissions!' }] },
+                                        { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Permissions!' }] }
+                                    ]}
+                                />
                             </Lists>
                         </Flex>
                     </Flex>

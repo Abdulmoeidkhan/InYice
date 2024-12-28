@@ -85,6 +85,14 @@ class RolesController extends BaseApiController
      */
     public function destroy(string $id)
     {
-        //
+        $role = Role::find($id);
+
+        if (is_null($role)) {
+            return $this->sendError('Role not found.');
+        }
+
+        $role->delete();
+
+        return $this->sendResponse([], 'Role deleted successfully.');
     }
 }

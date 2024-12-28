@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Divider, List, Skeleton, Space, Input, Button, Flex, Segmented } from 'antd';
-import { EditOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import FormModal from '../Modal/FormModal';
 import Fuse from 'fuse.js';
 
 const { Search } = Input;
@@ -15,30 +16,29 @@ const App = (props) => {
 
 
     const dataRestructuring = (dataArrayOfObject, identifier) => {
-        let convertedDataArrayOfObject = [];
+        let convertedDataArrayOfArray = [];
         dataArrayOfObject.map((valueOfObj) => {
             switch (identifier) {
                 case 'usersRoles':
-                    convertedDataArrayOfObject.push({
-                        id: valueOfObj.id,
-                        firstItem: valueOfObj.name,
-                        secondItem: valueOfObj.display_name,
-                        thirdItem: valueOfObj.description
-                    })
-                    break;
                 case 'usersPermissions':
-                    convertedDataArrayOfObject.push({
-                        id: valueOfObj.id,
-                        firstItem: valueOfObj.name,
-                        secondItem: valueOfObj.display_name,
-                        thirdItem: valueOfObj.description
-                    })
+                    convertedDataArrayOfArray.push([valueOfObj.id, valueOfObj.name, valueOfObj.display_name, valueOfObj.description])
                     break;
+                case 'users':
+                    convertedDataArrayOfArray.push([valueOfObj.id, valueOfObj.name, valueOfObj.email])
+                    break;
+                // case 'usersPermissions':
+                //     convertedDataArrayOfObject.push({
+                //         id: valueOfObj.id,
+                //         firstItem: valueOfObj.name,
+                //         secondItem: valueOfObj.display_name,
+                //         thirdItem: valueOfObj.description
+                //     })
+                //     break;
                 default:
                     break;
             }
         })
-        return convertedDataArrayOfObject;
+        return convertedDataArrayOfArray;
     }
 
 
@@ -52,15 +52,15 @@ const App = (props) => {
         await axios.get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
                 let convertedData = dataRestructuring(response.data.data, props.route)
-                console.log(response.data.data)
+                // console.log(response.data.data)
                 setData(convertedData);
                 setLoading(false);
             })
             .catch(function (error) {
+                console.log(error)
                 setLoading(false);
             });
     };
-
 
     useEffect(() => {
         loadData();
@@ -74,7 +74,7 @@ const App = (props) => {
         const options = {
             includeScore: true,
             // keys: [...props.searchKeys],
-            keys: ['firstItem','secondItem'],
+            // keys: ['firstItem', 'secondItem'],
         }
         setLoading(true);
 
@@ -122,24 +122,36 @@ const App = (props) => {
 
 
     // List InterFace (Action Button) Start
-    const actions = [
-        <EditOutlined key="edit" />,
-        <SettingOutlined key="setting" />,
-        <EllipsisOutlined key="ellipsis" />,
-    ];
+    // const actions = [
+    // <EditOutlined key="edit" />,
+    // <SettingOutlined key="setting" />,
+    // <EllipsisOutlined key="ellipsis" />,
+    // <DeleteOutlined key="delete" />
+    // ];
     // List InterFace (Action Button) End
 
-
-
+    // console.log(props.editComponent.props.initialData)
+    // console.log(filteredData)
 
     return (
         <>
-            <Flex align='center' justify='space-between' gap='middle' style={{ width: '100%' }}>
+            <Flex
+                align='center'
+                justify='space-between'
+                gap='middle'
+                style={{ width: '100%' }}
+            >
                 <h2>{props.listTitle}</h2>
                 {props.children}
-                {/* {props.addButton && <FormModal addFunction={addData} title={props.listTitle} />} */}
             </Flex>
-            <Search allowClear placeholder={`Search ${props.listTitle}`} onSearch={(searchValue) => setSearchValue(searchValue)} enterButton="Search" size="large" />
+            <Search
+                allowClear
+                size="large"
+                name="search"
+                enterButton="Search"
+                placeholder={`Search ${props.listTitle}`}
+                onSearch={(searchValue) => setSearchValue(searchValue)}
+            />
             <div
                 id="scrollableDiv"
                 style={{
@@ -168,15 +180,43 @@ const App = (props) => {
                 >
                     <List
                         dataSource={filteredData}
-                        renderItem={(item) => (
-                            <List.Item key={item.id} actions={actions}>
-                                <List.Item.Meta
-                                    avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item.id}`} /> : ''}
-                                    title={props.withUri ? <a href="https://ant.design">{item.secondItem}</a> : item.secondItem}
-                                    description={item.thirdItem} />
-                                {/* <div>{`${item.thirdItem}`}</div> */}
-                            </List.Item>
-                        )} />
+                        renderItem={(item) => {
+                            // console.log(item)
+                            return (
+                                <List.Item key={item[0]} actions={[
+                                    props.editComponentEssentials ? <FormModal
+                                        workingFunction={props.editComponentEssentials.func}
+                                        buttonDetails={{ title: '', icon: <EditOutlined key="edit" />, variant: 'link' }}
+                                        title={props.listTitle}
+                                        route={props.route}
+                                        okText='Update'
+                                        parentState={props.parentState}
+                                        setParentState={props.setParentState}
+                                        frm={props.editComponentEssentials.frm}
+                                        initialValues={item}
+                                    /> : '',
+                                    props.deleteComponentEssentials ? <FormModal
+                                        workingFunction={props.deleteComponentEssentials.func}
+                                        buttonDetails={{ title: '', icon: <DeleteOutlined key="delete" />, variant: 'link', danger: true }}
+                                        title={props.listTitle}
+                                        route={props.route}
+                                        okText='Delete'
+                                        okType='danger'
+                                        parentState={props.parentState}
+                                        setParentState={props.setParentState}
+                                        frm={[]}
+                                        initialValues={item}
+                                    /> : ''
+                                ]}>
+                                    <List.Item.Meta
+                                        avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item[0]}`} /> : ''}
+                                        title={props.withUri ? <a href="https://ant.design">{item[1]}</a> : item[1]}
+                                        description={item[2]}
+                                    />
+                                    {/* <div>{`${item.thirdItem}`}</div> */}
+                                </List.Item>
+                            )
+                        }} />
                 </InfiniteScroll>
             </div>
         </>

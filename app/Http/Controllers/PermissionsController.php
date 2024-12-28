@@ -39,7 +39,7 @@ class PermissionsController extends BaseApiController
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors(),422);
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
         } else {
             try {
                 $newPermission = Permission::create([
@@ -89,6 +89,14 @@ class PermissionsController extends BaseApiController
      */
     public function destroy(string $id)
     {
-        //
+        $permission = Permission::find($id);
+
+        if (is_null($permission)) {
+            return $this->sendError('Permission not found.');
+        }
+
+        $permission->delete();
+
+        return $this->sendResponse([], 'Permission deleted successfully.');
     }
 }
