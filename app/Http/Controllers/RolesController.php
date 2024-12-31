@@ -34,7 +34,7 @@ class RolesController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:roles,name',
-            'display_name' => 'string|min:3',
+            'display_name' => 'string|min:3|unique:roles,display_name',
             'description' => 'string|min:10',
         ]);
 
@@ -77,7 +77,31 @@ class RolesController extends BaseApiController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $role = Role::find($id);
+
+        if (is_null($role)) {
+            return $this->sendError('Role not found.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:roles,name,' . $id . ',id',
+            'display_name' => 'string|min:3|unique:roles,display_name,' . $id . ',id',
+            'description' => 'string|min:10',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
+
+        try {
+            $role->update($validator->validated());
+            return $this->sendResponse(new UserResource($role), 'Role updated successfully.');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            if ($ex->getCode() == 23000) {
+                return $this->sendError('Database Error: Duplicate entry for role name.', $ex->getMessage(), 422);
+            }
+            return $this->sendError('Database Error.', $ex->getMessage());
+        }
     }
 
     /**

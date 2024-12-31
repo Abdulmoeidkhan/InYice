@@ -6,6 +6,7 @@ import { Button, Modal, Form, Input, message } from 'antd';
 const App = (props) => {
     const [form] = Form.useForm();
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const [formInitialValues, setFormInitialValues] = useState({});
     const [open, setOpen] = useState(false);
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -18,11 +19,10 @@ const App = (props) => {
             type: 'loading',
             content: 'Validating Your Request...',
         });
-        props.workingFunction(values, props.route, props.initialValues.id).then((response) => {
-            console.log(response)
+        props.workingFunction(values, props.route, props?.initialValues?.id).then((response) => {
             setConfirmLoading(false);
             setOpen(false);
-            props.setParentState ? props.setParentState(!props.parentState) : null;
+            setFormInitialValues(response.data.data)
             messageApi.open({
                 key,
                 type: 'success',
@@ -39,7 +39,7 @@ const App = (props) => {
             messageApi.open({
                 key,
                 type: 'error',
-                content: `SomeThing Went Wrong,${error?.response?.data?.data || 'Submit failed!'}`,
+                content: `SomeThing Went Wrong,${JSON.stringify(error?.response?.data?.data) || 'Submit failed!'}`,
                 duration: 1,
                 onClose: () => {
                     console.log(error.response)
@@ -50,14 +50,12 @@ const App = (props) => {
     };
 
     useEffect(() => {
-        // console.log(form)
-        // console.log(props.initialValues)
-        // console.log(props.frm)
-        if (props.frm?.length > 0) {
-
-            console.log(props.frm?.map((fieldName) => { console.log(fieldName?.name) }))
+        // console.log(props)
+        if (props?.initialValues) {
+            setFormInitialValues(props.initialValues)
         }
-    }, []);
+    }, [])
+
 
 
     return (
@@ -82,6 +80,7 @@ const App = (props) => {
                         layout="vertical"
                         form={form}
                         name="form_in_modal"
+                        initialValues={formInitialValues}
                         clearOnDestroy
                         onFinish={(values) => onSubmit(values)}
                     >

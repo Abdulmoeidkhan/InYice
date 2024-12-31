@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex, Form, Input } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Lists from '../Components/Lists/Lists';
@@ -16,11 +16,26 @@ const App = () => {
     const [refreshData, setRefreshData] = useState(false);
 
 
-    // Add/Update/Delete Request Functions Start Comp <FormModal>
+    // Create/Read/Update/Delete Request Functions Start Comp <FormModal>
+
+    // Read Data Function Start
+    // const readData = (values, route, id) => {
+    //     const domanWithPort = import.meta.env.VITE_API_URL;
+    //     return axios.get(`${domanWithPort}/${route}/${id}`)
+    //         .then(function (response) {
+    //             return response
+    //         })
+    //         .catch(function (error) {
+    //             return Promise.reject(error);
+    //         });
+    // };
+    // Read Data Function End
+
     const addData = (values, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
+                setRefreshData(!refreshData)
                 return response
             })
             .catch(function (error) {
@@ -29,9 +44,11 @@ const App = () => {
     };
 
     const updateData = (values, route, id) => {
+        // console.log(values, route, id)
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.put(`${domanWithPort}/${route}/${id}`, values)
             .then(function (response) {
+                setRefreshData(!refreshData)
                 return response
             })
             .catch(function (error) {
@@ -43,6 +60,7 @@ const App = () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.delete(`${domanWithPort}/${route}/${id}`)
             .then(function (response) {
+                setRefreshData(!refreshData)
                 return response
             })
             .catch(function (error) {
@@ -50,7 +68,7 @@ const App = () => {
             });
     };
 
-    // Add/Update/Delete Request Functions End Comp <FormModal>
+    // Create/Read/Update/Delete Request Functions End Comp <FormModal>
 
     return (
         <Layout style={{
@@ -83,9 +101,9 @@ const App = () => {
                                 listTitle="Roles"
                                 route='usersRoles'
                                 parentState={refreshData}
-                                setParentState={setRefreshData}
                                 withPicture={false}
                                 withUri={false}
+                                fieldsToRender={['id', 'name', 'display_name', 'description']}
                                 deleteComponentEssentials={{ func: deleteData }}
                                 editComponentEssentials={{
                                     func: updateData, frm:
@@ -100,8 +118,6 @@ const App = () => {
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
                                     title='Roles'
                                     route='usersRoles'
-                                    parentState={refreshData}
-                                    setParentState={setRefreshData}
                                     frm={[
                                         { label: 'Role Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Role name!' }] },
                                         { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Role!' }] },
@@ -110,8 +126,13 @@ const App = () => {
                             </Lists>
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
-                            <Lists listTitle="Permissions" route='usersPermissions'
-                                parentState={refreshData} setParentState={setRefreshData} withPicture={false} withUri={false}
+                            <Lists
+                                withUri={false}
+                                withPicture={false}
+                                listTitle="Permissions"
+                                route="usersPermissions"
+                                parentState={refreshData}
+                                fieldsToRender={['id', 'name', 'display_name', 'description']}
                                 deleteComponentEssentials={{ func: deleteData }}
                                 editComponentEssentials={{
                                     func: updateData, frm:
@@ -126,8 +147,6 @@ const App = () => {
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
                                     title='Permissions'
                                     route='usersPermissions'
-                                    parentState={refreshData}
-                                    setParentState={setRefreshData}
                                     frm={[
                                         { label: 'Permissions Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Permissions name!' }] },
                                         { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Permissions!' }] },

@@ -15,33 +15,6 @@ const App = (props) => {
     const [searchValue, setSearchValue] = useState('');
 
 
-    const dataRestructuring = (dataArrayOfObject, identifier) => {
-        let convertedDataArrayOfArray = [];
-        dataArrayOfObject.map((valueOfObj) => {
-            switch (identifier) {
-                case 'usersRoles':
-                case 'usersPermissions':
-                    convertedDataArrayOfArray.push([valueOfObj.id, valueOfObj.name, valueOfObj.display_name, valueOfObj.description])
-                    break;
-                case 'users':
-                    convertedDataArrayOfArray.push([valueOfObj.id, valueOfObj.name, valueOfObj.email])
-                    break;
-                // case 'usersPermissions':
-                //     convertedDataArrayOfObject.push({
-                //         id: valueOfObj.id,
-                //         firstItem: valueOfObj.name,
-                //         secondItem: valueOfObj.display_name,
-                //         thirdItem: valueOfObj.description
-                //     })
-                //     break;
-                default:
-                    break;
-            }
-        })
-        return convertedDataArrayOfArray;
-    }
-
-
     // Load Full Data & Initiate Request via UseEffect Start
     const loadData = async () => {
         if (loading) {
@@ -51,9 +24,8 @@ const App = (props) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         await axios.get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
-                let convertedData = dataRestructuring(response.data.data, props.route)
-                // console.log(response.data.data)
-                setData(convertedData);
+                console.log(response.data.data)
+                setData(response.data.data);
                 setLoading(false);
             })
             .catch(function (error) {
@@ -73,15 +45,14 @@ const App = (props) => {
     const searchFuse = (value) => {
         const options = {
             includeScore: true,
-            // keys: [...props.searchKeys],
-            // keys: ['firstItem', 'secondItem'],
+            keys: props.fieldsToRender,
         }
         setLoading(true);
 
         const fuse = new Fuse(data, options)
         const result = fuse.search(value)
         const foramtedResult = result.map(({ item }) => item);
-
+        // console.log(data)
         value ? setFilteredData(foramtedResult) : setFilteredData(data);
 
         setLoading(false);
@@ -110,17 +81,6 @@ const App = (props) => {
     }, [data, searchValue]);
     // Rerender for data Storing And Searching End
 
-
-
-    // // Rerender for filter data Start
-    // useEffect(() => {
-    //     console.log(filteredData, searchValue);
-    // }, [filteredData]);
-    // // Rerender for filter data  End
-
-
-
-
     // List InterFace (Action Button) Start
     // const actions = [
     // <EditOutlined key="edit" />,
@@ -130,8 +90,6 @@ const App = (props) => {
     // ];
     // List InterFace (Action Button) End
 
-    // console.log(props.editComponent.props.initialData)
-    // console.log(filteredData)
 
     return (
         <>
@@ -183,15 +141,13 @@ const App = (props) => {
                         renderItem={(item) => {
                             // console.log(item)
                             return (
-                                <List.Item key={item[0]} actions={[
+                                <List.Item key={item[props.fieldsToRender[0]]} actions={[
                                     props.editComponentEssentials ? <FormModal
                                         workingFunction={props.editComponentEssentials.func}
                                         buttonDetails={{ title: '', icon: <EditOutlined key="edit" />, variant: 'link' }}
                                         title={props.listTitle}
                                         route={props.route}
                                         okText='Update'
-                                        parentState={props.parentState}
-                                        setParentState={props.setParentState}
                                         frm={props.editComponentEssentials.frm}
                                         initialValues={item}
                                     /> : '',
@@ -202,18 +158,16 @@ const App = (props) => {
                                         route={props.route}
                                         okText='Delete'
                                         okType='danger'
-                                        parentState={props.parentState}
-                                        setParentState={props.setParentState}
                                         frm={[]}
                                         initialValues={item}
                                     /> : ''
                                 ]}>
                                     <List.Item.Meta
-                                        avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${item[0]}`} /> : ''}
-                                        title={props.withUri ? <a href="https://ant.design">{item[1]}</a> : item[1]}
-                                        description={item[2]}
+                                        avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${props.fieldsToRender[0] ? item[props.fieldsToRender[0]] : 0}`} /> : ''}
+                                        title={props.withUri ? <a href={`${props.fieldsToRender[5] ? props.fieldsToRender[5] : ''}`}>{item[props.fieldsToRender[2]]}</a> : props.fieldsToRender[2] ? item[props.fieldsToRender[2]] : ''}
+                                        description={props.fieldsToRender[3] ? item[props.fieldsToRender[3]] : ''}
                                     />
-                                    {/* <div>{`${item.thirdItem}`}</div> */}
+                                    <div>{`${props.fieldsToRender[4] ? item[props.fieldsToRender[4]] : ''}`}</div>
                                 </List.Item>
                             )
                         }} />

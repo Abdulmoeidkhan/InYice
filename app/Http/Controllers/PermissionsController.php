@@ -34,7 +34,7 @@ class PermissionsController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:permissions,name',
-            'display_name' => 'string|min:3',
+            'display_name' => 'string|min:3|unique:permissions,display_name',
             'description' => 'string|min:10',
         ]);
 
@@ -81,7 +81,32 @@ class PermissionsController extends BaseApiController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $permission = Permission::find($id);
+
+        if (is_null($permission)) {
+            return $this->sendError('Permission not found.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:permissions,name,' . $id . ',id',
+            'display_name' => 'string|min:3|unique:permissions,display_name,' . $id . ',id',
+            'description' => 'string|min:10',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
+
+        try {
+            $permission->update($validator->validated());
+            return $this->sendResponse(new UserResource($permission), 'Permission updated successfully.');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            if ($ex->getCode() == 23000) {
+                return $this->sendError('Database Error: Duplicate entry for permissions name.', $ex->getMessage(), 422);
+            }
+            return $this->sendError('Database Error.', $ex->getMessage());
+        }
+
     }
 
     /**
