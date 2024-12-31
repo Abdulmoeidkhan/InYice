@@ -118,6 +118,7 @@ const App = () => {
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
                                     title='Roles'
                                     route='usersRoles'
+                                    initialValues={{ name: '', display_name: '', description: '' }}
                                     frm={[
                                         { label: 'Role Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Role name!' }] },
                                         { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Role!' }] },
@@ -147,6 +148,7 @@ const App = () => {
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
                                     title='Permissions'
                                     route='usersPermissions'
+                                    initialValues={{}}
                                     frm={[
                                         { label: 'Permissions Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Permissions name!' }] },
                                         { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Permissions!' }] },

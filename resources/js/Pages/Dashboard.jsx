@@ -59,22 +59,26 @@ const App = () => {
                                 listTitle="Users"
                                 withUri={true}
                                 withPicture={true}
-                                searchKeys={['name', 'email']} />
+                                fieldsToRender={['id', '', 'name', 'email']}
+                            />
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle'>
                             <h2>Users</h2>
                             <List
                                 itemLayout="horizontal"
                                 dataSource={data}
-                                renderItem={(item, index) => (
-                                    <List.Item>
-                                        <List.Item.Meta
-                                            avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                                            title={item.title}
-                                            description=""
-                                        />
-                                    </List.Item>
-                                )}
+                                renderItem={(item, index) => {
+                                    console.log(item, index)
+                                    return (
+                                        <List.Item>
+                                            <List.Item.Meta
+                                                avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
+                                                title={item.title}
+                                                description=""
+                                            />
+                                        </List.Item>
+                                    )
+                                }}
                             />
                         </Flex>
                     </Flex>
