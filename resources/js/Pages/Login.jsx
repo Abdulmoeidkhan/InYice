@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LockOutlined, UserOutlined, MailOutlined, CheckOutlined, HomeOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input, Flex, Card, message, Spin } from 'antd';
 import { useAuth } from "../utils/hooks/useAuth";
 import axios from 'axios';
@@ -189,6 +189,20 @@ const App = () => {
                     ]}
                 >
                     <Input allowClear prefix={<UserOutlined />} placeholder="John Doe" />
+                </Form.Item>
+                <Form.Item disabled={isLoading}
+                    name="company_name"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Company Name!',
+                            type: 'string',
+                            min: 3
+                        },
+                    ]}
+                >
+                    <Input allowClear prefix={<HomeOutlined />} placeholder="XYZ CO ORP" />
                 </Form.Item>
                 <Form.Item disabled={isLoading}
                     name="email"

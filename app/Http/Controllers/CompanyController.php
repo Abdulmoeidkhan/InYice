@@ -3,23 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseApiController as BaseApiController;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
-use App\Models\User as ModelsUser;
 use Illuminate\Http\Request;
+use App\Models\Company;
 
-class UsersController extends BaseApiController
+class CompanyController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $users = ModelsUser::with(['roles', 'permissions', 'teams'])->get();
-        $users = ModelsUser::with(['roles', 'permissions'])->get();
-        // $users = ModelsUser::with(['roles',''])->get();
-        // $users = [...$users,...ModelsUser::all()]; Just For Adding More Users ((Testing))
-        // return $users; 
-        return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
+        $permissions = Company::all();
+        return $this->sendResponse(UserResource::collection($permissions), 'Company retrieved successfully.');
     }
 
     /**
@@ -41,7 +38,7 @@ class UsersController extends BaseApiController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Company $company)
     {
         //
     }
@@ -49,7 +46,7 @@ class UsersController extends BaseApiController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Company $company)
     {
         //
     }
@@ -57,7 +54,7 @@ class UsersController extends BaseApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Company $company)
     {
         //
     }
@@ -65,7 +62,7 @@ class UsersController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Company $company)
     {
         //
     }

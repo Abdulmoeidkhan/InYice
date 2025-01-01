@@ -157,6 +157,68 @@ const App = () => {
                                 />
                             </Lists>
                         </Flex>
+                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
+                            <Lists
+                                withUri={false}
+                                withPicture={false}
+                                listTitle="Teams"
+                                route="usersTeams"
+                                parentState={refreshData}
+                                fieldsToRender={['id', 'name', 'display_name', 'description']}
+                                deleteComponentEssentials={{ func: deleteData }}
+                                editComponentEssentials={{
+                                    func: updateData, frm:
+                                        [
+                                            { label: 'Teams Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Teams name!' }] },
+                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Teams!' }] },
+                                            { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Teams!' }] }
+                                        ]
+                                }}>
+                                <FormModal
+                                    workingFunction={addData}
+                                    buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
+                                    title='Teams'
+                                    route='usersTeams'
+                                    initialValues={{}}
+                                    frm={[
+                                        { label: 'Teams Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Teams name!' }] },
+                                        { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Teams!' }] },
+                                        { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Teams!' }] }
+                                    ]}
+                                />
+                            </Lists>
+                        </Flex>
+                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
+                            <Lists
+                                withUri={false}
+                                withPicture={false}
+                                listTitle="Company"
+                                route="usersCompanies"
+                                parentState={refreshData}
+                                fieldsToRender={['uuid', 'contact', 'name', 'email',]}
+                                deleteComponentEssentials={{ func: deleteData }}
+                                editComponentEssentials={{
+                                    func: updateData, frm:
+                                        [
+                                            { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Company name!' }] },
+                                            { label: 'Display Name', name: 'email', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Company!' }] },
+                                            { label: 'Description', name: 'contact', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Company!' }] }
+                                        ]
+                                }}>
+                                <FormModal
+                                    workingFunction={addData}
+                                    buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
+                                    title='Company'
+                                    route='usersCompanies'
+                                    initialValues={{}}
+                                    frm={[
+                                        { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Company name!' }] },
+                                        { label: 'Display Name', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display name of Company!' }] },
+                                        { label: 'Description', name: 'contact', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Company!' }] }
+                                    ]}
+                                />
+                            </Lists>
+                        </Flex>
                     </Flex>
                 </Flex>
             </Content>

@@ -22,7 +22,7 @@ const App = (props) => {
         props.workingFunction(values, props.route, props?.initialValues?.id).then((response) => {
             setConfirmLoading(false);
             setOpen(false);
-            setFormInitialValues(response.data.data)
+            setFormInitialValues(props?.initialValues?.id ? response.data.data : {});
             messageApi.open({
                 key,
                 type: 'success',

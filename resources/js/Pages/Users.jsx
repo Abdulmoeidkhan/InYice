@@ -53,7 +53,7 @@ const App = () => {
                 <Flex gap="middle" justify='space-evenly' wrap width='100%'>
                     <h1>User's Dashboard</h1>
                     <Flex vertical style={{ width: '90%', minWidth: '200px' }} gap='middle'>
-                        <Lists listTitle="Users" route='users' searchKeys={['name', 'email']} />
+                        <Lists listTitle="User's" route='users' fieldsToRender={['id', '', 'name', 'email']} />
                     </Flex>
                 </Flex>
             </Content>

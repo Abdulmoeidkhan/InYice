@@ -47,6 +47,7 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
                 onClose: () => {
                     console.log(error);
                     setIsLoading(false);
+                    logOut()
                 },
             });
         });

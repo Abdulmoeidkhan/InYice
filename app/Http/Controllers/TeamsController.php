@@ -6,17 +6,17 @@ use App\Http\Controllers\BaseApiController as BaseApiController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Models\Permission;
+use App\Models\Team;
 
-class PermissionsController extends BaseApiController
+class TeamsController extends BaseApiController
 {
-    /**
+   /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $permissions = Permission::all();
-        return $this->sendResponse(UserResource::collection($permissions), 'Permissions retrieved successfully.');
+        $teams = Team::all();
+        return $this->sendResponse(UserResource::collection($teams), 'Teams retrieved successfully.');
     }
 
     /**
@@ -33,8 +33,8 @@ class PermissionsController extends BaseApiController
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:permissions,name',
-            'display_name' => 'string|min:3|unique:permissions,display_name',
+            'name' => 'required|string|max:255|unique:teams,name',
+            'display_name' => 'string|min:3|unique:teams,display_name',
             'description' => 'nullable|string|min:10',
         ]);
 
@@ -42,16 +42,12 @@ class PermissionsController extends BaseApiController
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         } else {
             try {
-                $newPermission = Permission::create([
-                    'name' => $request->name,
-                    'display_name' => $request->display_name,
-                    'description' => $request->description,
-                ]);
-                return $this->sendResponse($newPermission, 'Permissions saved successfully.');
+                $newTeam = Team::create($validator->validated());
+                return $this->sendResponse($newTeam, 'Team saved successfully.');
             } catch (\Illuminate\Database\QueryException $ex) {
                 // Handle specific database errors
                 if ($ex->getCode() == 23000) { // Duplicate entry error (unique constraint violation)
-                    return $this->sendError('Database Error: Duplicate entry for permissions name.', $ex->getMessage(), 422);
+                    return $this->sendError('Database Error: Duplicate entry for team name.', $ex->getMessage(), 422);
                 }
 
                 // General database error
@@ -81,15 +77,15 @@ class PermissionsController extends BaseApiController
      */
     public function update(Request $request, string $id)
     {
-        $permission = Permission::find($id);
+        $team = Team::find($id);
 
-        if (is_null($permission)) {
-            return $this->sendError('Permission not found.');
+        if (is_null($team)) {
+            return $this->sendError('Team not found.');
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:permissions,name,' . $id . ',id',
-            'display_name' => 'string|min:3|unique:permissions,display_name,' . $id . ',id',
+            'name' => 'required|string|max:255|unique:teams,name,' . $id . ',id',
+            'display_name' => 'string|min:3|unique:teams,display_name,' . $id . ',id',
             'description' => 'nullable|string|min:10',
         ]);
 
@@ -98,15 +94,14 @@ class PermissionsController extends BaseApiController
         }
 
         try {
-            $permission->update($validator->validated());
-            return $this->sendResponse(new UserResource($permission), 'Permission updated successfully.');
+            $team->update($validator->validated());
+            return $this->sendResponse(new UserResource($team), 'Team updated successfully.');
         } catch (\Illuminate\Database\QueryException $ex) {
             if ($ex->getCode() == 23000) {
-                return $this->sendError('Database Error: Duplicate entry for permissions name.', $ex->getMessage(), 422);
+                return $this->sendError('Database Error: Duplicate entry for team name.', $ex->getMessage(), 422);
             }
             return $this->sendError('Database Error.', $ex->getMessage());
         }
-
     }
 
     /**
@@ -114,14 +109,14 @@ class PermissionsController extends BaseApiController
      */
     public function destroy(string $id)
     {
-        $permission = Permission::find($id);
+        $team = Team::find($id);
 
-        if (is_null($permission)) {
-            return $this->sendError('Permission not found.');
+        if (is_null($team)) {
+            return $this->sendError('Team not found.');
         }
 
-        $permission->delete();
+        $team->delete();
 
-        return $this->sendResponse([], 'Permission deleted successfully.');
+        return $this->sendResponse([], 'Team deleted successfully.');
     }
 }

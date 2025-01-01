@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Divider, List, Skeleton, Space, Input, Button, Flex, Segmented } from 'antd';
+import { Avatar, Divider, List, Skeleton, Space, Input, Button, Flex, Segmented, Typography, Empty } from 'antd';
 import { EditOutlined, DeleteOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import FormModal from '../Modal/FormModal';
@@ -45,7 +45,7 @@ const App = (props) => {
     const searchFuse = (value) => {
         const options = {
             includeScore: true,
-            keys: props.fieldsToRender,
+            keys: props?.fieldsToRender || ['id', 'name'],
         }
         setLoading(true);
 
@@ -133,43 +133,57 @@ const App = (props) => {
                             active
                         />
                     }
-                    endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+                    endMessage={<>
+                        <Divider plain>It is all, nothing more 🤐</Divider>
+                        {/* <Empty
+                            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                            imageStyle={{
+                                height: 60,
+                            }}
+                            description={
+                                <Typography.Text>
+                                    Customize <a href="#API">Description</a>
+                                </Typography.Text>
+                            }
+                        >
+                            {props.children}
+                        </Empty> */}
+                    </>}
                     scrollableTarget="scrollableDiv"
                 >
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
                             // console.log(item)
-                            return (
-                                <List.Item key={item[props.fieldsToRender[0]]} actions={[
-                                    props.editComponentEssentials ? <FormModal
-                                        workingFunction={props.editComponentEssentials.func}
-                                        buttonDetails={{ title: '', icon: <EditOutlined key="edit" />, variant: 'link' }}
-                                        title={props.listTitle}
-                                        route={props.route}
-                                        okText='Update'
-                                        frm={props.editComponentEssentials.frm}
-                                        initialValues={item}
-                                    /> : '',
-                                    props.deleteComponentEssentials ? <FormModal
-                                        workingFunction={props.deleteComponentEssentials.func}
-                                        buttonDetails={{ title: '', icon: <DeleteOutlined key="delete" />, variant: 'link', danger: true }}
-                                        title={props.listTitle}
-                                        route={props.route}
-                                        okText='Delete'
-                                        okType='danger'
-                                        frm={[]}
-                                        initialValues={item}
-                                    /> : ''
-                                ]}>
-                                    <List.Item.Meta
-                                        avatar={props.withPicture ? <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${props.fieldsToRender[0] ? item[props.fieldsToRender[0]] : 0}`} /> : ''}
-                                        title={props.withUri ? <a href={`${props.fieldsToRender[5] ? props.fieldsToRender[5] : ''}`}>{item[props.fieldsToRender[2]]}</a> : props.fieldsToRender[2] ? item[props.fieldsToRender[2]] : ''}
-                                        description={props.fieldsToRender[3] ? item[props.fieldsToRender[3]] : ''}
-                                    />
-                                    <div>{`${props.fieldsToRender[4] ? item[props.fieldsToRender[4]] : ''}`}</div>
-                                </List.Item>
-                            )
+                            return (<List.Item key={item[props.fieldsToRender[0]]} actions={[
+                                props.editComponentEssentials ? <FormModal
+                                    workingFunction={props.editComponentEssentials.func}
+                                    buttonDetails={{ title: '', icon: <EditOutlined key="edit" />, variant: 'link' }}
+                                    title={props.listTitle}
+                                    route={props.route}
+                                    okText='Update'
+                                    frm={props.editComponentEssentials.frm}
+                                    initialValues={item}
+                                /> : '',
+                                props.deleteComponentEssentials ? <FormModal
+                                    workingFunction={props.deleteComponentEssentials.func}
+                                    buttonDetails={{ title: '', icon: <DeleteOutlined key="delete" />, variant: 'link', danger: true }}
+                                    title={props.listTitle}
+                                    route={props.route}
+                                    okText='Delete'
+                                    okType='danger'
+                                    frm={[]}
+                                    initialValues={item}
+                                /> : ''
+                            ]}>
+                                <List.Item.Meta
+                                    avatar={props.withPicture ?
+                                        <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${props.fieldsToRender[0] ? item[props.fieldsToRender[0]] : 0}`} /> : ''}
+                                    title={props.withUri ? <a href={`${props.fieldsToRender[5] ? props.fieldsToRender[5] : ''}`}>{item[props.fieldsToRender[2]]}</a> : props.fieldsToRender[2] ? <span style={{textTransform:'capitalize'}}> {item[props.fieldsToRender[2]].replace(/-/g, ' ')}</span> : ''}
+                                    description={props.fieldsToRender[3] ? item[props.fieldsToRender[3]] : ''}
+                                />
+                                <div>{`${props.fieldsToRender[4] ? item[props.fieldsToRender[4]] : ''}`}</div>
+                            </List.Item>)
                         }} />
                 </InfiniteScroll>
             </div>

@@ -35,7 +35,7 @@ class RolesController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:roles,name',
             'display_name' => 'string|min:3|unique:roles,display_name',
-            'description' => 'string|min:10',
+            'description' => 'nullable|string|min:10',
         ]);
 
         if ($validator->fails()) {
@@ -86,7 +86,7 @@ class RolesController extends BaseApiController
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:roles,name,' . $id . ',id',
             'display_name' => 'string|min:3|unique:roles,display_name,' . $id . ',id',
-            'description' => 'string|min:10',
+            'description' => 'nullable|string|min:10',
         ]);
 
         if ($validator->fails()) {
