@@ -161,7 +161,7 @@ const App = () => {
                             <Lists
                                 withUri={false}
                                 withPicture={false}
-                                listTitle="Teams"
+                                listTitle="Branches"
                                 route="usersTeams"
                                 parentState={refreshData}
                                 fieldsToRender={['id', 'name', 'display_name', 'description']}
@@ -169,21 +169,21 @@ const App = () => {
                                 editComponentEssentials={{
                                     func: updateData, frm:
                                         [
-                                            { label: 'Teams Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Teams name!' }] },
-                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Teams!' }] },
-                                            { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Teams!' }] }
+                                            { label: 'Branch Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Branch name!' }] },
+                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Branch!' }] },
+                                            { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Branch!' }] }
                                         ]
                                 }}>
                                 <FormModal
                                     workingFunction={addData}
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
-                                    title='Teams'
+                                    title='Branches'
                                     route='usersTeams'
                                     initialValues={{}}
                                     frm={[
-                                        { label: 'Teams Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Teams name!' }] },
-                                        { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Teams!' }] },
-                                        { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Teams!' }] }
+                                        { label: 'Branch Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Branch name!' }] },
+                                        { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: false, message: 'Please input Display name of Branch!' }] },
+                                        { label: 'Description', name: 'description', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Branch!' }] }
                                     ]}
                                 />
                             </Lists>
@@ -195,17 +195,19 @@ const App = () => {
                                 listTitle="Company"
                                 route="usersCompanies"
                                 parentState={refreshData}
-                                fieldsToRender={['uuid', 'contact', 'name', 'email',]}
+                                fieldsToRender={['uuid', 'name', 'display_name', 'email','contact']}
                                 deleteComponentEssentials={{ func: deleteData }}
                                 editComponentEssentials={{
                                     func: updateData, frm:
                                         [
                                             { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Company name!' }] },
-                                            { label: 'Display Name', name: 'email', type: 'text', rule: [{ required: false, message: 'Please edit Display name of Company!' }] },
-                                            { label: 'Description', name: 'contact', type: 'textArea', rule: [{ required: false, message: 'Please edit Description of Company!' }] }
+                                            { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: true, message: 'Please edit Company Display name!' }] },
+                                            { label: 'Email Address', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display Email Address of Company!' }] },
+                                            { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] },
+                                            { label: 'Address', name: 'address', type: 'textArea', rule: [{ required: false, message: 'Please input Address of Company!' }] },
                                         ]
                                 }}>
-                                <FormModal
+                                {/* <FormModal
                                     workingFunction={addData}
                                     buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
                                     title='Company'
@@ -213,10 +215,12 @@ const App = () => {
                                     initialValues={{}}
                                     frm={[
                                         { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Company name!' }] },
-                                        { label: 'Display Name', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display name of Company!' }] },
-                                        { label: 'Description', name: 'contact', type: 'textArea', rule: [{ required: false, message: 'Please input Description of Company!' }] }
+                                        { label: 'Email Address', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display Email Address of Company!' }] },
+                                        { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] },
+                                        { label: 'Address', name: 'address', type: 'textArea', rule: [{ required: false, message: 'Please input Address of Company!' }] },
+                                        // { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] }
                                     ]}
-                                />
+                                /> */}
                             </Lists>
                         </Flex>
                     </Flex>

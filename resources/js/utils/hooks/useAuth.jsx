@@ -12,8 +12,8 @@ export const AuthProvider = ({ children }) => {
         setUser("inyiceuser", data);
         if (data) {
             window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
+            navigate("/client/auth/dahsboard", { replace: true });
         }
-        navigate("/client/auth/dahsboard", { replace: true });
     };
 
     // call this function to sign out logged in user

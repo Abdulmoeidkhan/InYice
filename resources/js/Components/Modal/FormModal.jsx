@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Modal, Form, Input, message } from 'antd';
+import { Button, Modal, Form, Input, message, InputNumber } from 'antd';
 
 
 const App = (props) => {
@@ -19,10 +19,11 @@ const App = (props) => {
             type: 'loading',
             content: 'Validating Your Request...',
         });
-        props.workingFunction(values, props.route, props?.initialValues?.id).then((response) => {
+        let temporaryIdKey = props?.initialValues?.id || props?.initialValues?.uuid
+        props.workingFunction(values, props.route, temporaryIdKey).then((response) => {
             setConfirmLoading(false);
             setOpen(false);
-            setFormInitialValues(props?.initialValues?.id ? response.data.data : {});
+            setFormInitialValues(temporaryIdKey ? response.data.data : {});
             messageApi.open({
                 key,
                 type: 'success',
@@ -91,7 +92,9 @@ const App = (props) => {
                 {props.frm ? props.frm.map((item, i) =>
                     <Form.Item key={i} label={item.label} name={item.name}
                         rules={item.rule.map((ruleItem) => { return { required: ruleItem.required, message: ruleItem.message } })}>
-                        {item.type !== 'textArea' ? <Input /> : <Input.TextArea />}
+                        {item.type === 'textArea' && <Input.TextArea />}
+                        {item.type === 'text' && <Input />}
+                        {item.type === 'number' && <InputNumber style={{ width: '100%' }} />}
                     </Form.Item>) : ''}
             </Modal >
         </>

@@ -37,14 +37,17 @@ class RegisterController extends BaseApiController
             try {
                 $input = $request->all();
                 $input['password'] = bcrypt($input['password']);
-                $company = Company::create(['name' => strtolower(str_replace(' ', '-', $input['company_name'])),'email'=>$input['email']]);
-                if($company){
-                    $user = User::create($input);
-                    $adminRole= Role::where('name', 'admin')->first();
-                    $adminPermission= Permission::where('name', 'all-access')->first();
-                    $team = Team::where('name', 'main')->first();
-                    $user->addRole($adminRole,$team);
-                    $user->givePermission($adminPermission,$team);
+                $company = Company::create(['name' => strtolower(str_replace(' ', '-', $input['company_name'])), 'display_name' => $input['company_name'], 'email' => $input['email']]);
+                if ($company) {
+                    $user = User::create(['company_uuid' => $company->uuid, ...$validator->validated(), 'password' => $input['password']]);
+                    // $adminRole = Role::where('name', 'admin')->first();
+                    // $adminPermission = Permission::where('name', 'all-access')->first();
+                    // $team = Team::where('name', 'main')->first();
+                    $team = Team::firstOrCreate(['name' => 'main', 'display_name' => 'Main']);
+                    $adminRole = Role::firstOrCreate(['name' => 'owner', 'display_name' => 'Owner']);
+                    $adminPermission = Permission::firstOrCreate(['name' => 'all-access', 'display_name' => 'All Access']);
+                    $user->addRole($adminRole, $team);
+                    $user->givePermission($adminPermission, $team);
                     $success['token'] =  $user->createToken($user->name)->plainTextToken;
                     $success['name'] =  $user->name;
                     $success['company'] =  $user->company_name;
@@ -74,8 +77,10 @@ class RegisterController extends BaseApiController
             $user = Auth::user();
             $success['token'] =  $user->createToken($user->name)->plainTextToken;
             $success['name'] =  $user->name;
-            $success['name'] =  $user->company_name;
+            $success['uuid'] =  $user->uuid;
             $success['email'] =  $user->email;
+            $success['company_uuid'] =  $user->uuid;
+            $success['company_name'] =  $user->company_name;
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {

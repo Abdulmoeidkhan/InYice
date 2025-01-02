@@ -24,7 +24,7 @@ const App = (props) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         await axios.get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
-                console.log(response.data.data)
+                // console.log(response.data.data)
                 setData(response.data.data);
                 setLoading(false);
             })
@@ -45,7 +45,7 @@ const App = (props) => {
     const searchFuse = (value) => {
         const options = {
             includeScore: true,
-            keys: props?.fieldsToRender || ['id', 'name'],
+            keys: props?.fieldsToRender || ['name'],
         }
         setLoading(true);
 
@@ -90,6 +90,20 @@ const App = (props) => {
     // ];
     // List InterFace (Action Button) End
 
+    // Check Image URL is Valid or not Start
+    function checkImageLink(url) {
+        const img = new Image();
+        let isValid = false;
+        img.onload = function () {
+            isValid = true;
+        };
+        img.onerror = function () {
+            isValid = false;
+        };
+        let randonNumber = Math.floor(Math.random() * 99) + 1;
+        return isValid ? url : `https://api.dicebear.com/7.x/miniavs/svg?seed=1${randonNumber}`;
+    }
+    // Check Image URL is Valid or not End
 
     return (
         <>
@@ -177,12 +191,19 @@ const App = (props) => {
                                 /> : ''
                             ]}>
                                 <List.Item.Meta
-                                    avatar={props.withPicture ?
-                                        <Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${props.fieldsToRender[0] ? item[props.fieldsToRender[0]] : 0}`} /> : ''}
-                                    title={props.withUri ? <a href={`${props.fieldsToRender[5] ? props.fieldsToRender[5] : ''}`}>{item[props.fieldsToRender[2]]}</a> : props.fieldsToRender[2] ? <span style={{textTransform:'capitalize'}}> {item[props.fieldsToRender[2]].replace(/-/g, ' ')}</span> : ''}
-                                    description={props.fieldsToRender[3] ? item[props.fieldsToRender[3]] : ''}
+                                    avatar={
+                                        props.withPicture ? <Avatar src={checkImageLink(`${props.withPicture}/${props.fieldsToRender[0]}`)} alt='Image or Avatar' /> : ''
+                                    }
+                                    title={
+                                        props.withUri
+                                            ? <a href={`${props.withUri.length > 5 ? `${props.withUri}/${item.company_uuid}/${props.fieldsToRender[0]}` : ''}`}>{item[props.fieldsToRender[2]]}</a>
+                                            : (props.fieldsToRender[2]
+                                                ? <span style={{ textTransform: 'capitalize' }}> {item[props.fieldsToRender[2]]?.replace(/-/g, ' ')}</span>
+                                                : '')
+                                    }
+                                    description={props.fieldsToRender[3] && item[props.fieldsToRender[3]] !== null ? item[props.fieldsToRender[3]] : ''}
                                 />
-                                <div>{`${props.fieldsToRender[4] ? item[props.fieldsToRender[4]] : ''}`}</div>
+                                <div>{`${props.fieldsToRender[4] && item[props.fieldsToRender[4]] !== null ? item[props.fieldsToRender[4]] : ''}`}</div>
                             </List.Item>)
                         }} />
                 </InfiniteScroll>

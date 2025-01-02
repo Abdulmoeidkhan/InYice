@@ -42,11 +42,7 @@ class PermissionsController extends BaseApiController
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         } else {
             try {
-                $newPermission = Permission::create([
-                    'name' => $request->name,
-                    'display_name' => $request->display_name,
-                    'description' => $request->description,
-                ]);
+                $newPermission = Permission::create($validator->validated());
                 return $this->sendResponse($newPermission, 'Permissions saved successfully.');
             } catch (\Illuminate\Database\QueryException $ex) {
                 // Handle specific database errors
@@ -106,7 +102,6 @@ class PermissionsController extends BaseApiController
             }
             return $this->sendError('Database Error.', $ex->getMessage());
         }
-
     }
 
     /**

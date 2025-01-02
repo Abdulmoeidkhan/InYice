@@ -61,7 +61,6 @@ export const menuItems = [
 ];
 
 const App = () => {
-    console.log(location.pathname)
     return (
         <Menu mode="inline" items={menuItems} style={{ border: 'none'}}
             defaultSelectedKeys={[location.pathname]} />

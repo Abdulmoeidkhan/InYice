@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name')->unique();
+            $table->string('display_name')->unique();
             $table->string('email')->unique();
             $table->string('contact')->nullable();
             $table->string('address')->nullable();

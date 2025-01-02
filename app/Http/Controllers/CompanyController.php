@@ -15,8 +15,8 @@ class CompanyController extends BaseApiController
      */
     public function index()
     {
-        $permissions = Company::all();
-        return $this->sendResponse(UserResource::collection($permissions), 'Company retrieved successfully.');
+        $companies = Company::all();
+        return $this->sendResponse(UserResource::collection($companies), 'Company retrieved successfully.');
     }
 
     /**
@@ -54,16 +54,51 @@ class CompanyController extends BaseApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, string $id)
     {
-        //
+        $company = Company::where('uuid', $id)->first();
+
+        if (is_null($company)) {
+            return $this->sendError('Company not found.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255|unique:companies,name,' . $id . ',uuid',
+            'display_name' => 'required|string|max:255|unique:companies,display_name,' . $id . ',uuid',
+            'email' => 'required|email|unique:companies,email,' . $id . ',uuid',
+            'contact' => 'min:9|unique:companies,contact,' . $id . ',uuid',
+            'address' => 'nullable|string|min:10',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
+
+        try {
+            $company_name = strtolower(str_replace(' ', '-', $request['name']));
+            $company->update([...$validator->validated(), 'name' => $company_name]);
+            return $this->sendResponse(new UserResource($company), 'Company updated successfully.');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            if ($ex->getCode() == 23000) {
+                return $this->sendError('Database Error: Duplicate entry for company Name,Email,Contact.', $ex->getMessage(), 422);
+            }
+            return $this->sendError('Database Error.', $ex->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(Company $company, string $id)
     {
-        //
+        // $role = Company::where('uuid', $id)->first();
+
+        // if (is_null($role)) {
+        //     return $this->sendError('Company not found.');
+        // }
+
+        // $role->delete();
+
+        // return $this->sendResponse([], 'Company deleted successfully.');
     }
 }
