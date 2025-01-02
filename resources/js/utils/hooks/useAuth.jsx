@@ -13,14 +13,14 @@ export const AuthProvider = ({ children }) => {
         if (data) {
             window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
         }
-        navigate("/client");
+        navigate("/client/auth/dahsboard", { replace: true });
     };
 
     // call this function to sign out logged in user
     const logOut = () => {
         setUser("inyiceuser", null);
         window.axios.defaults.headers.common['Authorization'] = '';
-        navigate("/client/signin", { replace: true });
+        navigate("/client", { replace: true });
     };
 
     const value = useMemo(

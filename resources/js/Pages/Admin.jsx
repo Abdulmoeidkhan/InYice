@@ -77,7 +77,7 @@ const App = () => {
             <Breadcrumb
                 items={[
                     {
-                        title: 'Dashboard',
+                        title: 'Admin Dashboard',
                     },
                 ]}
                 style={{

@@ -8,21 +8,6 @@ const { Content } = Layout;
 
 
 const App = () => {
-    const data = [
-        {
-            title: 'Ant Design Title 1',
-        },
-        {
-            title: 'Ant Design Title 2',
-        },
-        {
-            title: 'Ant Design Title 3',
-        },
-        {
-            title: 'Ant Design Title 4',
-        },
-    ];
-    const [listData, setListData] = useState(data);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -60,25 +45,6 @@ const App = () => {
                                 withUri={true}
                                 withPicture={true}
                                 fieldsToRender={['id', '', 'name', 'email']}
-                            />
-                        </Flex>
-                        <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle'>
-                            <h2>Users</h2>
-                            <List
-                                itemLayout="horizontal"
-                                dataSource={data}
-                                renderItem={(item, index) => {
-                                    console.log(item, index)
-                                    return (
-                                        <List.Item>
-                                            <List.Item.Meta
-                                                avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                                                title={item.title}
-                                                description=""
-                                            />
-                                        </List.Item>
-                                    )
-                                }}
                             />
                         </Flex>
                     </Flex>

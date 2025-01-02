@@ -10,49 +10,50 @@ import { Menu } from 'antd';
 import { NavLink } from "react-router";
 
 
+const pathForMyPage = '/client/auth';
 
 export const menuItems = [
     {
-        key: '/',
+        key: `${pathForMyPage}/dashboard`,
         icon: <DashboardOutlined />,
         label: (
-            <NavLink to="/client/">
+            <NavLink to="dashboard">
                 Dashboard
             </NavLink>
         )
     },
     {
-        key: '/home',
+        key: `${pathForMyPage}/home`,
         icon: <HomeOutlined />,
         label: (
-            <NavLink to="/client/home">
+            <NavLink to="home">
                 Home
             </NavLink>
         )
     },
     {
-        key: '/about',
+        key: `${pathForMyPage}/about`,
         icon: <InfoCircleOutlined />,
         label: (
-            <NavLink to="/client/about">
+            <NavLink to="about">
                 About
             </NavLink>
         )
     },
     {
-        key: '/users',
+        key: `${pathForMyPage}/users`,
         icon: <TeamOutlined />,
         label: (
-            <NavLink to="/client/users">
+            <NavLink to="users">
                 Users
             </NavLink>
         )
     },
     {
-        key: '/admin',
+        key: `${pathForMyPage}/admin`,
         icon: <AuditOutlined />,
         label: (
-            <NavLink to="/client/admin">
+            <NavLink to="admin">
                 Admin
             </NavLink>
         )
@@ -60,7 +61,7 @@ export const menuItems = [
 ];
 
 const App = () => {
-
+    console.log(location.pathname)
     return (
         <Menu mode="inline" items={menuItems} style={{ border: 'none'}}
             defaultSelectedKeys={[location.pathname]} />
