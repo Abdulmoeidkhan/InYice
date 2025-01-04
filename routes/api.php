@@ -16,9 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::controller(RegisterController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login')->name('login');
+    Route::get('checkUser', 'validateUser')->name('checkUser');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    // Route::get('checkUser', [RegisterController::class, 'validateUser'])->name('checkUser');
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('users', UsersController::class);
     Route::resource('usersRoles', RolesController::class);

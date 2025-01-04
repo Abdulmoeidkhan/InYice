@@ -43,7 +43,8 @@ class UsersController extends BaseApiController
      */
     public function show(string $id)
     {
-        //
+        $users = ModelsUser::with(['roles', 'permissions'])->where('uuid', $id)->get();
+        return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
     }
 
     /**

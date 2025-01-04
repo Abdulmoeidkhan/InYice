@@ -47,7 +47,7 @@ const App = () => {
                     content: `${response.data.message}`,
                     duration: 1,
                     onClose: () => {
-                        // console.log(response);
+                        console.log(response);
                         setIsLoading(false);
                         logIn(response.data.data);
                     },

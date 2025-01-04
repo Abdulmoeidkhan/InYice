@@ -10,25 +10,29 @@ import Admin from "./Pages/Admin";
 import { useAuth, AuthProvider } from "./utils/hooks/useAuth";
 
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = (props) => {
     const { user } = useAuth();
     if (!user) {
         // user is not authenticated
-        return <Navigate to="/client" replace={true}/>;
+        return <Navigate to="/client" replace={true} />;
     }
-    return children;
+    return props.children;
 };
 
-const UnProtectedRoute = ({ children }) => {
+const UnProtectedRoute = (props) => {
     const { user } = useAuth();
+
     if (user) {
         // user is authenticated
-        return <Navigate to="/client/auth/dashboard" replace={true}/>;
+        return <Navigate to="/client/auth/dashboard" replace={true} />;
     }
-    return children;
+    return props.children;
 };
 
+
 const App = () => {
+
+
     return (
         <AuthProvider>
             <Routes>

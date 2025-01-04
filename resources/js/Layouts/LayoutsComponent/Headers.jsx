@@ -23,9 +23,9 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
             content: 'Logging You Out...',
         });
         await axios.post(`${domanWithPort}/logout`, {}, {
-            headers: {
-                'Authorization': `Bearer ${user.token}`,
-            }
+            // headers: {
+            //     'Authorization': `Bearer ${user.token}`,
+            // }
         }).then(function (response) {
             messageApi.open({
                 key,

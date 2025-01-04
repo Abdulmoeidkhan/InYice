@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     DashboardOutlined,
     HomeOutlined,
     InfoCircleOutlined,
     TeamOutlined,
-    AuditOutlined 
+    AuditOutlined
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { NavLink } from "react-router";
+
 
 
 const pathForMyPage = '/client/auth';
@@ -62,7 +63,7 @@ export const menuItems = [
 
 const App = () => {
     return (
-        <Menu mode="inline" items={menuItems} style={{ border: 'none'}}
+        <Menu mode="inline" items={menuItems} style={{ border: 'none' }}
             defaultSelectedKeys={[location.pathname]} />
     );
 };
