@@ -18,6 +18,14 @@ const ProtectedRoute = (props) => {
     }
     return props.children;
 };
+const ProtectedAdminRoute = (props) => {
+    const { user } = useAuth();
+    if (user) {
+        // user is not authenticated
+        return <Navigate to="/client/auth/dashboard" replace={true} />;
+    }
+    return props.children;
+};
 
 const UnProtectedRoute = (props) => {
     const { user } = useAuth();

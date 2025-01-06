@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "InYive",
+    "name": "inyive/invoicing-system",
     "type": "project",
     "description": "Invoicing System for Travel Agencies.",
     "keywords": ["laravel", "framework"],
@@ -26,7 +26,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/dataCollectionHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

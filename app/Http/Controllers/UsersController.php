@@ -14,11 +14,8 @@ class UsersController extends BaseApiController
      */
     public function index()
     {
-        // $users = ModelsUser::with(['roles', 'permissions', 'teams'])->get();
-        $users = ModelsUser::with(['roles', 'permissions'])->get();
-        // $users = ModelsUser::with(['roles',''])->get();
-        // $users = [...$users,...ModelsUser::all()]; Just For Adding More Users ((Testing))
-        // return $users; 
+        $relationships = ['roles', 'permissions'];
+        $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships);
         return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
     }
 
@@ -43,7 +40,8 @@ class UsersController extends BaseApiController
      */
     public function show(string $id)
     {
-        $users = ModelsUser::with(['roles', 'permissions'])->where('uuid', $id)->get();
+        $relationships = ['roles', 'permissions'];
+        $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships);
         return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
     }
 
