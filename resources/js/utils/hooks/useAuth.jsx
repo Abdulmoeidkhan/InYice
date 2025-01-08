@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
             // console.log(data);
             let { name, email, uuid, user_type, userAuthorized } = data;
             setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
-            navigate(`/client/auth/${data.uuid}/dashboard`, { replace: true });
+            navigate(`/client/auth/${data.company_uuid}/dashboard`, { replace: true });
         }
         else {
             navigate("/client", { replace: true });
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     const logOut = () => {
         if (user) {
             setUser("inyiceuser", null);
-            navigate(`/client/auth/${user.uuid}/dashboard`, { replace: true });
+            navigate(`/client`, { replace: true });
         }
         else {
             // setUser("inyiceuser", null);

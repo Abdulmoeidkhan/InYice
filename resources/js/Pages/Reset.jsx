@@ -151,7 +151,7 @@ const App = () => {
                     <Input.Password allowClear showCount prefix={<CheckOutlined />} type="password" placeholder="Confirm Password..." />
                 </Form.Item>
                 <Form.Item disabled={isLoading} >
-                    <SubmitButton form={form}>Sign Up</SubmitButton>
+                    <SubmitButton form={form}>Reset Password</SubmitButton>
                 </Form.Item>
             </Form>
         )

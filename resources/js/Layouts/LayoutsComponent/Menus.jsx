@@ -74,7 +74,7 @@ const App = () => {
 
 
     return (
-        <Menu mode="inline" items={user.userAuthorized ? company ? [...menuItems, ...protectedMenuItem] : protectedMenuItem : menuItems} style={{ border: 'none' }}
+        <Menu mode="inline" items={user?.userAuthorized ? company ? [...menuItems, ...protectedMenuItem] : protectedMenuItem : menuItems} style={{ border: 'none' }}
             defaultSelectedKeys={[location.pathname]} />
     );
 };
