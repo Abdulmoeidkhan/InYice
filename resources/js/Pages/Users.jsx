@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex } from 'antd';
 import Lists from '../Components/Lists/Lists';
+import { useParams } from 'react-router';
+
+
 const { Content } = Layout;
-
-
-
 
 
 const App = () => {
@@ -22,11 +22,11 @@ const App = () => {
             title: 'Ant Design Title 4',
         },
     ];
-    const [listData, setListData] = useState(data);
+    // const [listData, setListData] = useState(data);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
+    const { company } = useParams();
     return (
         <Layout style={{
             padding: '0 24px 24px',
@@ -57,7 +57,7 @@ const App = () => {
                             withUri={true}
                             withPicture={true}
                             listTitle="User's"
-                            route='users'
+                            route={`${company}/users`}
                             fieldsToRender={['id', '', 'name', 'email']} />
                     </Flex>
                 </Flex>

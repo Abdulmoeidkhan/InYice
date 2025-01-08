@@ -190,12 +190,12 @@ const App = () => {
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
                             <Lists
-                                withUri={false}
+                                withUri={`client/auth`}
                                 withPicture={false}
                                 listTitle="Company"
                                 route="usersCompanies"
                                 parentState={refreshData}
-                                fieldsToRender={['uuid', 'name', 'display_name', 'email','contact']}
+                                fieldsToRender={['uuid', 'name', 'display_name', 'email', 'contact','dashboard']}
                                 deleteComponentEssentials={{ func: deleteData }}
                                 editComponentEssentials={{
                                     func: updateData, frm:

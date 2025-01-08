@@ -24,6 +24,10 @@ const App = () => {
         {
             key: 'signUp',
             label: 'Sign Up',
+        },
+        {
+            key: 'reset',
+            label: 'Password Reset',
         }
     ];
 
@@ -67,6 +71,14 @@ const App = () => {
             });
 
     }
+
+
+    const onFinishReset = (values) => {
+        setIsLoading(true);
+        requestSubmitFunction('reset', values)
+        // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
+    };
+
     const onFinishSignIn = (values) => {
         setIsLoading(true);
         requestSubmitFunction('login', values)
@@ -263,9 +275,49 @@ const App = () => {
         )
     }
 
+    const ResetForm = () => {
+        const [form] = Form.useForm();
+
+        return (
+            <Form
+                name="reset"
+                form={form}
+                initialValues={{
+                    remember: true,
+                }}
+                style={{
+                    maxWidth: '100vw',
+                }}
+                onFinish={onFinishReset}
+                onFinishFailed={onFinishFailed}
+                disabled={isLoading}
+            >
+                <Form.Item disabled={isLoading}
+                    name="email"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Email in proper Format!',
+                            type: 'email',
+                            min: 3
+                        },
+                    ]}
+                >
+                    <Input allowClear showCount prefix={<MailOutlined />} placeholder="Email Address" />
+                </Form.Item>
+
+                <Form.Item disabled={isLoading}>
+                    <SubmitButton form={form}>Reset Password</SubmitButton>
+                </Form.Item>
+            </Form>
+        )
+    }
+
     const contentListNoTitle = {
         signIn: <LogInForm />,
         signUp: <SignUpForm />,
+        reset: <ResetForm />,
     };
 
 

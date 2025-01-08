@@ -196,7 +196,7 @@ const App = (props) => {
                                     }
                                     title={
                                         props.withUri
-                                            ? <a href={`${props.withUri.length > 5 ? `${props.withUri}/${item.company_uuid}/${props.fieldsToRender[0]}` : ''}`}>{item[props.fieldsToRender[2]]}</a>
+                                            ? <a href={`${props.withUri.length > 5 ? `/${props.withUri}/${item.uuid}/${props.fieldsToRender[5]}` : ''}`}>{item[props.fieldsToRender[2]]}</a>
                                             : (props.fieldsToRender[2]
                                                 ? <span style={{ textTransform: 'capitalize' }}> {item[props.fieldsToRender[2]]?.replace(/-/g, ' ')}</span>
                                                 : '')

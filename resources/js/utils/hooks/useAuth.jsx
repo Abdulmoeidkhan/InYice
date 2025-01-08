@@ -8,24 +8,21 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useLocalStorage("inyiceuser", null);
     const navigate = useNavigate();
 
-    // To Check User is authenticated or not 
-    useEffect(() => {
-        checkUser()
-    }, [])
 
     // call this function when you want to check user is authenticated or not 
 
-    const checkUser =  () => {
+    const checkUser = () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.get(`${domanWithPort}/${'checkUser'}`)
             .then(function (response) {
                 // console.log(response.data.data)
-                setUser("inyiceuser", response.data.data)
+                let { name, email, uuid, user_type, userAuthorized } = response.data.data;
+                setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
                 return response.data.data
             })
             .catch(function (error) {
                 setUser("inyiceuser", null);
-                // return Promise.reject(error);
+                return Promise.reject(error);
             });
     }
 
@@ -33,12 +30,13 @@ export const AuthProvider = ({ children }) => {
 
     // call this function when you want to authenticate the user
     const logIn = async (data) => {
-        // console.log(data)
-        checkUser()
-        if (user) {
+        if (data) {
             // setUser("inyiceuser", data);
             // window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
-            navigate("/client/auth/dashboard", { replace: true });
+            // console.log(data);
+            let { name, email, uuid, user_type, userAuthorized } = data;
+            setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
+            navigate(`/client/auth/${data.uuid}/dashboard`, { replace: true });
         }
         else {
             navigate("/client", { replace: true });
@@ -47,9 +45,9 @@ export const AuthProvider = ({ children }) => {
 
     // call this function to sign out logged in user
     const logOut = () => {
-        checkUser()
         if (user) {
-            navigate("/client/auth/dashboard", { replace: true });
+            setUser("inyiceuser", null);
+            navigate(`/client/auth/${user.uuid}/dashboard`, { replace: true });
         }
         else {
             // setUser("inyiceuser", null);
@@ -63,6 +61,7 @@ export const AuthProvider = ({ children }) => {
             user,
             logIn,
             logOut,
+            checkUser
         }),
         [user]
     );

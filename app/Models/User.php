@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laratrust\Traits\HasRolesAndPermissions;
+use App\Notifications\ResetPasswordLinkSPA;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Contracts\LaratrustUser;
 use Laravel\Sanctum\HasApiTokens;
@@ -34,6 +35,17 @@ class User extends Authenticatable implements LaratrustUser
         'email',
         'password',
     ];
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordLinkSPA($token));
+    }
 
     /**
      * The attributes that should be hidden for serialization.

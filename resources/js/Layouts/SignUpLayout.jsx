@@ -88,8 +88,8 @@ const App = (props) => {
                     </Sider>
                     <Content>
                         <Flex align='center' justify='center' style={{ width: collapsed ? '100vw' : '50vw', height: '100vh' }}>
-                            {/* <Outlet /> */}
-                            {props.children}
+                            <Outlet />
+                            {/* {props.children} */}
                         </Flex>
                     </Content>
                 </Layout>

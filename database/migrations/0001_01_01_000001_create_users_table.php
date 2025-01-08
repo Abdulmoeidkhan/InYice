@@ -15,13 +15,16 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
-            $table->string('company_name')->unique();
-            $table->uuid('company_uuid')->unique();
+            $table->string('company_name');
+            $table->uuid('company_uuid');
+            $table->integer('user_type')->default(0);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->foreign('company_uuid')->references('uuid')->on('companies')
+                ->onUpdate('cascade')->onDelete('cascade');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

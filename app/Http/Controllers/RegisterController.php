@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseApiController as BaseApiController;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Permission;
@@ -11,6 +12,8 @@ use App\Models\Company;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends BaseApiController
 {
@@ -21,8 +24,6 @@ class RegisterController extends BaseApiController
      * @return \Illuminate\Http\Response
      */
 
-
-
     /**
      * Validate the Sanctum token and get the associated user.
      *
@@ -32,9 +33,12 @@ class RegisterController extends BaseApiController
     public function validateUser(Request $request)
     {
         if ($request->user()) {
-            return $this->sendResponse($request->user(), 'Authenticated user retrieved successfully.');
+            $data = $request->user();
+            $company = Company::where('uuid', $request->user()->company_uuid)->first();
+            $data->userAuthorized = $company->name === 'inyice-coorporation';
+            return $this->sendResponse($data, 'Authenticated user retrieved successfully.');
         } else {
-            return $this->sendError('No User Found.', ['error' => 'Unable to Find User'],401);
+            return $this->sendError('No User Found.', ['error' => 'Unable to Find User'], 401);
         }
         // $user = auth()->user;
         // return $user;
@@ -77,7 +81,7 @@ class RegisterController extends BaseApiController
             'name' => 'required',
             'company_name' => 'required|string|min:5|max:255|unique:users,company_name',
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:8',
             'c_password' => 'required|same:password',
         ]);
 
@@ -103,6 +107,7 @@ class RegisterController extends BaseApiController
                     $success['name'] =  $user->name;
                     $success['company'] =  $user->company_name;
                     $success['email'] =  $user->email;
+                    $this->login($request);
                     return $this->sendResponse($success, 'User register successfully.');
                 }
             } catch (\Illuminate\Database\QueryException $ex) {
@@ -118,31 +123,144 @@ class RegisterController extends BaseApiController
     }
 
     /**
-     * Login api
+     * Login api for SPA 
      *
      * @return \Illuminate\Http\Response
      */
     public function login(Request $request)
     {
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-            // $success['token'] =  $user->createToken($user->name)->plainTextToken;
-            $success['name'] =  $user->name;
-            $success['uuid'] =  $user->uuid;
-            $success['email'] =  $user->email;
-            $success['company_uuid'] =  $user->uuid;
-            $success['company_name'] =  $user->company_name;
 
-            $request->session()->regenerate();
-            return $this->sendResponse($success, 'User login successfully.');
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
         } else {
-            return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user = Auth::user();
+                // return $user;
+                // $success['token'] =  $user->createToken($user->name)->plainTextToken;
+                $success['name'] =  $user->name;
+                $success['uuid'] =  $user->uuid;
+                $success['email'] =  $user->email;
+                $success['company_uuid'] =  $user->company_uuid;
+                $success['company_name'] =  $user->company_name;
+
+                $company = Company::where('uuid', $success['company_uuid'])->first();
+                $success['userAuthorized'] = $company->name === 'inyice-coorporation';
+                $request->session()->regenerate();
+                return $this->sendResponse($success, 'User login successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
+            }
+        }
+    }
+    /**
+     * Login api for Third Party 
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function loginThirdParty(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        } else {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $user = Auth::user();
+                $success['token'] =  $user->createToken($user->name)->plainTextToken;
+                $success['name'] =  $user->name;
+                $success['uuid'] =  $user->uuid;
+                $success['email'] =  $user->email;
+                $success['company_uuid'] =  $user->company_uuid;
+                $success['company_name'] =  $user->company_name;
+
+                $company = Company::where('uuid', $success['company_uuid'])->first();
+                $success['userAuthorized'] = $company->name === 'inyice-coorporation';
+
+                // $request->session()->regenerate();
+                return $this->sendResponse($success, 'User login successfully.');
+            } else {
+                return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
+            }
+        }
+    }
+
+
+
+    /**
+     * Reset api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reset(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        } else {
+            try {
+                $status = Password::sendResetLink(
+                    $request->only('email')
+                );
+                $status === Password::RESET_LINK_SENT;
+                // return $status;
+                return $this->sendResponse($status, 'Password Link Sent.');
+            } catch (\Illuminate\Database\QueryException $ex) {
+
+                // General database error
+                return $this->sendError('Authentication Error.', $ex->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Reset Password api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'c_password' => 'required|same:password',
+        ]);
+
+
+        if ($validator->fails()) {
+            return $this->sendError('Invalid Token / Request.', $validator->errors());
+        } else {
+            try {
+                $updatePassword = DB::table('password_reset_tokens')->where([
+                    'email' => $request->email,
+                ])->first();
+                if ($updatePassword && Hash::check($request->token, $updatePassword->token)) {
+                    $user = User::where('email', $request->email)->update(['password' => bcrypt($request->password)]);
+                    $user ? DB::table('password_reset_tokens')->where(['email' => $request->email])->delete() : null;
+                } else {
+                    return $this->sendError('User Not Updated Error.', 'User Not Found');
+                }
+                return $this->sendResponse([], 'Password Updated Successfully');
+            } catch (\Illuminate\Database\QueryException $ex) {
+
+                // General database error
+                return $this->sendError('User Not Updated Error.', $ex->getMessage());
+            }
         }
     }
 
 
     /**
-     * Logout api
+     * Logout api SPA
      *
      * @return \Illuminate\Http\Response
      */
@@ -155,6 +273,21 @@ class RegisterController extends BaseApiController
             // Auth::logout();
             $request->session()->flush();
             $request->session()->regenerate();
+            return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
+        } else {
+            return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);
+        }
+    }
+
+    /**
+     * Logout api ThirdParty
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function logoutThirdParty(Request $request)
+    {
+        if ($request->user()->currentAccessToken()) {
+            $request->user()->currentAccessToken()->delete();
             return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
         } else {
             return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);

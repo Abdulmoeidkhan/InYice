@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex } from 'antd';
 import Lists from '../Components/Lists/Lists';
+import { useParams } from 'react-router';
 const { Content } = Layout;
 
 
@@ -12,6 +13,8 @@ const App = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
+    const { company } = useParams();
+    // console.log(company)
     return (
         <Layout style={{
             padding: '0 24px 24px',
@@ -40,7 +43,7 @@ const App = () => {
                     <Flex gap="middle" style={{ width: '100%' }} justify='space-evenly' wrap>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
                             <Lists
-                                route='users'
+                                route={`${company}/users`}
                                 listTitle="Users"
                                 withUri={true}
                                 withPicture={true}

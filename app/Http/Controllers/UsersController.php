@@ -12,10 +12,10 @@ class UsersController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req, $company)
     {
         $relationships = ['roles', 'permissions'];
-        $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships);
+        $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships, $req, $company);
         return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
     }
 
