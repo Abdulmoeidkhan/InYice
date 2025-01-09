@@ -165,40 +165,42 @@ class RegisterController extends BaseApiController
             }
         }
     }
+
+    
     /**
      * Login api for Third Party 
      *
      * @return \Illuminate\Http\Response
      */
-    public function loginThirdParty(Request $request)
-    {
+    // public function loginThirdParty(Request $request)
+    // {
 
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        } else {
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user = Auth::user();
-                $success['token'] =  $user->createToken($user->name)->plainTextToken;
-                $success['name'] =  $user->name;
-                $success['uuid'] =  $user->uuid;
-                $success['email'] =  $user->email;
-                $success['company_uuid'] =  $user->company_uuid;
-                $success['company_name'] =  $user->company_name;
+    //     $validator = Validator::make($request->all(), [
+    //         'email' => 'required|email',
+    //         'password' => 'required|min:8',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return $this->sendError('Validation Error.', $validator->errors());
+    //     } else {
+    //         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+    //             $user = Auth::user();
+    //             $success['token'] =  $user->createToken($user->name)->plainTextToken;
+    //             $success['name'] =  $user->name;
+    //             $success['uuid'] =  $user->uuid;
+    //             $success['email'] =  $user->email;
+    //             $success['company_uuid'] =  $user->company_uuid;
+    //             $success['company_name'] =  $user->company_name;
 
-                $company = Company::where('uuid', $success['company_uuid'])->first();
-                $success['userAuthorized'] = $company->name === 'inyice-coorporation';
+    //             $company = Company::where('uuid', $success['company_uuid'])->first();
+    //             $success['userAuthorized'] = $company->name === 'inyice-coorporation';
 
-                // $request->session()->regenerate();
-                return $this->sendResponse($success, 'User login successfully.');
-            } else {
-                return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
-            }
-        }
-    }
+    //             // $request->session()->regenerate();
+    //             return $this->sendResponse($success, 'User login successfully.');
+    //         } else {
+    //             return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
+    //         }
+    //     }
+    // }
 
 
 
@@ -278,28 +280,33 @@ class RegisterController extends BaseApiController
         // return response()->json($request->user(), 200);
         // $user = auth::user()->tokens;
         // return $request->user()->currentAccessToken()->plainTextToken;
+        // Regenerate session ID
         if ($request->user()) {
+            if ($request->hasSession()) {
+                $request->session()->flush();
+                $request->session()->regenerate();
+            } else {
+                $request->user()->currentAccessToken()->delete();
+            }
             // Auth::logout();
-            $request->session()->flush();
-            $request->session()->regenerate();
             return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
         } else {
             return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);
         }
     }
 
-    /**
-     * Logout api ThirdParty
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function logoutThirdParty(Request $request)
-    {
-        if ($request->user()->currentAccessToken()) {
-            $request->user()->currentAccessToken()->delete();
-            return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
-        } else {
-            return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);
-        }
-    }
+    // /**
+    //  * Logout api ThirdParty
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function logoutThirdParty(Request $request)
+    // {
+    //     if ($request->user()->currentAccessToken()) {
+    //         $request->user()->currentAccessToken()->delete();
+    //         return $this->sendResponse('User Signed Out Successfully', 'Sign Out Successfully');
+    //     } else {
+    //         return $this->sendError('Error occured While Signing Out.', ['error' => 'Something Went Wrong']);
+    //     }
+    // }
 }

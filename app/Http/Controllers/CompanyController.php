@@ -13,9 +13,10 @@ class CompanyController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $req, $company)
     {
-        $companies = Company::all();
+        $companies = fetchDataAsPerAuthority(Company::class, null, $req, $company='', 'uuid');
+        // $companies = Company::all();
         return $this->sendResponse(UserResource::collection($companies), 'Company retrieved successfully.');
     }
 

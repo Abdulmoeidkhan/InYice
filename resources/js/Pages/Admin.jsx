@@ -3,10 +3,10 @@ import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex, Form, Input } fro
 import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import Lists from '../Components/Lists/Lists';
 import FormModal from '../Components/Modal/FormModal';
+import { useParams } from 'react-router';
+
+
 const { Content } = Layout;
-
-
-
 
 
 const App = () => {
@@ -15,6 +15,7 @@ const App = () => {
     } = theme.useToken();
     const [refreshData, setRefreshData] = useState(false);
 
+    const { company } = useParams();
 
     // Create/Read/Update/Delete Request Functions Start Comp <FormModal>
 
@@ -193,9 +194,9 @@ const App = () => {
                                 withUri={`client/auth`}
                                 withPicture={false}
                                 listTitle="Company"
-                                route="usersCompanies"
+                                route={`${company}/usersCompanies`}
                                 parentState={refreshData}
-                                fieldsToRender={['uuid', 'name', 'display_name', 'email', 'contact','dashboard']}
+                                fieldsToRender={['uuid', 'name', 'display_name', 'email', 'contact', 'dashboard']}
                                 deleteComponentEssentials={{ func: deleteData }}
                                 editComponentEssentials={{
                                     func: updateData, frm:

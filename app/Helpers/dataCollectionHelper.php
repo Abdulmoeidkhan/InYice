@@ -12,7 +12,7 @@ if (!function_exists('fetchDataAsPerAuthority')) {
      * @param string $uuid The UUID to check against.
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    function fetchDataAsPerAuthority(string $modelClass, array $relationship = null, ?object $req = null, ?string $company = null, ?string $uuidIdentifier = 'company_uuid',)
+    function fetchDataAsPerAuthority(string $modelClass, array $relationship = null, ?object $req = null, ?string $company = '', ?string $uuidIdentifier = 'company_uuid',)
     {
 
         // Check if the provided class is a valid model
@@ -31,8 +31,10 @@ if (!function_exists('fetchDataAsPerAuthority')) {
 
         // Handle data fetching based on user type
         if ($user->company_uuid === $dataToBeCheck->uuid) {
+
+            $validCompanyData = strlen($company) > 0 ? Company::where('uuid', $company)->first('uuid') : false;
             // Fetch all data for primary users
-            if ($company) {
+            if ($validCompanyData) {
                 return $relationship ? $modelClass::with($relationship)->where($uuidIdentifier, $company)->get() : $modelClass::where($uuidIdentifier, $company)->get();
             } else {
                 return $relationship ? $modelClass::with($relationship)->get() : $modelClass::all();

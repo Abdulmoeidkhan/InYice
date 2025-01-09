@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::controller(RegisterController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('login', 'login')->name('login');
-    Route::post('loginThirdParty', 'loginThirdParty')->name('loginThirdParty');
     Route::post('reset', 'reset')->name('password.reset');
     Route::post('resetPassword', 'resetPassword')->name('resetPassword');
     // Route::get('checkUser', 'validateUser')->name('checkUser');
@@ -24,11 +23,10 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('checkUser', [RegisterController::class, 'validateUser'])->name('checkUser');
-    Route::post('logoutThirdParty', [RegisterController::class, 'logoutThirdParty']);
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('/{company}/users', UsersController::class);
     Route::resource('usersRoles', RolesController::class);
     Route::resource('usersPermissions', PermissionsController::class);
     Route::resource('usersTeams', TeamsController::class);
-    Route::resource('usersCompanies', CompanyController::class);
+    Route::resource('/{company}/usersCompanies', CompanyController::class);
 });
