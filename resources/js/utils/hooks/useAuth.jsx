@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.get(`${domanWithPort}/${'checkUser'}`)
             .then(function (response) {
-                // console.log(response.data.data)
+                console.log(response)
                 let { name, email, uuid, user_type, userAuthorized } = response.data.data;
                 setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
                 return response.data.data

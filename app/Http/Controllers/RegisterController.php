@@ -139,17 +139,26 @@ class RegisterController extends BaseApiController
         } else {
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = Auth::user();
-                // return $user;
-                // $success['token'] =  $user->createToken($user->name)->plainTextToken;
-                $success['name'] =  $user->name;
-                $success['uuid'] =  $user->uuid;
-                $success['email'] =  $user->email;
-                $success['company_uuid'] =  $user->company_uuid;
-                $success['company_name'] =  $user->company_name;
+                // Prepare response data
+                $success = [
+                    'name' => $user->name,
+                    'uuid' => $user->uuid,
+                    'email' => $user->email,
+                    'company_uuid' => $user->company_uuid,
+                    'company_name' => $user->company_name,
+                ];
 
-                $company = Company::where('uuid', $success['company_uuid'])->first();
-                $success['userAuthorized'] = $company->name === 'inyice-coorporation';
-                $request->session()->regenerate();
+                // Check company authorization
+                $company = Company::where('uuid', $user->company_uuid)->first();
+                $success['userAuthorized'] = $company && $company->name === 'inyice-coorporation';
+
+                // Regenerate session ID
+                if ($request->hasSession()) {
+                    $request->session()->regenerate();
+                } else {
+                    $success['token'] =  $user->createToken($user->name)->plainTextToken;
+                }
+
                 return $this->sendResponse($success, 'User login successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);
