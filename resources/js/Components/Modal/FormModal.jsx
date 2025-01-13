@@ -90,11 +90,13 @@ const App = (props) => {
                 )}
             >
                 {props.frm ? props.frm.map((item, i) =>
-                    <Form.Item key={i} label={item.label} name={item.name}
+                    <Form.Item key={i} label={item.label}
+                        name={item.name}
                         rules={item.rule.map((ruleItem) => { return { required: ruleItem.required, message: ruleItem.message } })}>
                         {item.type === 'textArea' && <Input.TextArea />}
-                        {item.type === 'text' && <Input />}
                         {item.type === 'number' && <InputNumber style={{ width: '100%' }} />}
+                        {(item.type === 'text' || item.type === 'email') && <Input />}
+                        {item.type === 'select' && <Select ></Select>}
                     </Form.Item>) : ''}
             </Modal >
         </>
