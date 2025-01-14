@@ -11,6 +11,7 @@ const { Content } = Layout;
 
 const App = () => {
     // const [listData, setListData] = useState(data);
+    const [refreshData, setRefreshData] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -21,6 +22,7 @@ const App = () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
+                console.log(response)
                 setRefreshData(!refreshData)
                 return response
             })
@@ -84,6 +86,7 @@ const App = () => {
                         <Lists
                             withUri={true}
                             withPicture={true}
+                            parentState={refreshData}
                             listTitle="User's"
                             route={`${company}/users`}
                             fieldsToRender={['id', '', 'name', 'email']} >
@@ -94,11 +97,11 @@ const App = () => {
                                 route={`${company}/users`}
                                 initialValues={{}}
                                 frm={[
-                                    { label:'Name', name:'name', type:'text', rule:[{ required: true, message: 'Please input User name!' }] },
-                                    { label:'Email Address', name:'user_email', type:'email', rule:[{ required: true, message: 'Please input User Email!' }] },
-                                    { label:'Branch Name', name:'branch_name', type:'text', rule:[{ required: true, message: 'Please input Branch name!' }] },
-                                    { label:'Permissions Name', name:'permission_name', type:'text', rule:[{ required: true, message: 'Please input Permissions name!' }] },
-                                    { label:'Role Name', name:'role_name', type:'text', rule:[{ required: true, message: 'Please input Role name!' }] },
+                                    { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User name!' }] },
+                                    { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
+                                    { label: 'Branch Name', name: 'branch_name', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch name!' }] },
+                                    { label: 'Permissions Name', name: 'permission_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions name!' }] },
+                                    { label: 'Role Name', name: 'role_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role name!' }] },
                                 ]}
                             />
                         </Lists>
