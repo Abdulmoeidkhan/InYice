@@ -22,7 +22,7 @@ const App = () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
-                console.log(response)
+                // console.log(response)
                 setRefreshData(!refreshData)
                 return response
             })
@@ -84,12 +84,24 @@ const App = () => {
                     <h1>User's Dashboard</h1>
                     <Flex vertical style={{ width: '90%', minWidth: '200px' }} gap='middle'>
                         <Lists
-                            withUri={true}
-                            withPicture={true}
-                            parentState={refreshData}
                             listTitle="User's"
                             route={`${company}/users`}
-                            fieldsToRender={['id', '', 'name', 'email']} >
+                            parentState={refreshData}
+                            withPicture={true}
+                            withUri={true}
+                            fieldsToRender={['id', '', 'name', 'email']}
+                            deleteComponentEssentials={{ func: deleteData }}
+                            editComponentEssentials={{
+                                func: updateData, frm:
+                                    [
+                                        { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
+                                        { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
+                                        { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
+                                        { label: 'Permissions Name', name: 'permission_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
+                                        { label: 'Role Name', name: 'role_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
+                                    ]
+                            }}
+                        >
                             <FormModal
                                 workingFunction={addData}
                                 buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
@@ -97,11 +109,11 @@ const App = () => {
                                 route={`${company}/users`}
                                 initialValues={{}}
                                 frm={[
-                                    { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User name!' }] },
+                                    { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
                                     { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
-                                    { label: 'Branch Name', name: 'branch_name', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch name!' }] },
-                                    { label: 'Permissions Name', name: 'permission_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions name!' }] },
-                                    { label: 'Role Name', name: 'role_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role name!' }] },
+                                    { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
+                                    { label: 'Permissions Name', name: 'permission_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
+                                    { label: 'Role Name', name: 'role_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
                                 ]}
                             />
                         </Lists>

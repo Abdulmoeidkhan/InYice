@@ -83,6 +83,7 @@ const App = (props) => {
     return (
         <>
             {contextHolder}
+            {/* {console.log(formInitialValues)} */}
             <Button size='large' onClick={() => setOpen(true)} color={props.buttonDetails.danger ? 'danger' : "primary"} variant={props.buttonDetails.variant} icon={props.buttonDetails.icon} danger={props.buttonDetails.danger}>{props.buttonDetails.title}</Button>
             <Modal
                 open={open}
@@ -122,7 +123,7 @@ const App = (props) => {
                             // onChange={onGenderChange}
                             allowClear
                         >
-                            {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData,index) => <Option key={`${uniqueId}-${index}`} value={optData.name}>{optData.display_name}</Option>)}
+                            {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
                         </Select>}
                     </Form.Item>) : ''}
             </Modal >

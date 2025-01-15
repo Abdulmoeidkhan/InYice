@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Divider, List, Skeleton, Space, Input, Button, Flex, Segmented, Typography, Empty } from 'antd';
+import { Avatar, Divider, List, Skeleton, Input, Flex, } from 'antd';
 import { EditOutlined, DeleteOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import FormModal from '../Modal/FormModal';
+import Tags from '../Tags/Tags';
 import Fuse from 'fuse.js';
 
 const { Search } = Input;
@@ -198,12 +199,16 @@ const App = (props) => {
                                         props.withUri
                                             ? <a href={`${props.withUri.length > 5 ? `/${props.withUri}/${item.uuid}/${props.fieldsToRender[5]}` : ''}`}>{item[props.fieldsToRender[2]]}</a>
                                             : (props.fieldsToRender[2]
-                                                ? <span style={{ textTransform: 'capitalize' }}> {item[props.fieldsToRender[2]]?.replace(/-/g, ' ')}</span>
+                                                ? <><span style={{ textTransform: 'capitalize' }}> {item[props.fieldsToRender[2]]?.replace(/-/g, ' ')}</span></>
                                                 : '')
                                     }
-                                    description={props.fieldsToRender[3] && item[props.fieldsToRender[3]] !== null ? item[props.fieldsToRender[3]] : ''}
+                                    description={props.fieldsToRender[3] && item[props.fieldsToRender[3]] !== null ? `${item[props.fieldsToRender[3]]}` : ''}
                                 />
-                                <div>{`${props.fieldsToRender[4] && item[props.fieldsToRender[4]] !== null ? item[props.fieldsToRender[4]] : ''}`}</div>
+                                <div>
+                                    {`${props.fieldsToRender[4] && item[props.fieldsToRender[4]] !== null ? item[props.fieldsToRender[4]] : ''}`}
+                                    {item?.role_display_name && <Tags type="roles" dataTitle={item?.role_display_name} dataValue={item?.role_name} />}
+                                    {item?.permission_display_name && <Tags type="permissions" dataTitle={item?.permission_display_name} dataValue={item?.permission_name} />}
+                                </div>
                             </List.Item>)
                         }} />
                 </InfiniteScroll>

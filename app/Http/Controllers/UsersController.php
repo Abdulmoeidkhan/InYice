@@ -22,7 +22,33 @@ class UsersController extends BaseApiController
     {
         $relationships = ['roles', 'permissions'];
         $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships, $req, $company);
-        return $this->sendResponse(UserResource::collection($users), 'Users retrieved successfully.');
+        $sortedUsers = [];
+        foreach ($users as $key => $user) {
+            $requiredKeys = ['uuid', 'name', 'email', 'company_name', 'company_uuid', 'user_type'];
+
+            // Filter the user's data
+            $sortedData = array_intersect_key($user->toArray(), array_flip($requiredKeys));
+
+            if (!empty($user->roles)) {
+                $sortedData['role_name'] = $user->roles[0]['name'];
+                $sortedData['role_display_name'] = $user->roles[0]['display_name'];
+                $sortedData['branch_id'] = $user->roles[0]['pivot']['team_id']; // Access team_id from the pivot
+            } else {
+                $sortedData['role_name'] = null;
+                $sortedData['branch_id'] = null;
+            }
+
+            if (!empty($user->permissions)) {
+                $sortedData['permission_name'] = $user->permissions[0]['name'];
+                $sortedData['permission_display_name'] = $user->permissions[0]['display_name'];
+            } else {
+                $sortedData['permission_name'] = null;
+            }
+
+            // Add the filtered user to the sortedUsers array
+            $sortedUsers[] = $sortedData;
+        }
+        return $this->sendResponse(UserResource::collection($sortedUsers), 'Users retrieved successfully.');
     }
 
     /**
@@ -53,10 +79,7 @@ class UsersController extends BaseApiController
             try {
                 if ($request->user()->company_name) {
                     $user = ModelsUser::create(['company_uuid' => $request->user()->company_uuid, ...$validator->validated(), 'password' => bcrypt(Str::random(8))]);
-                    // $adminRole = Role::where('name', 'admin')->first();
-                    // $adminPermission = Permission::where('name', 'all-access')->first();
-                    // $team = Team::where('name', 'main')->first();
-                    $team = Team::where('name', $request->branch_name)->first();
+                    $team = Team::where('id', $request->branch_id)->first();
                     $role = Role::where('name', $request->role_name)->first();
                     $permission = Permission::where('name', $request->permission_name)->first();
                     $user->addRole($role, $team);
