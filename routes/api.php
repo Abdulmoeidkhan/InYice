@@ -28,5 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('usersRoles', RolesController::class);
     Route::resource('usersPermissions', PermissionsController::class);
     Route::resource('usersTeams', TeamsController::class);
-    Route::resource('/{company}/usersCompanies', CompanyController::class);
+    Route::resource('usersCompanies', CompanyController::class);
 });

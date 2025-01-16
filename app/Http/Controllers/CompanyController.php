@@ -13,9 +13,9 @@ class CompanyController extends BaseApiController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $req, $company)
+    public function index(Request $req, $company = '')
     {
-        $companies = fetchDataAsPerAuthority(Company::class, null, $req, $company='', 'uuid');
+        $companies = fetchDataAsPerAuthority(Company::class, null, $req, $company, 'uuid');
         // $companies = Company::all();
         return $this->sendResponse(UserResource::collection($companies), 'Company retrieved successfully.');
     }
@@ -67,7 +67,9 @@ class CompanyController extends BaseApiController
             'name' => 'required|string|max:255|unique:companies,name,' . $id . ',uuid',
             'display_name' => 'required|string|max:255|unique:companies,display_name,' . $id . ',uuid',
             'email' => 'required|email|unique:companies,email,' . $id . ',uuid',
-            'contact' => 'min:9|unique:companies,contact,' . $id . ',uuid',
+            'industry' => 'nullable|string|min:4',
+            'keywords' => 'nullable|array|min:1',
+            'contact' => 'nullable|min:9|unique:companies,contact,' . $id . ',uuid',
             'address' => 'nullable|string|min:10',
         ]);
 

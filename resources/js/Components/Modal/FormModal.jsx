@@ -75,6 +75,18 @@ const App = (props) => {
                     .catch(function (error) {
                         console.log(error)
                     });
+            } else if (value.type == 'selectTag') {
+                axios.get(`${domanWithPort}/${value.dataRoute}`)
+                    .then(function (response) {
+                        // console.log(response.data.data)
+                        setSelectOptionData((prevState) => ({
+                            ...prevState,
+                            [value.dataRoute]: response.data.data,
+                        }));
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
             }
         })
     }, [])
@@ -118,11 +130,10 @@ const App = (props) => {
                         {item.type === 'textArea' && <Input.TextArea />}
                         {item.type === 'number' && <InputNumber style={{ width: '100%' }} />}
                         {(item.type === 'text' || item.type === 'email') && <Input />}
-                        {item.type === 'select' && <Select
-                            placeholder={item.rule[0].message}
-                            // onChange={onGenderChange}
-                            allowClear
-                        >
+                        {item.type === 'select' && <Select placeholder={item.rule[0].message} allowClear>
+                            {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
+                        </Select>}
+                        {item.type === 'selectTag' && <Select mode="tags" placeholder={item.rule[0].message} allowClear>
                             {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
                         </Select>}
                     </Form.Item>) : ''}

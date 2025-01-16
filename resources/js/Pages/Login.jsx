@@ -61,7 +61,7 @@ const App = () => {
                 messageApi.open({
                     key,
                     type: 'error',
-                    content: `SomeThing Went Wrong,${error.response.data.data.error}`,
+                    content: `SomeThing Went Wrong,${error.response.data}`,
                     duration: 1,
                     onClose: () => {
                         console.log(error);

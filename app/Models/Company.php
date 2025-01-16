@@ -16,7 +16,7 @@ class Company extends Model
     // // Set the primary key type to UUID
     // protected $keyType = 'string';
 
-        /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -26,6 +26,8 @@ class Company extends Model
         'display_name',
         'email',
         'contact',
+        'industry',
+        'keywords',
         'address',
     ];
 

@@ -15,7 +15,7 @@ const App = () => {
     } = theme.useToken();
     const [refreshData, setRefreshData] = useState(false);
 
-    const { company } = useParams();
+    // const { company } = useParams();
 
     // Create/Read/Update/Delete Request Functions Start Comp <FormModal>
 
@@ -191,10 +191,10 @@ const App = () => {
                         </Flex>
                         <Flex vertical style={{ width: '90%', minWidth: '200px', maxWidth: '650px' }} gap='middle' >
                             <Lists
-                                withUri={`client/auth`}
+                                withUri='client/auth'
                                 withPicture={false}
-                                listTitle="Company"
-                                route={`${company}/usersCompanies`}
+                                listTitle='Company'
+                                route='usersCompanies'
                                 parentState={refreshData}
                                 fieldsToRender={['uuid', 'name', 'display_name', 'email', 'contact', 'dashboard']}
                                 deleteComponentEssentials={{ func: deleteData }}
@@ -204,6 +204,8 @@ const App = () => {
                                             { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please edit Company name!' }] },
                                             { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: true, message: 'Please edit Company Display name!' }] },
                                             { label: 'Email Address', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display Email Address of Company!' }] },
+                                            { label: 'Industry', name: 'industry', type: 'text', rule: [{ required: false, message: 'Please input Indutry of Company!' }] },
+                                            { label: 'Keywords', name: 'keywords', type: 'selectTag', rule: [{ required: false, message: 'Please input Keywords of Company!' }] },
                                             { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] },
                                             { label: 'Address', name: 'address', type: 'textArea', rule: [{ required: false, message: 'Please input Address of Company!' }] },
                                         ]

@@ -17,7 +17,7 @@ const Tags = (props) => {
             '2': 'Branch A',
             '3': 'Branch B',
             '4': 'Branch C',
-            '5': 'Branch Df',
+            '5': 'Branch D',
         },
     ]
     switch (props.type) {

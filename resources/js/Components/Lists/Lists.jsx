@@ -169,7 +169,7 @@ const App = (props) => {
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
-                            // console.log(item)
+                            // console.log(props)
                             return (<List.Item key={item[props.fieldsToRender[0]]} actions={[
                                 props.editComponentEssentials ? <FormModal
                                     workingFunction={props.editComponentEssentials.func}
