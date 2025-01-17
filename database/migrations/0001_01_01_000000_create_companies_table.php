@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('display_name')->unique();
             $table->string('email')->unique();
             $table->string('industry')->nullable();
-            $table->string('keywords')->nullable();
             $table->string('contact')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();

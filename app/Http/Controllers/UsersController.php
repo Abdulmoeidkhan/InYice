@@ -67,6 +67,7 @@ class UsersController extends BaseApiController
         // return $request->user();
         // $registerController = new RegisterController();
         // // return $registerController->register($request);
+        return $request->user();
         $request['company_name'] = $request->user()->company_name;
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -119,16 +120,59 @@ class UsersController extends BaseApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $company, string $id)
     {
-        //
+        $user = ModelsUser::where('uuid', $id)->with(['roles','permissions'])->first();
+        // return $user;
+        if (is_null($user)) {
+            return $this->sendError('User not found.');
+        }
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'branch_id' => 'required|min:1',
+            'permission_display_name' => 'required|min:1',
+            'role_display_name' => 'required|min:1',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors(), 422);
+        }
+        // return $user->roles[0]->id;
+        try {
+            $user->removeRole($user->roles[0]->id,$user->roles[0]->pivot->team_id);
+            $user->removePermission($user->permissions[0]->id,$user->roles[0]->pivot->team_id);
+            $user->update(['name' => $request['name'], 'email' => $request['email']]);
+            // $team = Team::find($request->branch_id);
+            // $role = Role::find($request->role_display_name);
+            // $permission = Permission::find($request->permission_display_name);
+            $user->addRole($request->role_display_name, $request->branch_id);
+            $user->givePermission($request->permission_display_name, $request->branch_id);
+            return $this->sendResponse(new UserResource($user), 'User updated successfully.');
+        } catch (\Illuminate\Database\QueryException $ex) {
+            if ($ex->getCode() == 23000) {
+                return $this->sendError('Database Error: Duplicate entry for team name.', $ex->getMessage(), 422);
+            }
+            return $this->sendError('Database Error.', $ex->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $company, string $id)
     {
-        //
+        $user = ModelsUser::where('uuid', $id)->with('roles')->first();
+        $role = $user->roles[0]->name;
+        if ($role == 'owner' || $role == 'admin') {
+            return $this->sendError('Unauthorised.', 'You Can not delete Owner or Admin');
+        }
+        try {
+            // Perform the deletion
+            $user->delete();
+            return  $this->sendResponse(UserResource::collection($user), 'Users deleted successfully.');
+        } catch (\Exception $ex) {
+            return $this->sendError('An error occurred while deleting the user.', $ex->getMessage(), 422);
+        }
+        // return $request->all();
     }
 }

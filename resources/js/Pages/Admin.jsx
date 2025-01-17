@@ -205,25 +205,10 @@ const App = () => {
                                             { label: 'Display Name', name: 'display_name', type: 'text', rule: [{ required: true, message: 'Please edit Company Display name!' }] },
                                             { label: 'Email Address', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display Email Address of Company!' }] },
                                             { label: 'Industry', name: 'industry', type: 'text', rule: [{ required: false, message: 'Please input Indutry of Company!' }] },
-                                            { label: 'Keywords', name: 'keywords', type: 'selectTag', rule: [{ required: false, message: 'Please input Keywords of Company!' }] },
                                             { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] },
                                             { label: 'Address', name: 'address', type: 'textArea', rule: [{ required: false, message: 'Please input Address of Company!' }] },
                                         ]
                                 }}>
-                                {/* <FormModal
-                                    workingFunction={addData}
-                                    buttonDetails={{ title: 'Add', icon: <PlusOutlined />, variant: 'solid' }}
-                                    title='Company'
-                                    route='usersCompanies'
-                                    initialValues={{}}
-                                    frm={[
-                                        { label: 'Company Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input Company name!' }] },
-                                        { label: 'Email Address', name: 'email', type: 'text', rule: [{ required: false, message: 'Please input Display Email Address of Company!' }] },
-                                        { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] },
-                                        { label: 'Address', name: 'address', type: 'textArea', rule: [{ required: false, message: 'Please input Address of Company!' }] },
-                                        // { label: 'Contact', name: 'contact', type: 'number', rule: [{ required: false, message: 'Please input Contact of Company!' }] }
-                                    ]}
-                                /> */}
                             </Lists>
                         </Flex>
                     </Flex>

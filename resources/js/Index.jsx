@@ -13,128 +13,123 @@ import { useAuth, AuthProvider } from "./utils/hooks/useAuth";
 import { Spin, Flex, } from 'antd';
 
 
+// Utility component for showing a loading spinner
+const LoadingScreen = () => (
+    <Flex
+        style={{ height: "100vh", width: "100vw" }}
+        vertical
+        align="center"
+        justify="center"
+        gap="middle"
+    >
+        <Spin size="large" />
+    </Flex>
+);
 
+// Custom hook to centralize authentication logic
+const useAuthCheck = () => {
+    const { checkUser } = useAuth();
+    const [authState, setAuthState] = useState(null);
+
+    useEffect(() => {
+        checkUser()
+            .then((userChecked) => setAuthState(userChecked))
+            .catch(() =>
+                setAuthState({ company_uuid: null, userAuthorized: false })
+            );
+    }, []);
+
+    return authState;
+};
+
+// Protected Route: Validates company UUID
 const ProtectedRoute = ({ children }) => {
-    const { checkUser } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // null indicates loading state
+    const isAuthenticated = useAuthCheck();
 
-
-    useEffect(() => {
-        checkUser().then((userChecked) => {
-            setIsAuthenticated(userChecked)
-        }).catch((error) => {
-            setIsAuthenticated(error)
-        });
-    }, []);
-
-    // Show a loading state while checking authentication
     if (isAuthenticated === null) {
-        return <Flex style={{height:'100vh',width:'100vw'}} vertical align="center" justify='center' gap="middle"><Spin size="large" /></Flex>;
-        // Optional: Replace with a spinner or loading component
+        return <LoadingScreen />;
     }
-
-    if (isAuthenticated?.company_uuid) {
+    if (isAuthenticated.company_uuid) {
         return children;
     }
-    else {
-        return <Navigate to="/client" replace />;
+    else if (isAuthenticated.userAuthorized) {
+        return <Navigate to="/client/inyice/admin" replace />;
     }
 
-    // if (!user) {
-    //     // user is not authenticated
-    //     return <Navigate to="/client" replace={true} />;
-    // }
-
+    return <Navigate to="/client" replace />;
 };
 
+// Protected Admin Route: Validates admin authorization
 const ProtectedAdminRoute = ({ children }) => {
-    const { checkUser } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // null indicates loading state
+    const isAuthenticated = useAuthCheck();
 
-
-    useEffect(() => {
-        checkUser().then((userChecked) => {
-            setIsAuthenticated(userChecked)
-        }).catch((error) => {
-            setIsAuthenticated(error)
-        });
-    }, []);
-
-    // Show a loading state while checking authentication
     if (isAuthenticated === null) {
-        return <Flex style={{height:'100vh',width:'100vw'}} vertical align="center" justify='center' gap="middle"><Spin size="large" /></Flex>;
-        // Optional: Replace with a spinner or loading component
+        return <LoadingScreen />;
     }
 
-    // Redirect if not authenticated
-    if (isAuthenticated?.userAuthorized) {
+    if (isAuthenticated.userAuthorized) {
         return children;
     }
-    else if (isAuthenticated?.company_uuid) {
-        return <Navigate to={`/client/auth/dashboard`} replace={true} />;
+    else if (isAuthenticated.company_uuid) {
+        return (
+            <Navigate
+                to={`/client/auth/${isAuthenticated.company_uuid}/dashboard`}
+                replace
+            />
+        );
     }
-    else {
-        return <Navigate to="/client" replace />;
-    }
+
+    return <Navigate to="/client" replace />;
 };
 
+// Unprotected Route: Redirects based on user state
 const UnProtectedRoute = ({ children }) => {
-    const { checkUser } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(null); // null indicates loading state
+    const isAuthenticated = useAuthCheck();
 
-
-    useEffect(() => {
-        checkUser().then((userChecked) => {
-            setIsAuthenticated(userChecked)
-        }).catch((error) => {
-            setIsAuthenticated(error)
-        });
-    }, []);
-
-    // Show a loading state while checking authentication
     if (isAuthenticated === null) {
-        return <Flex style={{height:'100vh',width:'100vw'}} vertical align="center" justify='center' gap="middle"><Spin size="large" /></Flex>;
-        // Optional: Replace with a spinner or loading component
+        return <LoadingScreen />;
     }
 
-    // Redirect if not authenticated
-    if (isAuthenticated?.userAuthorized) {
-        return <Navigate to={`inyice/admin`} replace={true} />;
+    if (isAuthenticated.userAuthorized) {
+        return <Navigate to="/client/inyice/admin" replace />;
     }
-    else if (isAuthenticated?.company_uuid) {
-        return <Navigate to={`auth/dashboard`} replace={true} />;
+    else if (isAuthenticated.company_uuid) {
+        return (
+            <Navigate
+                to={`/client/auth/${isAuthenticated.company_uuid}/dashboard`}
+                replace
+            />
+        );
     }
+
     return children;
 };
 
-
+// Main Application Component
 const App = () => {
-
     return (
         <AuthProvider>
             <Routes>
+                {/* Unprotected Routes */}
                 <Route path="client" element={<UnProtectedRoute><SignUpLayout /></UnProtectedRoute>}>
                     <Route index element={<Login />} />
                     <Route path="reset" element={<Reset />} />
                 </Route>
+
+                {/* Protected Routes */}
                 <Route path="client/auth/:company" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="home" element={<Home />} />
                     <Route path="about" element={<About />} />
                     <Route path="users" element={<Users />} />
-                    {/* <Route path="admin" element={<Admin />} /> */}
                 </Route>
-                <Route path="client/inyice" element={<ProtectedAdminRoute><DashboardLayout /></ProtectedAdminRoute>}>
-                    <Route path="admin" element={<Admin />} />
+
+                {/* Protected Admin Routes */}
+                <Route path="client/inyice" element={<ProtectedAdminRoute><DashboardLayout /></ProtectedAdminRoute>} >
+                    <Route path='admin' element={<Admin />} />
                 </Route>
-                {/* <Route path="auth"> */}
-                {/* <Route path="admin" element={<Admin />} /> */}
-                {/* <Route path="adminPanel" element={<ProtectedAdminRoute><DashboardLayout /></ProtectedAdminRoute>}>
-                            <Route index element={<>Hello</>} />
-                        </Route> */}
-                {/* </Route> */}
-            </Routes >
-        </AuthProvider >
+            </Routes>
+        </AuthProvider>
     );
 };
 

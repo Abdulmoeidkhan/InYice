@@ -46,6 +46,7 @@ const App = () => {
 
     const deleteData = (value, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
+        // console.log(route,id,`${domanWithPort}/${route}/${id}`)
         return axios.delete(`${domanWithPort}/${route}/${id}`)
             .then(function (response) {
                 setRefreshData(!refreshData)
@@ -89,7 +90,7 @@ const App = () => {
                             parentState={refreshData}
                             withPicture={true}
                             withUri={true}
-                            fieldsToRender={['id', '', 'name', 'email']}
+                            fieldsToRender={['id', , 'name', 'email']}
                             deleteComponentEssentials={{ func: deleteData }}
                             editComponentEssentials={{
                                 func: updateData, frm:
@@ -97,8 +98,8 @@ const App = () => {
                                         { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
                                         { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
                                         { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
-                                        { label: 'Permissions Name', name: 'permission_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
-                                        { label: 'Role Name', name: 'role_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
+                                        { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
+                                        { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
                                     ]
                             }}
                         >

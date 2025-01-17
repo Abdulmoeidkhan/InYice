@@ -16,6 +16,7 @@ const App = (props) => {
     const key = 'updatable';
 
     const onSubmit = async (values) => {
+        // console.log(props.initialValues)
         setConfirmLoading(true);
         messageApi.open({
             key,
@@ -75,19 +76,20 @@ const App = (props) => {
                     .catch(function (error) {
                         console.log(error)
                     });
-            } else if (value.type == 'selectTag') {
-                axios.get(`${domanWithPort}/${value.dataRoute}`)
-                    .then(function (response) {
-                        // console.log(response.data.data)
-                        setSelectOptionData((prevState) => ({
-                            ...prevState,
-                            [value.dataRoute]: response.data.data,
-                        }));
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    });
-            }
+            } 
+            // else if (value.type == 'selectTag') {
+            //     axios.get(`${domanWithPort}/${value.dataRoute}`)
+            //         .then(function (response) {
+            //             // console.log(response.data.data)
+            //             setSelectOptionData((prevState) => ({
+            //                 ...prevState,
+            //                 [value.dataRoute]: response.data.data,
+            //             }));
+            //         })
+            //         .catch(function (error) {
+            //             console.log(error)
+            //         });
+            // }
         })
     }, [])
 
@@ -133,9 +135,11 @@ const App = (props) => {
                         {item.type === 'select' && <Select placeholder={item.rule[0].message} allowClear>
                             {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
                         </Select>}
-                        {item.type === 'selectTag' && <Select mode="tags" placeholder={item.rule[0].message} allowClear>
+                                {/* console.log(optData) */}
+                        {/* {item.type === 'selectTag' && 
+                        <Select mode="tags" tokenSeparators={[',']} placeholder={item.rule[0].message}  allowClear>
                             {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
-                        </Select>}
+                        </Select>} */}
                     </Form.Item>) : ''}
             </Modal >
         </>

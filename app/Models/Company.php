@@ -27,7 +27,6 @@ class Company extends Model
         'email',
         'contact',
         'industry',
-        'keywords',
         'address',
     ];
 
