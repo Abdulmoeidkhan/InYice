@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Divider, List, Skeleton, Input, Flex, } from 'antd';
 import { EditOutlined, DeleteOutlined, SettingOutlined, EllipsisOutlined, BarsOutlined, AppstoreOutlined, PlusOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useAuth } from "../../utils/hooks/useAuth";
 import FormModal from '../Modal/FormModal';
 import Tags from '../Tags/Tags';
 import Fuse from 'fuse.js';
@@ -14,7 +15,9 @@ const App = (props) => {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
+    const { user } = useAuth();
 
+    user && console.log(user);
 
     // Load Full Data & Initiate Request via UseEffect Start
     const loadData = async () => {
@@ -169,7 +172,7 @@ const App = (props) => {
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
-                            // console.log(props)
+                            console.log(props)
                             return (<List.Item key={item[props.fieldsToRender[0]]} actions={[
                                 props.editComponentEssentials ? <FormModal
                                     workingFunction={props.editComponentEssentials.func}
