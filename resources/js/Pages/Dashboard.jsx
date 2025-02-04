@@ -34,6 +34,7 @@ const App = () => {
                     margin: '24px 16px',
                     padding: 24,
                     minHeight: 1000,
+                    height: '80vh',
                     background: colorBgContainer,
                     borderRadius: borderRadiusLG,
                 }}

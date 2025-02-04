@@ -84,7 +84,7 @@ const App = () => {
             //     colorPrimaryBg: '#1677ff',
             // },
         }} wave={{ showEffect: showInsetEffect }}>
-            <Layout>
+            <Layout style={{ minHeight: '100vh' }}>
                 <Sider
                     collapsible
                     breakpoint='md'
@@ -115,7 +115,7 @@ const App = () => {
                     }} />
                     <Menus />
                 </Sider>
-                <Layout style={collapsedWidth ? { transition: 'padding 200ms', paddingLeft: collapsed ? 80 : 200 } : {}}>
+                <Layout style={collapsedWidth ? { transition: 'padding 200ms', paddingLeft: collapsed ? 80 : 200,} : {}}>
                     <Headers isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} collapsedWidth={collapsedWidth} />
                     <Outlet />
                     <FloatButton.Group
