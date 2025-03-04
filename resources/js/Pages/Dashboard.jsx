@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex } from 'antd';
+import { Breadcrumb, Layout, theme, Avatar, List, Space, Flex   } from 'antd';
 import Lists from '../Components/Lists/Lists';
 import { useParams } from 'react-router';
 const { Content } = Layout;
-
-
-
 
 
 const App = () => {
@@ -14,6 +11,7 @@ const App = () => {
     } = theme.useToken();
 
     const { company } = useParams();
+
     // console.log(company)
     return (
         <Layout style={{
@@ -28,7 +26,7 @@ const App = () => {
                 style={{
                     margin: '16px 0',
                 }}
-            />
+              />
             <Content
                 style={{
                     margin: '24px 16px',
@@ -58,3 +56,4 @@ const App = () => {
     );
 };
 export default App;
+

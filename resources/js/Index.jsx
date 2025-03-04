@@ -72,7 +72,7 @@ const ProtectedAdminRoute = ({ children }) => {
     }
     else if (isAuthenticated.company_uuid) {
         return (
-            <Navigate
+            <Navigate 
                 to={`/client/auth/${isAuthenticated.company_uuid}/dashboard`}
                 replace
             />
