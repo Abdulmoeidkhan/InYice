@@ -132,8 +132,6 @@ const App = (props) => {
         getUser();
     }, [dispatch]);
 
-   
-
     return (
         <>
             <Flex
@@ -196,58 +194,16 @@ const App = (props) => {
                     }
                     scrollableTarget="scrollableDiv"
                 >
-                    {/* <List
-                        dataSource={filteredData}
-                        renderItem={(item) => {
-                            console.log(props)
-                            console.log(item)
-                            return (<List.Item key={item[props.fieldsToRender[0]]} actions={[
-                                props.editComponentEssentials ? <FormModal
-                                    workingFunction={props.editComponentEssentials.func}
-                                    buttonDetails={{ title: '', icon: <EditOutlined key="edit" />, variant: 'link' }}
-                                    title={props.listTitle}
-                                    route={props.route}
-                                    okText='Update'
-                                    frm={props.editComponentEssentials.frm}
-                                    initialValues={item}
-                                /> : '',
-                                props.deleteComponentEssentials ? <FormModal
-                                    workingFunction={props.deleteComponentEssentials.func}
-                                    buttonDetails={{ title: '', icon: <DeleteOutlined key="delete" />, variant: 'link', danger: true }}
-                                    title={props.listTitle}
-                                    route={props.route}
-                                    okText='Delete'
-                                    okType='danger'
-                                    frm={[]}
-                                    initialValues={item}
-                                /> : ''
-                            ]}>
-                                <List.Item.Meta
-                                    avatar={
-                                        props.withPicture ? <Avatar src={checkImageLink(`${props.withPicture}/${props.fieldsToRender[0]}`)} alt='Image or Avatar' /> : ''
-                                    }
-                                    title={
-                                        props.withUri
-                                            ? <a href={`${props.withUri.length > 5 ? `/${props.withUri}/${item.uuid}/${props.fieldsToRender[5]}` : ''}`}>{item[props.fieldsToRender[2]]}</a>
-                                            : (props.fieldsToRender[2]
-                                                ? <><span style={{ textTransform: 'capitalize' }}> {item[props.fieldsToRender[2]]?.replace(/-/g, ' ')}</span></>
-                                                : '')
-                                    }
-                                    description={props.fieldsToRender[3] && item[props.fieldsToRender[3]] !== null ? `${item[props.fieldsToRender[3]]}` : ''}
-                                />
-                                <div>
-                                    {`${props.fieldsToRender[4] && item[props.fieldsToRender[4]] !== null ? item[props.fieldsToRender[4]] : ''}`}
-                                    {item?.role_display_name && <Tags type="roles" dataTitle={item?.role_display_name} dataValue={item?.role_name} />}
-                                    {item?.permission_display_name && <Tags type="permissions" dataTitle={item?.permission_display_name} dataValue={item?.permission_name} />}
-                                </div>
-                            </List.Item>)
-                        }} /> */}
-
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
-                            // const {role_id} = item
-                            // console.log("Props:", props);
+                            const {role_id} = item
+
+                            
+                            // console.log("Props:", props.route);
+
+                            // console.log("Props:", props.route.user);
+
                             // console.log("Item:", item);
 
                             // Current User Data
@@ -297,11 +253,14 @@ const App = (props) => {
                             //     props.deleteComponentEssentials,
                             //     "delete"
                             // );
+                          
                             return (
                                 <List.Item
                                     key={item[props.fieldsToRender[0]]}
                                     actions={[
-                                        item?.role_id === undefined ? (
+                                        props.route  === "usersRoles" && props.route  === "usersPermissions"
+                                        && props.route  === "usersCompanies" && props.route  === "usersTeams" && props.route  === "usersPermissions"
+                                        && props.route  === "usersPermissions" ? (
                                             <>
                                                 {props.editComponentEssentials ? (
                                                     <FormModal

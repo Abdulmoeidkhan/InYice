@@ -57,19 +57,6 @@ const App = () => {
             });
     };
 
-//     const [currentUserRole, setCurrentUserRole] = useState(null);
-//     console.log(currentUserRole)
-    
-// useEffect(() => {
-//     axios.get(`${import.meta.env.VITE_API_URL}/currentUser`)
-//         .then(res => {
-//             setCurrentUserRole(res.data.role); // e.g., "admin" / "user"
-//         })
-//         .catch(err => {
-//             console.error("Error fetching user role:", err);
-//         });
-// }, []);
-
 
     return (
         <Layout style={{
