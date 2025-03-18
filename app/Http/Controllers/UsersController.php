@@ -22,13 +22,15 @@ class UsersController extends BaseApiController
     private function dataSortingForAPIResponse($users)
     {
         $sortedUsers = [];
+        // return $users;
         foreach ($users as $key => $user) {
-            $requiredKeys = ['uuid', 'name', 'email', 'company_name', 'company_uuid', 'user_type'];
+            $requiredKeys = ['uuid', 'name', 'email', 'company_name', 'company_uuid', 'user_type','role_id'];
 
             // Filter the user's data
             $sortedData = array_intersect_key($user->toArray(), array_flip($requiredKeys));
 
             if (!empty($user->roles)) {
+                $sortedData['role_id'] = $user->roles[0]['id'];
                 $sortedData['role_name'] = $user->roles[0]['name'];
                 $sortedData['role_display_name'] = $user->roles[0]['display_name'];
                 $sortedData['branch_id'] = $user->roles[0]['pivot']['team_id']; // Access team_id from the pivot

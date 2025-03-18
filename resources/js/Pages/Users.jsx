@@ -57,18 +57,18 @@ const App = () => {
             });
     };
 
-    const [currentUserRole, setCurrentUserRole] = useState(null);
-    console.log(currentUserRole)
+//     const [currentUserRole, setCurrentUserRole] = useState(null);
+//     console.log(currentUserRole)
     
-useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/currentUser`)
-        .then(res => {
-            setCurrentUserRole(res.data.role); // e.g., "admin" / "user"
-        })
-        .catch(err => {
-            console.error("Error fetching user role:", err);
-        });
-}, []);
+// useEffect(() => {
+//     axios.get(`${import.meta.env.VITE_API_URL}/currentUser`)
+//         .then(res => {
+//             setCurrentUserRole(res.data.role); // e.g., "admin" / "user"
+//         })
+//         .catch(err => {
+//             console.error("Error fetching user role:", err);
+//         });
+// }, []);
 
 
     return (
@@ -98,52 +98,45 @@ useEffect(() => {
                     <h1>User's Dashboard</h1>
                     <Flex vertical style={{ width: '90%', minWidth: '200px' }} gap='middle'>
                         <Lists
-                            listTitle="User's"
-                            route={`${company}/users`}
-                            parentState={refreshData}
-                            withPicture={true}
-                            withUri={true}
-                            fieldsToRender={['id', , 'name', 'email']}
-                        //     extraProps={({ id, role }) => ({
-                        //         listItemId: id,
-                        //         listItemRole: role
-                        //     })}
-                        //     {...((currentUserRole === 'owner' || 
-                        //         (currentUserRole === 'admin' && listItemRole !== 'admin' && listItemId !== currentUserId)) && {
-                        //        deleteComponentEssentials: { func: deleteData },
-                        //        editComponentEssentials: {
-                        //            func: updateData,
-                        //            frm: [
-                        //                { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
-                        //                { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
-                        //                { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
-                        //                { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
-                        //                { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
-                        //            ],
-                        //        }
-                        //    })}
+                             listTitle="User's"
+                             route={`${company}/users`}
+                             parentState={refreshData}
+                             withPicture={true}
+                             withUri={true}
+                             fieldsToRender={['id', , 'name', 'email']}
+                             deleteComponentEssentials={{ func: deleteData }}
+                             editComponentEssentials={{
+                                 func: updateData, frm:
+                                     [
+                                         { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
+                                         { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
+                                         { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
+                                         { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
+                                         { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
+                                     ]
+                             }}
 
-                        extraProps={({ id, role }) => ({
-                            listItemId: id,
-                            listItemRole: role
-                        })}
-                        {...((currentUserRole === 'owner' || currentUserRole === 'admin') && {
+                        // extraProps={({ id, role }) => ({
+                        //     listItemId: id,
+                        //     listItemRole: role
+                        // })}
+                        // {...((currentUserRole === 'Owner' || currentUserRole === 'Admin') && {
                             
-                            deleteComponentEssentials: {
-                                func: deleteData,
-                                // Pass the necessary data here for delete
-                            },
-                            editComponentEssentials: {
-                                func: updateData,
-                                frm: [
-                                    { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
-                                    { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
-                                    { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
-                                    { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
-                                    { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
-                                ],
-                            }
-                        })}
+                        //     deleteComponentEssentials: {
+                        //         func: deleteData,
+                        //         // Pass the necessary data here for delete
+                        //     },
+                        //     editComponentEssentials: {
+                        //         func: updateData,
+                        //         frm: [
+                        //             { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
+                        //             { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
+                        //             { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
+                        //             { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
+                        //             { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
+                        //         ],
+                        //     }
+                        // })}
                         >
                             <FormModal
                                 workingFunction={addData}

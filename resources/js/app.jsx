@@ -1,14 +1,17 @@
 import "./bootstrap";
 import "../css/app.css";
-
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import Index from './Index';
+import { store } from "./Components/Redux/reducers/store.js";
+import { Provider } from "react-redux";
 
 
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
     <BrowserRouter>
-        <Index />
+    <Provider store={store}> 
+        <Index/>
+    </Provider>
     </BrowserRouter>
 );
