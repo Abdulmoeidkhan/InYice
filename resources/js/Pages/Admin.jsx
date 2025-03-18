@@ -44,6 +44,21 @@ const App = () => {
             });
     };
 
+        // const addData = (values) => {
+        //     const domanWithPort = import.meta.env.VITE_API_URL;
+        //     const userData = { ...values, role: "user" }; // Default role set
+        
+        //     return axios.post(`${domanWithPort}/users`, userData)
+        //         .then((response) => {
+        //             setRefreshData(!refreshData);
+        //             return response;
+        //         })
+        //         .catch((error) => {
+        //             return Promise.reject(error);
+        //         });
+        // };
+        
+
     const updateData = (values, route, id) => {
         // console.log(values, route, id)
         const domanWithPort = import.meta.env.VITE_API_URL;
