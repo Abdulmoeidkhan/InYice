@@ -10,7 +10,7 @@ const { Content } = Layout;
 
 
 const App = () => {
-    // const [listData, setListData] = useState(data);
+ 
     const [refreshData, setRefreshData] = useState(false);
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -22,7 +22,7 @@ const App = () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
             .then(function (response) {
-                // console.log(response)
+
                 setRefreshData(!refreshData)
                 return response
             })
@@ -32,7 +32,6 @@ const App = () => {
     };
 
     const updateData = (values , route, id) => {
-        // console.log(values, route, id)
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.put(`${domanWithPort}/${route}/${id}`, values)
             .then(function (response) {
@@ -46,7 +45,7 @@ const App = () => {
 
     const deleteData = (value, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
-        // console.log(route,id,`${domanWithPort}/${route}/${id}`)
+
         return axios.delete(`${domanWithPort}/${route}/${id}`)
             .then(function (response) {
                 setRefreshData(!refreshData)
@@ -102,28 +101,6 @@ const App = () => {
                                          { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
                                      ]
                              }}
-
-                        // extraProps={({ id, role }) => ({
-                        //     listItemId: id,
-                        //     listItemRole: role
-                        // })}
-                        // {...((currentUserRole === 'Owner' || currentUserRole === 'Admin') && {
-                            
-                        //     deleteComponentEssentials: {
-                        //         func: deleteData,
-                        //         // Pass the necessary data here for delete
-                        //     },
-                        //     editComponentEssentials: {
-                        //         func: updateData,
-                        //         frm: [
-                        //             { label: 'Name', name: 'name', type: 'text', rule: [{ required: true, message: 'Please input User Name!' }] },
-                        //             { label: 'Email Address', name: 'email', type: 'email', rule: [{ required: true, message: 'Please input User Email!' }] },
-                        //             { label: 'Branch Name', name: 'branch_id', type: 'select', dataRoute: 'usersTeams', rule: [{ required: true, message: 'Please select Branch Name!' }] },
-                        //             { label: 'Permissions Name', name: 'permission_display_name', type: 'select', dataRoute: 'usersPermissions', rule: [{ required: true, message: 'Please select Permissions Name!' }] },
-                        //             { label: 'Role Name', name: 'role_display_name', type: 'select', dataRoute: 'usersRoles', rule: [{ required: true, message: 'Please select Role Name!' }] },
-                        //         ],
-                        //     }
-                        // })}
                         >
                             <FormModal
                                 workingFunction={addData}

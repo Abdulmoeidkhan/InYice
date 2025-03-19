@@ -105,7 +105,7 @@ const UnProtectedRoute = ({ children }) => {
     return children;
 };
 
-// Main Application Component
+
 const App = () => {
     return (
         <AuthProvider>
