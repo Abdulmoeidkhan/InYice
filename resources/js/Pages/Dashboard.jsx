@@ -12,7 +12,6 @@ const App = () => {
 
     const { company } = useParams();
 
-    // console.log(company)
     return (
         <Layout style={{
             padding: '0 24px 24px',

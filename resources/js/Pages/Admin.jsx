@@ -15,23 +15,6 @@ const App = () => {
     } = theme.useToken();
     const [refreshData, setRefreshData] = useState(false);
 
-    // const { company } = useParams();
-
-    // Create/Read/Update/Delete Request Functions Start Comp <FormModal>
-
-    // Read Data Function Start
-    // const readData = (values, route, id) => {
-    //     const domanWithPort = import.meta.env.VITE_API_URL;
-    //     return axios.get(`${domanWithPort}/${route}/${id}`)
-    //         .then(function (response) {
-    //             return response
-    //         })
-    //         .catch(function (error) {
-    //             return Promise.reject(error);
-    //         });
-    // };
-    // Read Data Function End
-
     const addData = (values, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.post(`${domanWithPort}/${route}`, values)
@@ -44,23 +27,8 @@ const App = () => {
             });
     };
 
-        // const addData = (values) => {
-        //     const domanWithPort = import.meta.env.VITE_API_URL;
-        //     const userData = { ...values, role: "user" }; // Default role set
-        
-        //     return axios.post(`${domanWithPort}/users`, userData)
-        //         .then((response) => {
-        //             setRefreshData(!refreshData);
-        //             return response;
-        //         })
-        //         .catch((error) => {
-        //             return Promise.reject(error);
-        //         });
-        // };
-        
 
     const updateData = (values, route, id) => {
-        // console.log(values, route, id)
         const domanWithPort = import.meta.env.VITE_API_URL;
         return axios.put(`${domanWithPort}/${route}/${id}`, values)
             .then(function (response) {

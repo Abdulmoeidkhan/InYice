@@ -28,7 +28,6 @@ const App = (props) => {
 
     user && console.log(user);
 
-    // Load Full Data & Initiate Request via UseEffect Start
     const loadData = async () => {
         if (loading) {
             return;
@@ -38,7 +37,7 @@ const App = (props) => {
         await axios
             .get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
-                // console.log(response.data.data)
+        
                 setData(response.data.data);
                 setLoading(false);
             })
@@ -65,40 +64,19 @@ const App = (props) => {
         const fuse = new Fuse(data, options);
         const result = fuse.search(value);
         const foramtedResult = result.map(({ item }) => item);
-        // console.log(data)
+
         value ? setFilteredData(foramtedResult) : setFilteredData(data);
 
         setLoading(false);
 
         return result;
     };
-    // Fuse Search Logics End
-
-    // This Function is not in Use right now but it can be used for loading more data in Future
-    // const showMoreData = async () => {
-    //     if (loading) {
-    //         return;
-    //     }
-    //     setLoading(true);
-    //     console.log('loading more data');
-    //     setLoading(false);
-    // }
-
-    // Rerender for data Storing And Searching Start
+    
    useEffect(() => {
         searchFuse(searchValue);
-        // console.log(data, searchValue);
+        
     }, [data, searchValue]); 
-    // Rerender for data Storing And Searching End
-
-    // List InterFace (Action Button) Start
-    // const actions = [
-    // <EditOutlined key="edit" />,
-    // <SettingOutlined key="setting" />,
-    // <EllipsisOutlined key="ellipsis" />,
-    // <DeleteOutlined key="delete" />
-    // ];
-    // List InterFace (Action Button) End
+    
 
     // Check Image URL is Valid or not Start
     function checkImageLink(url) {
@@ -119,7 +97,7 @@ const App = (props) => {
 
     const dispatch = useDispatch();
     const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
-    // console.log(users)
+   
 
     const getUser = async () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
@@ -163,8 +141,6 @@ const App = (props) => {
             >
                 <InfiniteScroll
                     dataLength={filteredData.length}
-                    // next={showMoreData}
-                    // hasMore={filteredData.length < 5}
                     loader={
                         <Skeleton
                             avatar
@@ -177,19 +153,7 @@ const App = (props) => {
                     endMessage={
                         <>
                             <Divider plain>It is all, nothing more 🤐</Divider>
-                            {/* <Empty
-                            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                            imageStyle={{
-                                height: 60,
-                            }}
-                            description={
-                                <Typography.Text>
-                                    Customize <a href="#API">Description</a>
-                                </Typography.Text>
-                            }
-                        >
-                            {props.children}
-                        </Empty> */}
+                           
                         </>
                     }
                     scrollableTarget="scrollableDiv"
@@ -200,45 +164,33 @@ const App = (props) => {
                             const {role_id} = item
 
                             
-                            // console.log("Props:", props.route);
-
-                            // console.log("Props:", props.route.user);
-
-                            // console.log("Item:", item);
+                           
 
                             // Current User Data
                             const currentUser = item.role_display_name;
-                            // console.log(currentUser); // Logged-in user ka data
+                        
 
                             const isOwner = item?.role_id === 1; // Agar Owner hai (Full Access)
-                            // console.log(
-                            //     `isOwner ${isOwner}`,
-                            //     `role_id: ${item?.role_id}`
                             // ); // Owner hai ya nahi
 
                             
                             const IsInYice =
                                 users?.company_name === "Inyice coorporation"; // Agar inyice hai (Full Access)
-                            // console.log(
-                            //     `IsInYice ${IsInYice}`,
-                            //     users?.company_name
                             // );      // Inyice hai ya nahi
 
                             const isSameCompany =
                                 item?.company_name === item.company_name; // Kya ye same company ka hai?
-                            // console.log(
-                            //     `${isSameCompany} same company name ${item?.company_name}`
-                            // );
+                         
 
-                            // const isAdmin = item?.role_id === 2 && isSameCompany; // Apni company ka admin hai?
+                            // Apni company ka admin hai?
                             const isAdmin =
                                 (item?.role_id === 2 && isSameCompany) || // Apni company ka admin
                                 (item?.role_id === 2 && IsInYice); // InYice ka admin
-                            // console.log("isAdmin", isAdmin); // Admin hai ya nahi
+                             // Admin hai ya nahi
 
                             const isSameRoleOrLower =
                                 item?.role_id <= item.role_id; // Kya same ya chhota role hai?
-                            // console.log("isSameRoleOrLower", isSameRoleOrLower); // Same ya chhota role hai?
+                            
 
                             // Edit/Delete Condition
                             const canEditDelete =
@@ -247,13 +199,7 @@ const App = (props) => {
                                 (isAdmin && isSameRoleOrLower ); // Admin sirf apni company ke admin aur users ko cher sakta hai
 
 
-                            // console.log("canEditDelete", canEditDelete); // Edit/Delete kar sakta hai ya nahi
-                            // console.log(props.editComponentEssentials, "edit");
-                            // console.log(
-                            //     props.deleteComponentEssentials,
-                            //     "delete"
-                            // );
-                          
+                           
                             return (
                                 <List.Item
                                     key={item[props.fieldsToRender[0]]}

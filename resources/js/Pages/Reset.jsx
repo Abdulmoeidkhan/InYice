@@ -32,7 +32,7 @@ const App = () => {
     };
 
     const requestSubmitFunction = async (route, values) => {
-        // const domanWithPort = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}` : '');
+       
         const domanWithPort = import.meta.env.VITE_API_URL;
         messageApi.open({
             key,
@@ -72,7 +72,7 @@ const App = () => {
     const onFinishReset = (values) => {
         setIsLoading(true);
         requestSubmitFunction('resetPassword', values)
-        // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
+        
     };
 
     const SubmitButton = ({ form, children }) => {

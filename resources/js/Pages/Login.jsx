@@ -51,7 +51,6 @@ const App = () => {
                     content: `${response.data.message}`,
                     duration: 1,
                     onClose: () => {
-                        // console.log(response);
                         setIsLoading(false);
                         logIn(response.data.data);
                     },
@@ -76,19 +75,17 @@ const App = () => {
     const onFinishReset = (values) => {
         setIsLoading(true);
         requestSubmitFunction('reset', values)
-        // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
+        
     };
 
     const onFinishSignIn = (values) => {
         setIsLoading(true);
         requestSubmitFunction('login', values)
-        // messageApi.success('Sign In Successfully!', 2, () => console.log('Received values of form: ', values));
     };
 
     const onFinishSignUp = (values) => {
         setIsLoading(true);
         requestSubmitFunction('register', values)
-        // messageApi.success('Sign Up Successfully!', 2, () => console.log('Received values of form: ', values));
     };
 
     const SubmitButton = ({ form, children }) => {

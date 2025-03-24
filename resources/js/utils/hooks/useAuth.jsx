@@ -31,9 +31,6 @@ export const AuthProvider = ({ children }) => {
     // call this function when you want to authenticate the user
     const logIn = async (data) => {
         if (data) {
-            // setUser("inyiceuser", data);
-            // window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token;
-            // console.log(data);
             let { name, email, uuid, user_type, userAuthorized } = data;
             setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
             navigate(`/client/auth/${data.company_uuid}/dashboard`, { replace: true });
@@ -50,8 +47,6 @@ export const AuthProvider = ({ children }) => {
             navigate(`/client`, { replace: true });
         }
         else {
-            // setUser("inyiceuser", null);
-            // window.axios.defaults.headers.common['Authorization'] = '';
             navigate("/client", { replace: true });
         }
     };

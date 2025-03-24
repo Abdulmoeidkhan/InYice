@@ -16,7 +16,6 @@ const App = (props) => {
     const key = 'updatable';
 
     const onSubmit = async (values) => {
-        // console.log(props.initialValues)
         setConfirmLoading(true);
         messageApi.open({
             key,
@@ -52,11 +51,11 @@ const App = (props) => {
                 },
             });
         });
-        // console.log('Received values of form: ', values);
+       
     };
 
     useEffect(() => {
-        // console.log(props)
+       
         if (props?.initialValues) {
             setFormInitialValues(props.initialValues)
         }
@@ -68,7 +67,7 @@ const App = (props) => {
             if (value.type == 'select') {
                 axios.get(`${domanWithPort}/${value.dataRoute}`)
                     .then(function (response) {
-                        // console.log(response.data.data)
+                       
                         setSelectOptionData((prevState) => ({
                             ...prevState,
                             [value.dataRoute]: response.data.data,
@@ -78,19 +77,7 @@ const App = (props) => {
                         console.log(error)
                     });
             } 
-            // else if (value.type == 'selectTag') {
-            //     axios.get(`${domanWithPort}/${value.dataRoute}`)
-            //         .then(function (response) {
-            //             // console.log(response.data.data)
-            //             setSelectOptionData((prevState) => ({
-            //                 ...prevState,
-            //                 [value.dataRoute]: response.data.data,
-            //             }));
-            //         })
-            //         .catch(function (error) {
-            //             console.log(error)
-            //         });
-            // }
+       
         })
     }, [])
 
@@ -98,7 +85,7 @@ const App = (props) => {
     return (
         <>
             {contextHolder}
-            {/* {console.log(formInitialValues)} */}
+         
             <Button size='large' onClick={() => setOpen(true)} color={props.buttonDetails.danger ? 'danger' : "primary"} variant={props.buttonDetails.variant} icon={props.buttonDetails.icon} danger={props.buttonDetails.danger}>{props.buttonDetails.title}</Button>
             <Modal
                 open={open}
@@ -136,11 +123,7 @@ const App = (props) => {
                         {item.type === 'select' && <Select placeholder={item.rule[0].message} allowClear>
                             {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
                         </Select>}
-                                {/* console.log(optData) */}
-                        {/* {item.type === 'selectTag' && 
-                        <Select mode="tags" tokenSeparators={[',']} placeholder={item.rule[0].message}  allowClear>
-                            {selectOptionData.hasOwnProperty(item.dataRoute) && selectOptionData[item.dataRoute].map((optData, index) => <Option key={`${uniqueId}-${index}`} value={optData.id}>{optData.display_name}</Option>)}
-                        </Select>} */}
+        
                     </Form.Item>) : ''}
             </Modal >
         </>

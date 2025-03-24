@@ -6,7 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     laravel({
-      input: ["resources/css/app.css", "resources/js/app.jsx"], // React file `.jsx` ho sakti hai
+      input: ["resources/css/app.css", "resources/js/app.jsx"], 
       refresh: true,
     }),
     react(),
@@ -14,9 +14,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "robots.txt", "apple-touch-icon.png"],
       manifest: {
-        name: "Meri Laravel React App",
+        name: "My Laravel React App",
         short_name: "ReactPWA",
-        description: "Yeh Laravel + React + Vite PWA hai.",
+        description: "This is the Laravel + React + Vite PWA .",
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",

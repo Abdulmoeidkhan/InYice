@@ -80,9 +80,7 @@ const App = () => {
     return (
         <ConfigProvider theme={{
             algorithm: isDarkMode ? (isCompactMode ? [darkAlgorithm, compactAlgorithm] : darkAlgorithm) : (isCompactMode ? [defaultAlgorithm, compactAlgorithm] : defaultAlgorithm),
-            // token: {
-            //     colorPrimaryBg: '#1677ff',
-            // },
+
         }} wave={{ showEffect: showInsetEffect }}>
             <Layout style={{ minHeight: '100vh' }}>
                 <Sider
@@ -124,15 +122,12 @@ const App = () => {
                         icon={<SettingOutlined />}
                     >
                         <FloatButton.BackTop visibilityHeight={100} />
-                        {/* <FloatButton />
-                        <FloatButton />
-                        <FloatButton icon={<CommentOutlined />} /> */}
+
                         <FloatButton icon={isCompactMode ? <ExpandOutlined /> : <CompressOutlined />} onClick={() => setIsCompactMode((isCompactMode) => !isCompactMode)} />
                     </FloatButton.Group>
                     {collapsedWidth < 80 && <FloatButton.Group style={{ insetInlineEnd: 30 }}>
                         <FloatButton icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />} onClick={() => setCollapsed((collapsed) => !collapsed)} />
                     </FloatButton.Group>}
-                    {/* <Footers collapsedWidth={collapsedWidth} collapsed={collapsed} setCollapsed={setCollapsed} /> */}
                 </Layout>
             </Layout>
         </ConfigProvider >
