@@ -3,13 +3,18 @@ import { UserOutlined, MoonFilled, HolderOutlined, SunFilled, SettingOutlined, L
 import { theme, Flex, Dropdown, Avatar, Switch, Layout, Button, message } from 'antd';
 import { useAuth } from '../../utils/hooks/useAuth';
 import { useLocalStorage } from "../../utils/hooks/useLocalStorage";
+import { useNavigate } from 'react-router';
 const { Header } = Layout;
 
 
 const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
     const [user] = useLocalStorage("inyiceuser");
+    console.log(user)
     const [messageApi, contextHolder] = message.useMessage();
     const [isLoading, setIsLoading] = useState(false);
+    const navigate=useNavigate()
+
+
 
     // Log Out Function Start
     const key = 'updatable';
@@ -90,6 +95,7 @@ const App = ({ isDarkMode, setIsDarkMode, collapsedWidth }) => {
             label: 'Settings',
             icon: <SettingOutlined />,
             extra: '⌘S',
+            onClick: () => navigate(`/client/auth/${user.company_uuid}/settings/organization`),
         },
         {
             key: '5',

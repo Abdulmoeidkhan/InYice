@@ -4,7 +4,8 @@ import {
     HomeOutlined,
     InfoCircleOutlined,
     TeamOutlined,
-    AuditOutlined
+    AuditOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { NavLink, useParams } from "react-router";
@@ -67,6 +68,15 @@ const App = () => {
             label: (
                 <NavLink to={`${commonPathForMyPage}/users`}>
                     Users
+                </NavLink>
+            )
+        },
+        {
+            key: `${commonPathForMyPage}/settings`,
+            icon: <SettingOutlined />,
+            label: (
+                <NavLink to={`${commonPathForMyPage}/settings`}>
+                    Settings
                 </NavLink>
             )
         },

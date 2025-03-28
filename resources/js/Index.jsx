@@ -11,6 +11,7 @@ import Users from "./Pages/Users";
 import Admin from "./Pages/Admin";
 import { useAuth, AuthProvider } from "./utils/hooks/useAuth";
 import { Spin, Flex, } from 'antd';
+import Settings from './Pages/Settings';
 
 
 // Utility component for showing a loading spinner
@@ -122,7 +123,12 @@ const App = () => {
                     <Route path="home" element={<Home />} />
                     <Route path="about" element={<About />} />
                     <Route path="users" element={<Users />} />
+                    <Route path="settings" element={<Settings />} />
                 </Route>
+
+                {/* <Route path="client/auth/:company/settings/:page?" element={<ProtectedRoute></ProtectedRoute>} /> */}
+
+
 
                 {/* Protected Admin Routes */}
                 <Route path="client/inyice" element={<ProtectedAdminRoute><DashboardLayout /></ProtectedAdminRoute>} >
