@@ -17,6 +17,7 @@ const App = () => {
     } = theme.useToken();
 
     const { company } = useParams();
+    console.log(company)
 
     const addData = (values, route, id) => {
         const domanWithPort = import.meta.env.VITE_API_URL;
