@@ -25,7 +25,7 @@ const dateFormats = [
     "YYYY-MM-DD", "DD-MM-YYYY", "MM-DD-YYYY", "YYYY/DD/MM", "DD/MM/YYYY"
 ];
 
-const Fiscal = () => {
+const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
     const [fiscalYear, setFiscalYear] = useState(null);
     const [fiscalStartDate, setFiscalStartDate] = useState(null);
     const [fiscalRange, setFiscalRange] = useState("");
@@ -38,16 +38,27 @@ const Fiscal = () => {
         const currentYear = dayjs().year();
         const startMonth = parseInt(selectedYear.startMonth, 10);
         const endMonth = parseInt(selectedYear.endMonth, 10);
-
+    
         const startYear = startMonth === 1 ? currentYear : currentYear - 1;
         const endYear = endMonth === 12 ? startYear : startYear + 1;
-
+    
         const calculatedDate = dayjs(`${startYear}-${startMonth}-01`);
-
+    
         setFiscalYear(value);
         setFiscalStartDate(calculatedDate);
         setFiscalRange(`${dayjs().month(startMonth - 1).format("MMMM")} to ${dayjs().month(endMonth - 1).format("MMMM")}`);
+    
+        // Convert fiscalStartDate to string before dispatching
+        setFiscalData({
+            fiscalYear: value,
+            fiscalStartDate: calculatedDate.format("YYYY-MM-DD"),  // Convert to string format
+            fiscalRange,
+            language,
+            timezone,
+            dateFormat
+        });
     };
+    
 
     return (
         <Card style={{ maxWidth: "500px", margin: "30px auto", padding: "20px" }}>

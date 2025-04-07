@@ -126,8 +126,7 @@ const App = () => {
                     <Route path="settings" element={<Settings />} />
                 </Route>
 
-                {/* <Route path="client/auth/:company/settings/:page?" element={<ProtectedRoute></ProtectedRoute>} /> */}
-
+            
 
 
                 {/* Protected Admin Routes */}

@@ -1,7 +1,7 @@
 {
-    "name": "My Laravel App",
-    "short_name": "MyApp",
-    "description": "This is my Laravel Vite PWA app .",
+    "name": "Smart Invoice Management System",
+    "short_name": "InvoiceApp",
+    "description": "A fast and user-friendly invoice management system to create, track, and manage invoices efficiently.",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone",

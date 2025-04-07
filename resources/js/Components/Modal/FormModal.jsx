@@ -115,6 +115,7 @@ const App = (props) => {
             >
                 {props.frm ? props.frm.map((item, i) =>
                     <Form.Item key={i} label={item.label}
+                
                         name={item.name}
                         rules={item.rule.map((ruleItem) => { return { required: ruleItem.required, message: ruleItem.message } })}>
                         {item.type === 'textArea' && <Input.TextArea />}
@@ -125,6 +126,7 @@ const App = (props) => {
                         </Select>}
         
                     </Form.Item>) : ''}
+                    
             </Modal >
         </>
     );
