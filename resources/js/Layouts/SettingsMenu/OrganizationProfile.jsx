@@ -9,13 +9,15 @@ import { useDispatch } from "react-redux";
 
 const { Text } = Typography;
 
-const OrganizationProfile = () => {
+const OrganizationProfile = ({ userData }) => {
+    // console.log(userData)
+    
     const { company } = useParams();
     const [formData, setFormData] = useState({});
-    const [fiscalData, setFiscalData] = useState({}); // Added for fiscal data
+    const [fiscalData, setFiscalData] = useState({}); 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const dispatch = useDispatch();  // Call useDispatch once at the top
+    const dispatch = useDispatch();  
 
     const formFields = [
         { label: "Organization Name", name: "orgName", type: "text", rule: { required: true, message: "Please enter organization name!" }, placeholder: "Enter Organization Name" },
@@ -31,8 +33,8 @@ const OrganizationProfile = () => {
     ];
 
     const handleFiscalSubmit = () => {
-        console.log("Fiscal Data: ", fiscalData);  // Check the data being submitted
-        dispatch(setFiscalYear(fiscalData));  // Dispatch fiscal data to Redux store
+        console.log("Fiscal Data: ", fiscalData);  
+        dispatch(setFiscalYear(fiscalData));  
     };
 
     const handleSettingsSubmit = (settingsValues) => {
@@ -56,17 +58,18 @@ const OrganizationProfile = () => {
         setIsModalVisible(false);
     };
 
+   
     return (
         <div>
-            <Text>ID: {company}</Text>
+            <Text>Company Name : {userData?.company_name}</Text>
             <h3>Organization Logo</h3>
 
             <LogoUploader />
             <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} />
-            <Fiscal setFiscalData={setFiscalData} /> {/* Make sure Fiscal component passes data correctly */}
+            <Fiscal setFiscalData={setFiscalData} /> 
 
             <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
-                <Button type="primary" onClick={handleFiscalSubmit}>Save</Button> {/* Fixed: Now calls handleFiscalSubmit */}
+                <Button type="primary" onClick={handleFiscalSubmit}>Save</Button> 
                 <Button type="default">Cancel</Button>
             </div>  
 

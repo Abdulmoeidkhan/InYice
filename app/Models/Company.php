@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 class Company extends Model
 {
     use HasFactory;
-
     // // Indicate that the primary key is not auto-incrementing
     // public $incrementing = false;
 

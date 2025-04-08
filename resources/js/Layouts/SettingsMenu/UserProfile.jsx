@@ -6,12 +6,11 @@ import DynamicForm from '../../Components/DynamicForm/DynamicForm';
 
 const { Text } = Typography;
 
-const UserProfile = () => {
+const UserProfile = ({ userData }) => {
   const { company } = useParams();
   const [isModalVisible, setIsModalVisible] = useState(false);  
   const [formData, setFormData] = useState(null); 
 
-  // Form fields for user profile
   const formFields = [
     { label: "User Name", name: "userName", type: "text", rule: { required: true, message: "Please enter user name!" }, placeholder: "Enter Organization Name" },
     { label: "Father Name", name: "Father Name", type: "text", rule: { required: true, message: "Please enter father name!" }, placeholder: "Enter father name" },
@@ -42,7 +41,8 @@ const UserProfile = () => {
 
   return (
     <div>
-      <Text>ID : {company}</Text>
+      <Text>Username :   
+         { userData?.name}</Text>
       <h3>User Logo</h3>
       <LogoUploader />
       <DynamicForm formFields={formFields} onSubmit={handleSubmit} />
