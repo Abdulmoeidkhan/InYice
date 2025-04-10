@@ -61,7 +61,7 @@ const OrganizationProfile = ({ userData }) => {
    
     return (
         <div>
-            <Text>Company Name : {userData?.company_name}</Text>
+            <Text>Org Name : {userData?.company_name}</Text>
             <h3>Organization Logo</h3>
 
             <LogoUploader />
@@ -76,7 +76,7 @@ const OrganizationProfile = ({ userData }) => {
             {/* Modal for confirmation */}
             <Modal
                 title="Confirm Submission"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleModalOk}
                 onCancel={handleModalCancel}
                 okText="Submit"

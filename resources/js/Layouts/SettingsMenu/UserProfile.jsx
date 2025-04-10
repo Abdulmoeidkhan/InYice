@@ -8,8 +8,8 @@ const { Text } = Typography;
 
 const UserProfile = ({ userData }) => {
   const { company } = useParams();
-  const [isModalVisible, setIsModalVisible] = useState(false);  
-  const [formData, setFormData] = useState(null); 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [formData, setFormData] = useState(null);
 
   const formFields = [
     { label: "User Name", name: "userName", type: "text", rule: { required: true, message: "Please enter user name!" }, placeholder: "Enter Organization Name" },
@@ -24,25 +24,24 @@ const UserProfile = ({ userData }) => {
 
   // Handle form submission
   const handleSubmit = (values) => {
-    setFormData(values);  
-    setIsModalVisible(true);  
+    setFormData(values);
+    setIsModalVisible(true);
   };
 
   // Handle confirm action in the modal
   const handleOk = () => {
     console.log("Form Submitted:", formData);
-    setIsModalVisible(false); 
+    setIsModalVisible(false);
   };
 
   // Handle cancel action in the modal
   const handleCancel = () => {
-    setIsModalVisible(false);  
+    setIsModalVisible(false);
   };
 
   return (
     <div>
-      <Text>Username :   
-         { userData?.name}</Text>
+      <Text>User Name : {userData?.name}</Text>
       <h3>User Logo</h3>
       <LogoUploader />
       <DynamicForm formFields={formFields} onSubmit={handleSubmit} />
@@ -55,7 +54,7 @@ const UserProfile = ({ userData }) => {
       {/* Modal for confirmation */}
       <Modal
         title="Confirm Submission"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Submit"

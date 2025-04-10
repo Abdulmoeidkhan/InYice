@@ -95,7 +95,7 @@ const App = () => {
                     <h1>Setting</h1>
                     <Flex
                         gap="middle"
-                        style={{ width: "100%", justifyContent: "center", flexWrap: "wrap" }}
+                        style={{ width: "100%", flexWrap: "wrap" }}
                     >
                         <Flex
                             vertical

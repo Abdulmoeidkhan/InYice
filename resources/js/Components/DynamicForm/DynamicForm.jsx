@@ -192,7 +192,7 @@ const DynamicForm = ({formFields,onSubmit}) => {
     // };
 
     return (
-        <Card style={{ maxWidth: "100%", margin: "30px auto", padding: "20px" }}>
+        <Card variant="borderless" style={{ maxWidth: "100%", margin: "30px auto", padding: "20px" }}>
             <Form layout="vertical" onFinish={onSubmit}>
                 {formFields?.map((field) => (
                 
