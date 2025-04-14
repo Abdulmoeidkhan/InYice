@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->uuid('user_uuid')->unique();
-            $table->uuid('company_uuid')->unique();
-            $table->string('company_name')->unique();
-            $table->string('company_display_name')->unique();
-            $table->string('company_email')->unique();
-            $table->string('company_contact')->nullable();
-            $table->string('company_industry')->nullable();
-            $table->string('company_code')->nullable();
-            $table->string('company_address')->nullable();
-            $table->string('company_city')->nullable();
+            $table->uuid('uuid')->unique();
+            $table->string('name')->unique();
+            $table->string('display_name')->unique();
+            $table->string('email')->unique();
+            $table->string('contact')->nullable();
+            $table->string('industry')->nullable();
+            $table->string('code')->nullable();
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
             $table->timestamps();
         });
     }

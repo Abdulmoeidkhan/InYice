@@ -41,7 +41,6 @@ const LogoUploader = () => {
                         action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                         listType="picture-card"
                         fileList={fileList}
-                        
                         onChange={onChange}
                         onPreview={onPreview}
                         maxCount={1} 

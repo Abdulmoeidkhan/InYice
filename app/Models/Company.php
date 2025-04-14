@@ -21,11 +21,13 @@ class Company extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_uuid',
         'name',
         'display_name',
         'email',
         'contact',
         'industry',
+        'city',
         'address',
     ];
 
@@ -43,6 +45,11 @@ class Company extends Model
     {
         static::creating(function ($company) {
             $company->uuid = (string) Str::uuid(); // Generate a UUID
+            $company->user_uuid = $company->uuid; // Generate a UUID
+        });
+
+        static::creating(function ($company) {
+            $company->code = strtoupper(Str::random(2)) . str_pad(mt_rand(0, 99999999), 8, '0', STR_PAD_LEFT);
         });
     }
 }

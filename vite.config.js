@@ -14,9 +14,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "robots.txt", "apple-touch-icon.png"],
       manifest: {
-        name: "My Laravel React App",
-        short_name: "ReactPWA",
-        description: "This is the Laravel + React + Vite PWA .",
+        name: "InYice",
+        short_name: "InYice",
+        description: "InYice is a platform for making your Invoices & helps you to manage your accounts in a efficeint way .",
         theme_color: "#ffffff",
         background_color: "#ffffff",
         display: "standalone",

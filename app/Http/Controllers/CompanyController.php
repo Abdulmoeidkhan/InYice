@@ -21,22 +21,6 @@ class CompanyController extends BaseApiController
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Company $company)
@@ -44,13 +28,6 @@ class CompanyController extends BaseApiController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Company $company)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -62,15 +39,15 @@ class CompanyController extends BaseApiController
         if (is_null($company)) {
             return $this->sendError('Company not found.');
         }
-
+        // return $request->all();
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:companies,name,' . $id . ',uuid',
-            'display_name' => 'required|string|max:255|unique:companies,display_name,' . $id . ',uuid',
-            'email' => 'required|email|unique:companies,email,' . $id . ',uuid',
-            'industry' => 'nullable|string|min:4',
-            'keywords' => 'nullable|array|min:1',
+            // 'name' => 'required|string|max:255|unique:companies,name,' . $id . ',uuid',
+            // 'email' => 'required|email|unique:companies,email,' . $id . ',uuid',
+            // 'display_name' => 'required|string|max:255|unique:companies,display_name,' . $id . ',uuid',
             'contact' => 'nullable|min:9|unique:companies,contact,' . $id . ',uuid',
+            'industry' => 'nullable|string|min:4',
             'address' => 'nullable|string|min:10',
+            'city' => 'nullable|string|min:3',
         ]);
 
         if ($validator->fails()) {
@@ -78,8 +55,8 @@ class CompanyController extends BaseApiController
         }
 
         try {
-            $company_name = strtolower(str_replace(' ', '-', $request['name']));
-            $company->update([...$validator->validated(), 'name' => $company_name]);
+            // $company_name = strtolower(str_replace(' ', '-', $request['name']));
+            $company->update($validator->validated());
             return $this->sendResponse(new UserResource($company), 'Company updated successfully.');
         } catch (\Illuminate\Database\QueryException $ex) {
             if ($ex->getCode() == 23000) {
@@ -88,6 +65,7 @@ class CompanyController extends BaseApiController
             return $this->sendError('Database Error.', $ex->getMessage());
         }
     }
+    
 
     /**
      * Remove the specified resource from storage.
