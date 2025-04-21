@@ -40,6 +40,7 @@ class UsersController extends BaseApiController
             }
 
             if (!empty($user->permissions)) {
+                $sortedData['permission_id'] = $user->permissions[0]['id'];
                 $sortedData['permission_name'] = $user->permissions[0]['name'];
                 $sortedData['permission_display_name'] = $user->permissions[0]['display_name'];
             } else {
@@ -167,26 +168,39 @@ class UsersController extends BaseApiController
         if (is_null($user)) {
             return $this->sendError('User not found.');
         }
-
+        // return $request->all();
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
-            'branch_id' => 'required|min:1',
-            'permission_display_name' => 'required|min:1',
-            'role_display_name' => 'required|min:1',
+            'branch_id' => 'nullable|min:1',
+            'role_id' => 'nullable|min:1',
+            'permission_id' => 'nullable|min:1',
         ]);
+        
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
+        
+        if (!$request->has('branch_id') || empty($request->branch_id)) {
+            $request['branch_id']=$request->user()->roles[0]->team_id;
+        }
+
+        if (!$request->has('role_id') || empty($request->role_id)) {
+            $request['role_id']=$request->user()->roles[0]->role_id;
+        }
+
+        if (!$request->has('permission_id') || empty($request->permission_id)) {
+            $request['permission_id']=$request->user()->permissions[0]->permission_id;
+        }
 
         $team = Team::where('id', $request->branch_id)->orWhere('display_name', $request->branch_id)->first();
-        $role = Role::where('id', $request->role_display_name)->orWhere('display_name', $request->role_display_name)->first();
-        $permission = Permission::where('id', $request->permission_display_name)->orWhere('display_name', $request->permission_display_name)->first();
+        $role = Role::where('id', $request->role_id)->orWhere('display_name', $request->role_display_name)->first();
+        $permission = Permission::where('id', $request->permission_id)->orWhere('display_name', $request->permission_display_name)->first();
 
+// return $request->user();
         if (is_null($team) || is_null($role) || is_null($permission)) {
             return $this->sendError('Validation Error.', 'Invalid team, role, or permission.', 422);
         }
+
 
         try {
             $user->update(['name' => $request['name'], 'email' => $request['email']]);
