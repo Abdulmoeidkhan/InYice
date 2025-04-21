@@ -15,7 +15,7 @@ import FormModal from "../Modal/FormModal";
 import Tags from "../Tags/Tags";
 import Fuse from "fuse.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUser } from "../Redux/reducers/User/UserSlice";
+import { getAllUser } from "../../utils/constant/Redux/reducers/User/UserSlice";
 
 const { Search } = Input;
 
@@ -37,7 +37,6 @@ const App = (props) => {
         await axios
             .get(`${domanWithPort}/${props.route}`)
             .then(function (response) {
-        
                 setData(response.data.data);
                 setLoading(false);
             })
@@ -71,12 +70,10 @@ const App = (props) => {
 
         return result;
     };
-    
-   useEffect(() => {
+
+    useEffect(() => {
         searchFuse(searchValue);
-        
-    }, [data, searchValue]); 
-    
+    }, [data, searchValue]);
 
     // Check Image URL is Valid or not Start
     function checkImageLink(url) {
@@ -97,7 +94,7 @@ const App = (props) => {
 
     const dispatch = useDispatch();
     const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
-   
+    
 
     const getUser = async () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
@@ -105,6 +102,7 @@ const App = (props) => {
         const data = await response?.data;
         dispatch(getAllUser(data));
     };
+    console.log(users);
 
     useEffect(() => {
         getUser();
@@ -153,7 +151,6 @@ const App = (props) => {
                     endMessage={
                         <>
                             <Divider plain>It is all, nothing more 🤐</Divider>
-                           
                         </>
                     }
                     scrollableTarget="scrollableDiv"
@@ -161,52 +158,62 @@ const App = (props) => {
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
-                            const {role_id} = item
+                            console.log(item)
 
-                            
-                           
+                            // const currentUser = item
 
-                            // Current User Data
-                            const currentUser = item.role_display_name;
-                        
-
-                            const isOwner = item?.role_id === 1; // Agar Owner hai (Full Access)
+                            const isOwner = item?.role_id === 1;
+                            console.log(isOwner); // Agar Owner hai (Full Access)
                             // ); // Owner hai ya nahi
 
-                            
                             const IsInYice =
-                                users?.company_name === "Inyice coorporation"; // Agar inyice hai (Full Access)
+                                users?.company_name === "Inyice coorporation";
+                            console.log(IsInYice); // Agar inyice hai (Full Access)
                             // );      // Inyice hai ya nahi
 
+                            
+                             // Kya ye same company ka hai?
                             const isSameCompany =
-                                item?.company_name === item.company_name; // Kya ye same company ka hai?
-                         
+                                users?.company_name ===
+                                item?.company_name;
+                            console.log(isSameCompany);
 
                             // Apni company ka admin hai?
                             const isAdmin =
                                 (item?.role_id === 2 && isSameCompany) || // Apni company ka admin
                                 (item?.role_id === 2 && IsInYice); // InYice ka admin
-                             // Admin hai ya nahi
+                            // Admin hai ya nahi
+                            console.log(isAdmin);
 
+                         // Kya same ya chhota role hai?
                             const isSameRoleOrLower =
-                                item?.role_id <= item.role_id; // Kya same ya chhota role hai?
-                            
+                                item?.role_id >= item?.role_id;
+                            console.log(isSameRoleOrLower);
 
-                            // Edit/Delete Condition
                             const canEditDelete =
-                                IsInYice ||
-                                isOwner || // Owner har kisi ko cher sakta hai
-                                (isAdmin && isSameRoleOrLower ); // Admin sirf apni company ke admin aur users ko cher sakta hai
+                                // Inyice ka Owner/Admin ho to sab ko chher sakta hai
+                                (IsInYice && (isOwner || isAdmin)) ||
+                                // Non-Inyice Owner sirf apni company mein sab ko chher sakta hai
+                                (!IsInYice && isOwner && isSameCompany) ||
+                                // Non-Inyice Admin sirf lower roles aur same company ko chher sakta hai
+                                (!IsInYice &&
+                                    isAdmin &&
+                                    isSameCompany &&
+                                    isSameRoleOrLower);
+
+                            // Current Logged-in User
 
 
-                           
                             return (
                                 <List.Item
                                     key={item[props.fieldsToRender[0]]}
                                     actions={[
-                                        props.route  === "usersRoles" && props.route  === "usersPermissions"
-                                        && props.route  === "usersCompanies" && props.route  === "usersTeams" && props.route  === "usersPermissions"
-                                        && props.route  === "usersPermissions" ? (
+                                        props.route === "usersRoles" ||
+                                        props.route === "usersPermissions" ||
+                                        props.route === "usersCompanies" ||
+                                        props.route === "usersTeams" ||
+                                        props.route === "usersPermissions" ||
+                                        props.route === "usersPermissions" ? (
                                             <>
                                                 {props.editComponentEssentials ? (
                                                     <FormModal

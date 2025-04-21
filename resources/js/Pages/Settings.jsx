@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrumb, Layout, theme, Tabs, Flex } from "antd";
 import { useParams } from "react-router";
-import OrganizationProfile from "../Layouts/SettingsMenu/OrganizationProfile";
-import UserProfile from "../Layouts/SettingsMenu/UserProfile";
+// import OrganizationProfile from "../Layouts/SettingsMenu/OrganizationProfile";
+// import UserProfile from "../Layouts/SettingsMenu/UserProfile";
 import { useAuth } from "../utils/hooks/useAuth";
+import OrganizationProfile from "../Components/SettingsMenu/OrganizationProfile";
+import UserProfile from "../Components/SettingsMenu/UserProfile";
 const { Content } = Layout;
 
 const App = () => {

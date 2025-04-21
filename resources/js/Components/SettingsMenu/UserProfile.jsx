@@ -2,7 +2,7 @@ import { Button, Typography, Modal } from 'antd';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import LogoUploader from '../../utils/constant/Settingform/LogoUploader';
-import DynamicForm from '../../Components/DynamicForm/DynamicForm';
+import DynamicForm from '../DynamicForm/DynamicForm';
 
 const { Text } = Typography;
 
@@ -68,3 +68,4 @@ const UserProfile = ({ userData }) => {
 };
 
 export default UserProfile;
+
