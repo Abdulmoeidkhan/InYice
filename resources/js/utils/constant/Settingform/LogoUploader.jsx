@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Flex, Upload, Typography } from "antd";
 import ImgCrop from "antd-img-crop";
-import OrganizationForm from '../../../Components/DynamicForm/DynamicForm';
 
 const { Text } = Typography;
 
 const LogoUploader = () => {
     const [fileList, setFileList] = useState([]);
-    console.log(fileList)
+    // console.log(fileList)
     
     const onChange = ({ fileList: newFileList }) => {
         setFileList(newFileList.slice(-1)); 
