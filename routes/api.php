@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RolesController;
@@ -26,4 +27,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('usersPermissions', PermissionsController::class);
     Route::resource('usersTeams', TeamsController::class);
     Route::resource('usersCompanies', CompanyController::class);
+    Route::resource('foreignImages', ImageController::class);
 });

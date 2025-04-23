@@ -9,6 +9,7 @@ import UserProfile from "../Components/SettingsMenu/UserProfile";
 const { Content } = Layout;
 
 const App = () => {
+    // console.log(matchedCompany)
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
@@ -40,21 +41,6 @@ const App = () => {
         window.addEventListener("resize", updateTabPosition);
         return () => window.removeEventListener("resize", updateTabPosition);
     }, []);
-
-    // const items = [
-    //     {
-    //       key: '1',
-    //       label: `${userData?.company_name} Profile` || 'Organization Profile',
-    //       children: <OrganizationProfile/>,
-    //     },
-    //     {
-    //       key: '2',
-    //       label: `${userData?.name} Profile` ||'User Profile',
-    //       children: <UserProfile/>,
-    //     },
-    // ];
-
-    // const activeLabel = items.find((item) => item.key === selectedTab)?.label || "Settings";
 
 
     const items = [

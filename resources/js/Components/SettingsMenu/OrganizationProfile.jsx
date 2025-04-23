@@ -1,32 +1,114 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Button, Typography, Modal } from "antd";
-// import LogoUploader from "../../../utils/constant/Settingform/LogoUploader";
-// import DynamicForm from "../../../Components/DynamicForm/DynamicForm";
-// import Fiscal from "../../../utils/constant/Settingform/Fiscal";
-// import { setDateFormat, setLanguage, setTimezone, setFiscalYear } from "../../../Components/Redux/reducers/User/FiscalSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios"; 
 import LogoUploader from "../../utils/constant/Settingform/LogoUploader";
 import DynamicForm from "../DynamicForm/DynamicForm";
-// import Fiscal from "../../utils/constant/Settingform/Fiscal";
-// import { setDateFormat, setFiscalYear } from "../../utils/constant/Redux/reducers/User/FiscalSlice";
-// import { setDateFormat, setFiscalYear} from "../Redux/reducers/User/FiscalSlice";
+import { useSelector} from "react-redux";
+import { useAuth } from "../../utils/hooks/useAuth";
+import { getAllUser } from "../../utils/constant/Redux/reducers/User/UserSlice";
 
 const { Text } = Typography;
 
 const OrganizationProfile = ({ userData }) => {
-    // console.log(userData)
-    
-    const { company } = useParams();
-    const [formData, setFormData] = useState({});
-    const [fiscalData, setFiscalData] = useState({}); 
-    const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const dispatch = useDispatch();  
+    const { company } = useParams(); 
+    const [formData, setFormData] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const { user } = useAuth();
+
+    
+
+    user && console.log(user);
+    const dispatch = useDispatch();
+    const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
+    console.log(users)
+
+    const getUser = async () => {
+        const domanWithPort = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
+        const data = await response?.data;
+        dispatch(getAllUser(data));
+    };
+    // console.log(users);
+
+    useEffect(() => {
+        getUser();
+    }, [dispatch]);
+
+    
+   
+    
+  
+    useEffect(() => {
+        const fetchCompany = async () => {
+            try {
+                const domain = import.meta.env.VITE_API_URL;
+                const response = await axios.get(`${domain}/usersCompanies`);
+                const allCompanies = response.data?.data || [];
+                console.log(allCompanies)
+                const matchedCompany = allCompanies.find((item) => item.uuid?.toString() === company);
+                if (matchedCompany) {
+                    setFormData({
+                        orgName: matchedCompany.name || "",
+                        industry: matchedCompany.industry || "",
+                        businessType: matchedCompany.business_type || "",
+                        location: matchedCompany.location || "",
+                        orgAddress: matchedCompany.address || "",
+                        city: matchedCompany.city || "",
+                        zip: matchedCompany.zip || "",
+                        phone: matchedCompany.contact || "",
+                        website: matchedCompany.website || "",
+                        currency: matchedCompany.currency || "",
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching company data", error);
+            }
+        };
+
+        fetchCompany();
+    
+    }, [company]);
+
+
+
+    const handleFormSubmit = (values) => {
+        setFormData(values);
+        setIsModalVisible(true);
+    };
+
+    const handleModalOk = async () => {
+        try {
+            const domain = import.meta.env.VITE_API_URL;
+            const payload = {
+                contact: formData.phone,
+                industry: formData.industry,
+                address: formData.orgAddress,
+                city: formData.city
+            };
+            console.log(payload)
+
+            const response = await axios.put(`${domain}/usersCompanies/${company}`, payload);
+            console.log(response) 
+
+            console.log("Update success:", response.data);
+            setIsModalVisible(false);
+        } catch (error) {
+            console.error("Error updating company:", error);
+        }
+    };
+
+    const handleModalCancel = () => {
+        setIsModalVisible(false);
+    };
+
+   
 
     const formFields = [
-        { label: "Organization Name", name: "orgName", type: "text", rule: { required: true, message: "Please enter organization name!" }, placeholder: "Enter Organization Name" },
-        { label: "Industry", name: "industry", type: "select", rule: { required: true, message: "Please select industry!" }, placeholder: "Select Industry", options: ["IT", "Finance", "Healthcare", "Education"] },
+        { label: "Organization Name", name: "orgName", type: "text", rule: { required: true, message: "Please enter organization name!" }, placeholder: "Enter Organization Name"  },
+        { label: "Industry", name: "industry", type: "select", rule: { required: true, message: "Please select industry!" }, placeholder: "Select Industry", options: ["Information Tech", "Finance", "Healthcare", "Education"] },
         { label: "Business Type", name: "businessType", type: "select", rule: { required: true, message: "Please select business type!" }, placeholder: "Select Business Type", options: ["Private", "Public", "NGO"] },
         { label: "Location", name: "location", type: "select", rule: { required: true, message: "Please select location!" }, placeholder: "Select Location", options: ["USA", "UK", "India", "Pakistan"] },
         { label: "Address", name: "orgAddress", type: "text", rule: { required: true, message: "Please enter address!" }, placeholder: "Enter Address" },
@@ -37,50 +119,13 @@ const OrganizationProfile = ({ userData }) => {
         { label: "Base Currency", name: "currency", type: "select", rule: { required: true, message: "Please select a currency!" }, placeholder: "Select Currency", options: ["USD", "EUR", "GBP", "JPY", "INR", "PKR"] },
     ];
 
-    // const handleFiscalSubmit = () => {
-    //     console.log("Fiscal Data: ", fiscalData);  
-    //     dispatch(setFiscalYear(fiscalData));  
-    // };
-
-    // const handleSettingsSubmit = (settingsValues) => {
-    //     const { language, timezone, dateFormat } = settingsValues;
-    //     dispatch(setLanguage(language));
-    //     dispatch(setTimezone(timezone));
-    //     dispatch(setDateFormat(dateFormat));
-    // };
-
-    const handleFormSubmit = (values) => {
-        setFormData(values);
-        setIsModalVisible(true);
-    };
-
-    const handleModalOk = () => {
-        console.log("Form Submitted:", formData);
-        setIsModalVisible(false);
-    };
-
-    const handleModalCancel = () => {
-        setIsModalVisible(false);
-    };
-
-   
     return (
         <div>
             <Text>Org Name : {userData?.company_name}</Text>
             <h3>Organization Logo</h3>
-
             <LogoUploader />
+            <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} initialValues={formData} />
 
-            <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} />
-
-            {/* <Fiscal setFiscalData={setFiscalData} />  */}
-
-            {/* <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
-                <Button type="primary" onClick={handleFiscalSubmit}>Save</Button> 
-                <Button type="default">Cancel</Button>
-            </div>   */}
-
-            {/* Modal for confirmation */}
             <Modal
                 title="Confirm Submission"
                 open={isModalVisible}
