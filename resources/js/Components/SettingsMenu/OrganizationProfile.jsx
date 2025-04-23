@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { Button, Typography, Modal } from "antd";
-import LogoUploader from "../../utils/constant/Settingform/LogoUploader";
-import DynamicForm from "../../Components/DynamicForm/DynamicForm";
-import Fiscal from "../../utils/constant/Settingform/Fiscal";
-import { setDateFormat, setLanguage, setTimezone, setFiscalYear } from "../../Components/Redux/reducers/User/FiscalSlice";
+// import LogoUploader from "../../../utils/constant/Settingform/LogoUploader";
+// import DynamicForm from "../../../Components/DynamicForm/DynamicForm";
+// import Fiscal from "../../../utils/constant/Settingform/Fiscal";
+// import { setDateFormat, setLanguage, setTimezone, setFiscalYear } from "../../../Components/Redux/reducers/User/FiscalSlice";
 import { useDispatch } from "react-redux";
+import LogoUploader from "../../utils/constant/Settingform/LogoUploader";
+import DynamicForm from "../DynamicForm/DynamicForm";
+// import Fiscal from "../../utils/constant/Settingform/Fiscal";
+// import { setDateFormat, setFiscalYear } from "../../utils/constant/Redux/reducers/User/FiscalSlice";
+// import { setDateFormat, setFiscalYear} from "../Redux/reducers/User/FiscalSlice";
 
 const { Text } = Typography;
 
@@ -32,17 +37,17 @@ const OrganizationProfile = ({ userData }) => {
         { label: "Base Currency", name: "currency", type: "select", rule: { required: true, message: "Please select a currency!" }, placeholder: "Select Currency", options: ["USD", "EUR", "GBP", "JPY", "INR", "PKR"] },
     ];
 
-    const handleFiscalSubmit = () => {
-        console.log("Fiscal Data: ", fiscalData);  
-        dispatch(setFiscalYear(fiscalData));  
-    };
+    // const handleFiscalSubmit = () => {
+    //     console.log("Fiscal Data: ", fiscalData);  
+    //     dispatch(setFiscalYear(fiscalData));  
+    // };
 
-    const handleSettingsSubmit = (settingsValues) => {
-        const { language, timezone, dateFormat } = settingsValues;
-        dispatch(setLanguage(language));
-        dispatch(setTimezone(timezone));
-        dispatch(setDateFormat(dateFormat));
-    };
+    // const handleSettingsSubmit = (settingsValues) => {
+    //     const { language, timezone, dateFormat } = settingsValues;
+    //     dispatch(setLanguage(language));
+    //     dispatch(setTimezone(timezone));
+    //     dispatch(setDateFormat(dateFormat));
+    // };
 
     const handleFormSubmit = (values) => {
         setFormData(values);
@@ -65,13 +70,15 @@ const OrganizationProfile = ({ userData }) => {
             <h3>Organization Logo</h3>
 
             <LogoUploader />
-            <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} />
-            <Fiscal setFiscalData={setFiscalData} /> 
 
-            <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
+            <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} />
+
+            {/* <Fiscal setFiscalData={setFiscalData} />  */}
+
+            {/* <div style={{ marginTop: "20px", display: "flex", justifyContent: "space-between" }}>
                 <Button type="primary" onClick={handleFiscalSubmit}>Save</Button> 
                 <Button type="default">Cancel</Button>
-            </div>  
+            </div>   */}
 
             {/* Modal for confirmation */}
             <Modal

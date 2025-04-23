@@ -1,3 +1,6 @@
+**======================= Fiscal Component Start===================**
+
+
 import React, { useState } from "react";
 import { Form, Select, DatePicker, Card, Typography } from "antd";
 import dayjs from "dayjs";
@@ -64,7 +67,7 @@ const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
         <Card style={{ maxWidth: "500px", margin: "30px auto", padding: "20px" }}>
             <Form layout="vertical">
                 {/* Language Dropdown */}
-                <Form.Item label="Select Language">
+                {/* <Form.Item label="Select Language">
                     <Select
                         placeholder="Choose Language"
                         style={{ width: "100%" }}
@@ -76,10 +79,10 @@ const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
                             </Option>
                         ))}
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
 
                 {/* Timezone Dropdown */}
-                <Form.Item label="Select Timezone">
+                {/* <Form.Item label="Select Timezone">
                     <Select
                         placeholder="Choose Timezone"
                         style={{ width: "100%" }}
@@ -91,10 +94,10 @@ const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
                             </Option>
                         ))}
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
 
                 {/* Date Format Dropdown */}
-                <Form.Item label="Select Date Format">
+                {/* <Form.Item label="Select Date Format">
                     <Select
                         placeholder="Choose Date Format"
                         style={{ width: "100%" }}
@@ -106,7 +109,7 @@ const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
                             </Option>
                         ))}
                     </Select>
-                </Form.Item>
+                </Form.Item> */}
 
                 {/* Fiscal Year Dropdown */}
                 <Form.Item label="Fiscal Year">
@@ -167,3 +170,86 @@ const Fiscal = ({ setFiscalData }) => {  // Receive setFiscalData as a prop
 };
 
 export default Fiscal;
+
+**======================= Fiscal Component End===================**
+
+
+
+
+**========================Fiscal Slice Redux start==========================**
+
+// src/redux/settingsSlice.js
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+    language: null,
+    timezone: null,
+    dateFormat: null,
+    fiscalYear: null,
+    fiscalStartDate: null,
+    fiscalRange: "",
+};
+
+const FiscalSlice = createSlice({
+    name: "fiscal",
+    initialState,
+    reducers: {
+        // setLanguage: (state, { payload }) => {
+        //     state.language = payload;
+        // },
+        // setTimezone: (state, { payload }) => {
+        //     state.timezone = payload;
+        // },
+        setDateFormat: (state, { payload }) => {
+            state.dateFormat = payload;
+        },
+        setFiscalYear: (state, { payload }) => {
+            state.fiscalYear = payload.fiscalYear;
+            state.fiscalStartDate = payload.fiscalStartDate;
+            state.fiscalRange = payload.fiscalRange;
+        },
+    },
+});
+
+export const {  setDateFormat, setFiscalYear } = FiscalSlice.actions;
+
+export default FiscalSlice.reducer;
+
+
+**========================Fiscal Slice Redux end==========================**
+
+
+
+
+**================================DynamicForm Redux Start===========================**
+
+// // src/redux/reducers/User/OrganizationSlice.js
+// import { createSlice } from "@reduxjs/toolkit";
+
+// const initialState = {
+//   formData: {},
+// };
+
+// const DynamicFormSlice = createSlice({
+//   name: "dynamic",
+//   initialState,
+//   reducers: {
+//     setOrganizationData: (state, action) => {
+//       state.formData = action.payload; 
+//     },
+//   },
+// });
+
+// export const { setOrganizationData } = DynamicFormSlice.actions;
+
+// export default DynamicFormSlice.reducer;
+
+
+
+**================================DynamicForm Redux End===========================**
+
+
+
+
+
+
