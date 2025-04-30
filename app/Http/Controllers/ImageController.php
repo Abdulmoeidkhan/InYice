@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseApiController as BaseApiController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
-use Illuminate\Database\QueryException;
+use App\Models\ImageCollection;
 
 
 
@@ -46,6 +46,13 @@ class ImageController extends BaseApiController
             // Store the image in Cloudinary
             $filename = $request->uid.'.'.$request->file('file')->getClientOriginalExtension();
             $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'),$filename);
+            $imgDataUpdate = $imgSaved ? ImageCollection::updateOrCreate(
+                [
+                    'assoc_uuid' => $filename,
+                    'belongs_to' => $request->path.'-'.$filename,
+                    'path' => $request->path.'/'.$filename,
+                ],
+            ) : null;
             // $imgSaved = Storage::disk('local')->putFileAs($request->path, $request->file('file'),$filename);
             return $imgSaved ? $this->sendResponse($request->path.'/'.$filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
         } catch (\Illuminate\Database\QueryException $ex) {
