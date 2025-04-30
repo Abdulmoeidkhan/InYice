@@ -251,5 +251,19 @@ export default FiscalSlice.reducer;
 
 
 
+**=============================PaymentStubs Field start=============================**
 
+ {/* <Form.Item>
+                        <Space style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                            <span>Would you like to add a different address from payment stubs?</span>
+                            <Switch onChange={(checked) => setShowAddress(checked)} />
+                        </Space>
+                    </Form.Item>
 
+                    {showAddress && (
+                        <Form.Item label="Payment Stub Address" name="paymentStubAddress">
+                            <Input.TextArea rows={3} placeholder="You can enter a maximum of 255 characters" />
+                        </Form.Item>
+                    )} */}
+
+**=============================PaymentStubs Field end=============================**

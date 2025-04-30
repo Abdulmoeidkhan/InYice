@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
 use Illuminate\Database\QueryException;
 
+
+
 use Illuminate\Http\Request;
 
 class ImageController extends BaseApiController
@@ -23,14 +25,29 @@ class ImageController extends BaseApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, ?string $uid, ?string $path)
+    // public function store(Request $request)
+    public function store(Request $request)
     {
-        return $this->sendResponse('', 'Image updated successfully.');
-        $imageBlob = $request->file;
         try {
-            // $imgSaved = Storage::disk('cloudinary')->put($path.'/' . $uid, $imageBlob);
-            $imgSaved = Storage::disk('cloudinary')->put('image',$imageBlob);
-            return $imgSaved ? $this->sendResponse('', 'Image updated successfully.') : $this->sendError('something Went Wrong');
+            // Validate the request
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Validation Error.', $validator->errors());
+            }
+
+            // Check if the file is present in the request
+            if (!$request->hasFile('file')) {
+                return $this->sendError('File not found in the request.');
+            }
+
+            // Store the image in Cloudinary
+            $filename = $request->uid.'.'.$request->file('file')->getClientOriginalExtension();
+            $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'),$filename);
+            // $imgSaved = Storage::disk('local')->putFileAs($request->path, $request->file('file'),$filename);
+            return $imgSaved ? $this->sendResponse($request->path.'/'.$filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
         } catch (\Illuminate\Database\QueryException $ex) {
             if ($ex->getCode() == 23000) {
                 return $this->sendError('Database Error: Duplicate entry for role name.', $ex->getMessage(), 422);
