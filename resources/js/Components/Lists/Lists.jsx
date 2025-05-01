@@ -20,13 +20,14 @@ import { getAllUser } from "../../utils/constant/Redux/reducers/User/UserSlice";
 const { Search } = Input;
 
 const App = (props) => {
+    // console.log(props)
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
     const { user } = useAuth();
 
-    user && console.log(user);
+    // user && console.log(user);
 
     const loadData = async () => {
         if (loading) {
@@ -47,7 +48,7 @@ const App = (props) => {
     };
 
     useEffect(() => {
-        loadData();
+            loadData();
     }, [props.parentState]);
 
     // Load Full Data & Initiate Request via UseEffect End
@@ -93,22 +94,19 @@ const App = (props) => {
     // Check Image URL is Valid or not End
 
     const dispatch = useDispatch();
-    const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
-
-   
-    
+    const users = useSelector((state) => state?.AllUsers?.AllUsers);
 
     const getUser = async () => {
         const domanWithPort = import.meta.env.VITE_API_URL;
         const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
-        const data = await response?.data;
+        const data = await response?.data?.data;
         dispatch(getAllUser(data));
     };
     console.log(users);
 
     useEffect(() => {
         getUser();
-    }, [dispatch]);
+    }, []);
 
     return (
         <>
@@ -160,17 +158,17 @@ const App = (props) => {
                     <List
                         dataSource={filteredData}
                         renderItem={(item) => {
-                            console.log(item)
+                            // console.log(item)
 
                             // const currentUser = item
 
                             const isOwner = item?.role_id === 1;
-                            console.log(isOwner); // Agar Owner hai (Full Access)
+                            // console.log(isOwner); // Agar Owner hai (Full Access)
                             // ); // Owner hai ya nahi
 
                             const IsInYice =
                                 users?.company_name === "Inyice coorporation";
-                            console.log(IsInYice); // Agar inyice hai (Full Access)
+                            // console.log(IsInYice); // Agar inyice hai (Full Access)
                             // );      // Inyice hai ya nahi
 
                             
@@ -178,19 +176,19 @@ const App = (props) => {
                             const isSameCompany =
                                 users?.company_name ===
                                 item?.company_name;
-                            console.log(isSameCompany);
+                            // console.log(isSameCompany);
 
                             // Apni company ka admin hai?
                             const isAdmin =
                                 (item?.role_id === 2 && isSameCompany) || // Apni company ka admin
                                 (item?.role_id === 2 && IsInYice); // InYice ka admin
                             // Admin hai ya nahi
-                            console.log(isAdmin);
+                            // console.log(isAdmin);
 
                          // Kya same ya chhota role hai?
                             const isSameRoleOrLower =
                                 item?.role_id >= item?.role_id;
-                            console.log(isSameRoleOrLower);
+                            // console.log(isSameRoleOrLower);
 
                             const canEditDelete =
                                 // Inyice ka Owner/Admin ho to sab ko chher sakta hai

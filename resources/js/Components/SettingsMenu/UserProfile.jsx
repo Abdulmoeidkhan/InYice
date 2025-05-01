@@ -1,18 +1,42 @@
 import { Button, Typography, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import LogoUploader from "../../utils/constant/Settingform/LogoUploader";
+import LogoUploader from "../ImageUploader/ImageUploader";
 import DynamicForm from "../DynamicForm/DynamicForm";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUser } from "../../utils/constant/Redux/reducers/User/UserSlice";
 
 const { Text } = Typography;
 
 
-const UserProfile = ({ userData }) => {
+const UserProfile = ({ userData,setMatchedUserName }) => {
+    console.log(userData)
     const { company } = useParams();
     console.log(company);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [formData, setFormData] = useState(null);
+    const [UserImageId, setUserImageId] = useState(null);
 
+
+
+    const dispatch = useDispatch();
+    const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
+    console.log(users)
+
+    const getUser = async () => {
+        const domanWithPort = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
+        const data = await response?.data;
+        dispatch(getAllUser(data));
+    };
+    
+    // console.log(users);
+
+    useEffect(() => {
+        
+        getUser();
+        
+    }, []);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -22,7 +46,7 @@ const UserProfile = ({ userData }) => {
                     `${domainWithPort}/{company}/users`
                 );
                 const allUsers = response.data?.data || [];
-                // console.log(allUsers)
+                console.log(allUsers)
 
                 const matchedUser = allUsers.find(
                     (item) => item.company_uuid?.toString() === company
@@ -39,6 +63,8 @@ const UserProfile = ({ userData }) => {
                     zip: matchedUser?.zip || "",
                     phone: matchedUser?.contact || "",
                 });
+                setUserImageId(matchedUser.uuid);
+                setMatchedUserName?.(matchedUser.name || "");
                 } else {
                     console.warn("Company not found with ID:", company);
                 }
@@ -74,9 +100,6 @@ const UserProfile = ({ userData }) => {
         }
     };
 
-    // const handleModalCancel = () => {
-    //     setIsModalVisible(false);
-    // };
 
     const formFields = [
       {
@@ -142,22 +165,19 @@ const UserProfile = ({ userData }) => {
         setIsModalVisible(true);
     };
 
-    // Handle confirm action in the modal
-    // const handleOk = () => {
-    //     console.log("Form Submitted:", formData);
-    //     setIsModalVisible(false);
-    // };
-
-    // Handle cancel action in the modal
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
     return (
         <div>
-            <Text>User Name : {userData?.name}</Text>
+            {/* <Text>User Name : {userData?.name}</Text> */}
             <h3>User Logo</h3>
-            <LogoUploader />
+            {/* <LogoUploader /> */}
+
+            {users && <LogoUploader path='userprofile' imageId={UserImageId} />}
+
+            
             <DynamicForm
                 formFields={formFields}
                 onSubmit={handleSubmit}
@@ -171,10 +191,7 @@ const UserProfile = ({ userData }) => {
                     justifyContent: "space-between",
                 }}
             >
-                {/* <Button type="primary" onClick={() => handleSubmit(formData)}>
-                    Save
-                </Button>
-                <Button type="default">Cancel</Button> */}
+
             </div>
 
             {/* Modal for confirmation */}

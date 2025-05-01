@@ -4,7 +4,6 @@ import { Form, Input, Select, Button, Card, Row, Col, Switch, Space } from "antd
 const { Option } = Select;
 
 const DynamicForm = ({ formFields, onSubmit, initialValues }) => {
-    const [showAddress, setShowAddress] = useState(false);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -49,18 +48,7 @@ const DynamicForm = ({ formFields, onSubmit, initialValues }) => {
                     </Form.Item>
                 ))}
 
-                    {/* <Form.Item>
-                        <Space style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                            <span>Would you like to add a different address from payment stubs?</span>
-                            <Switch onChange={(checked) => setShowAddress(checked)} />
-                        </Space>
-                    </Form.Item>
-
-                    {showAddress && (
-                        <Form.Item label="Payment Stub Address" name="paymentStubAddress">
-                            <Input.TextArea rows={3} placeholder="You can enter a maximum of 255 characters" />
-                        </Form.Item>
-                    )} */}
+                   
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit">Submit</Button>

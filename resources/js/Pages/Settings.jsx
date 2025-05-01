@@ -9,14 +9,18 @@ import UserProfile from "../Components/SettingsMenu/UserProfile";
 const { Content } = Layout;
 
 const App = () => {
-    // console.log(matchedCompany)
+
+    const [matchedCompanyName, setMatchedCompanyName] = useState("");
+    const [matchedUserName, setMatchedUserName] = useState("");
+
+  
+    
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
     const { checkUser } = useAuth();
 
-    const [userData, setUserData] = useState(null);
-    // console.log(userData)
+    const [userData, setUserData] = useState(null); 
 
     useEffect(() => {
         checkUser()
@@ -47,18 +51,19 @@ const App = () => {
         {
             key: '1',
             label: 'Organization Profile',
-            children: <OrganizationProfile userData={userData} />,
+            children: <OrganizationProfile userData={userData} setMatchedCompanyName={setMatchedCompanyName}/>,
+            
         },
         {
             key: '2',
             label: 'User Profile',
-            children: <UserProfile userData={userData}/>,
+            children: <UserProfile userData={userData} setMatchedUserName={setMatchedUserName}/>,
         },
     ];
     
     const activeLabel = selectedTab === '1'
-        ? (`${userData?.company_name} Profile` || 'Organization Profile')
-        : (`${userData?.name} Profile` || 'User Profile');
+        ? (`${matchedCompanyName} Profile` || 'Organization Profile')
+        : (`${matchedUserName} Profile` || 'User Profile');
 
     return (
         <Layout style={{ padding: "0 16px 16px" }}>

@@ -36,7 +36,6 @@ const App = () => {
     };
 
     const requestSubmitFunction = async (route, values) => {
-        // const domanWithPort = window.location.protocol + '//' + window.location.hostname + (window.location.port ? `:${window.location.port}` : '');
         const domanWithPort = import.meta.env.VITE_API_URL;
         messageApi.open({
             key,
