@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use App\Models\Company;
+use App\Models\ImageCollection;
 use App\Models\Role;
 use App\Models\Team;
 use App\Models\User;
@@ -35,6 +36,8 @@ class RegisterController extends BaseApiController
         if ($request->user()) {
             $data = $request->user();
             $company = Company::where('uuid', $request->user()->company_uuid)->first();
+            $company->ProfilePicture = ImageCollection::where('assoc_uuid', $company->uuid)->where('belongs_to','organization')->first(['image_uuid','path']);
+            $data->company;
             $data->userAuthorized = $company->name === 'inyice-coorporation';
             return $this->sendResponse($data, 'Authenticated user retrieved successfully.');
         } else {
@@ -140,12 +143,18 @@ class RegisterController extends BaseApiController
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = Auth::user();
                 // Prepare response data
+                $user->ProfilePicture = ImageCollection::where('assoc_uuid', $user->uuid)->where('belongs_to','userprofile')->first(['image_uuid','path']);
+                $user->CompanyProfilePicture = ImageCollection::where('assoc_uuid', $user->company_uuid)
+                    ->where('belongs_to', 'organization')
+                    ->first(['image_uuid','path']) ?? null;                
                 $success = [
                     'name' => $user->name,
                     'uuid' => $user->uuid,
                     'email' => $user->email,
                     'company_uuid' => $user->company_uuid,
                     'company_name' => $user->company_name,
+                    'profile_picture' => $user->ProfilePicture,
+                    'company_profile_picture' => $user->CompanyProfilePicture,
                 ];
 
                 // Check company authorization

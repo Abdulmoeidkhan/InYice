@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
     // call this function when you want to authenticate the user
     const logIn = async (data) => {
         if (data) {
+            console.log(data)
             let { name, email, uuid, user_type, userAuthorized } = data;
             setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized })
             navigate(`/client/auth/${data.company_uuid}/dashboard`, { replace: true });

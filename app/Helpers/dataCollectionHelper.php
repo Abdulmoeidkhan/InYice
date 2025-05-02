@@ -12,7 +12,7 @@ if (!function_exists('fetchDataAsPerAuthority')) {
      * @param string $uuid The UUID to check against.
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    function fetchDataAsPerAuthority(string $modelClass, array $relationship = null, ?object $req = null, ?string $company = '', ?string $uuidIdentifier = 'company_uuid',)
+    function fetchDataAsPerAuthority(string $modelClass, array $relationship = [], ?object $req = null, ?string $company = '', ?string $uuidIdentifier = 'company_uuid',)
     {
 
         // Check if the provided class is a valid model

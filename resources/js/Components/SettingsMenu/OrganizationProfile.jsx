@@ -12,7 +12,6 @@
     const { Text } = Typography;
     const OrganizationProfile = ({ userData,setMatchedCompanyName }) => {
 
-    
         const { company } = useParams();
         const [formData, setFormData] = useState({});
         const [isModalVisible, setIsModalVisible] = useState(false);
@@ -120,7 +119,7 @@
 
         return (
             <div>
-                {/* <Text>Org Name : {userData?.company_name}</Text> */}
+                <Text>Org Name : {userData?.company_name}</Text>
                 <h3>Organization Logo</h3>
 
                 {/* {users && <LogoUploader path='organization' imageId={users.uuid} />} */}

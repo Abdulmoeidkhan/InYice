@@ -6,6 +6,7 @@ import axios from "axios";
 const { Text } = Typography;
 
 const LogoUploader = (props) => {
+    console.log(props);
     const [fileList, setFileList] = useState([]);
     const domain = import.meta.env.VITE_API_URL;
 
