@@ -28,15 +28,7 @@ const LogoUploader = (props) => {
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
     };
-
-
-    // useEffect(()=>{
-    //     setFileList([{
-    //         uid: "1",
-    //         name: props.imageId,
-    //         status: "done",
-    //         url: `https://res.cloudinary.com/doluaubbn/image/upload/v${Date.now()}/${props.path}/${props.imageId}.jpg`,        }])
-    // },[props.imageId, props.path])
+ 
 
     useEffect(() => {
         if (props.imageId) {

@@ -11,8 +11,7 @@ const { Text } = Typography;
 
 const UserProfile = ({ userData,setMatchedUserName }) => {
     console.log(userData)
-    const { company } = useParams();
-    console.log(company);
+    const { company } = useParams();    
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [formData, setFormData] = useState(null);
     const [UserImageId, setUserImageId] = useState(null);

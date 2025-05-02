@@ -24,7 +24,7 @@
 
         const dispatch = useDispatch();
         const users = useSelector((state) => state?.AllUsers?.AllUsers?.data );
-        console.log(users)
+        // console.log(users)
 
         const getUser = async () => {
             const domanWithPort = import.meta.env.VITE_API_URL;
