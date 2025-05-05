@@ -5,6 +5,7 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\TeamsController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('checkUser', [RegisterController::class, 'validateUser'])->name('checkUser');
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('/{company}/users', UsersController::class);
+    Route::resource('/{company}/staffs', StaffController::class);
     Route::resource('usersRoles', RolesController::class);
     Route::resource('usersPermissions', PermissionsController::class);
     Route::resource('usersTeams', TeamsController::class);
