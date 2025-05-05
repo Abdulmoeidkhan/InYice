@@ -25,7 +25,11 @@ const App = (props) => {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchValue, setSearchValue] = useState("");
-    const { user } = useAuth();
+    // const { user } = useAuth();
+    // console.log(user)
+
+    const users = useSelector((state) => state.AllUsers.AllUsers );
+        console.log(users)
 
     // user && console.log(user);
 
@@ -76,37 +80,66 @@ const App = (props) => {
         searchFuse(searchValue);
     }, [data, searchValue]);
 
-    // Check Image URL is Valid or not Start
+
+
+    
+    // function checkImageLink(url) {
+    //     console.log(url);
+    //     const img = new Image();
+    //     let isValid = false;
+    //     img.onload = function () {
+    //         isValid = true;
+    //     };
+    //     img.onerror = function () {
+    //         isValid = false;
+    //     };
+    //     let randonNumber = Math.floor(Math.random() * 99) + 1;
+    //     return isValid
+    //         ? url
+    //         : `https://api.dicebear.com/7.x/miniavs/svg?seed=1${randonNumber}`;
+    // }
+
+
+
     function checkImageLink(url) {
-        const img = new Image();
-        let isValid = false;
-        img.onload = function () {
-            isValid = true;
-        };
-        img.onerror = function () {
-            isValid = false;
-        };
-        let randonNumber = Math.floor(Math.random() * 99) + 1;
-        return isValid
-            ? url
-            : `https://api.dicebear.com/7.x/miniavs/svg?seed=1${randonNumber}`;
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = function () {
+                resolve(url);  // Image loaded successfully
+            };
+            img.onerror = function () {
+                const randomNumber = Math.floor(Math.random() * 99) + 1;
+                resolve(`https://api.dicebear.com/7.x/miniavs/svg?seed=1${randomNumber}`);  // Default image if error
+            };
+            img.src = url;  // Start loading the image
+        });
     }
-    // Check Image URL is Valid or not End
 
-    const dispatch = useDispatch();
-    const users = useSelector((state) => state?.AllUsers?.AllUsers);
 
-    const getUser = async () => {
-        const domanWithPort = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
-        const data = await response?.data?.data;
-        dispatch(getAllUser(data));
-    };
-    console.log(users);
 
-    useEffect(() => {
-        getUser();
-    }, []);
+    
+    const [finalImage, setFinalImage] = useState("");
+    
+useEffect(() => {
+    const pfImage = users?.companyPicture?.image_uuid;
+    const Imagepath =  users?.companyPicture?.path;
+
+    console.log(`ImageId`,pfImage)
+    console.log(`path`,Imagepath)
+
+    if (pfImage) {
+        // const url = `https://res.cloudinary.com/doluaubbn/image/upload/userprofile/${pfImage}.jpg`;
+        const url = `https://res.cloudinary.com/doluaubbn/image/upload/${Imagepath}`;
+
+        checkImageLink(url).then((img) => {
+            setFinalImage(img);
+        });
+    } else {
+        const r = Math.floor(Math.random() * 99) + 1;
+        setFinalImage(`https://api.dicebear.com/7.x/miniavs/svg?seed=1${r}`);
+    }
+}, [users]);
+
 
     return (
         <>
@@ -325,15 +358,13 @@ const App = (props) => {
                                     ]}
                                 >
                                     <List.Item.Meta
-                                        avatar={
-                                            props.withPicture ? (
-                                                <Avatar
-                                                    src={checkImageLink(
-                                                        `${props.withPicture}/${props.fieldsToRender[0]}`
-                                                    )}
-                                                    alt="Image or Avatar"
-                                                />
-                                            ) : null
+                                         avatar={
+                                            <Avatar
+                                                src={finalImage}
+                                                alt="Company Logo"
+                                                shape="circle"
+                                                size={48}
+                                            />
                                         }
                                         title={
                                             props.withUri ? (

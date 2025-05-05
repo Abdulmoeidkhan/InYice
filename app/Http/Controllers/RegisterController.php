@@ -36,7 +36,8 @@ class RegisterController extends BaseApiController
         if ($request->user()) {
             $data = $request->user();
             $company = Company::where('uuid', $request->user()->company_uuid)->first();
-            $company->ProfilePicture = ImageCollection::where('assoc_uuid', $company->uuid)->where('belongs_to','organization')->first(['image_uuid','path']);
+            $data->profilePicture = ImageCollection::where('assoc_uuid', $data->uuid)->where('belongs_to','userprofile')->first(['image_uuid','path']);
+            $data->companyPicture = ImageCollection::where('assoc_uuid', $company->uuid)->where('belongs_to','organization')->first(['image_uuid','path']);
             $data->company;
             $data->userAuthorized = $company->name === 'inyice-coorporation';
             return $this->sendResponse($data, 'Authenticated user retrieved successfully.');

@@ -6,9 +6,11 @@ import { useParams } from "react-router";
 import { useAuth } from "../utils/hooks/useAuth";
 import OrganizationProfile from "../Components/SettingsMenu/OrganizationProfile";
 import UserProfile from "../Components/SettingsMenu/UserProfile";
+import { useAuthCheck } from "../Index";
 const { Content } = Layout;
 
 const App = () => {
+    const userData = useAuthCheck();
 
     const [matchedCompanyName, setMatchedCompanyName] = useState("");
     const [matchedUserName, setMatchedUserName] = useState("");
@@ -19,18 +21,6 @@ const App = () => {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
     const { checkUser } = useAuth();
-
-    const [userData, setUserData] = useState(null); 
-
-    useEffect(() => {
-        checkUser()
-            .then((data) => {
-                setUserData(data);
-            })
-            .catch(() => {
-                setUserData(null);
-            });
-    }, []);
     
      
     const [selectedTab, setSelectedTab] = useState("1");

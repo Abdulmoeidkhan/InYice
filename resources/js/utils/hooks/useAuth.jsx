@@ -1,11 +1,15 @@
 import { createContext, useContext, useMemo, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useLocalStorage } from "./useLocalStorage";
+import { useDispatch } from "react-redux";
+import { getAllUser } from "../constant/Redux/reducers/User/UserSlice";
+
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useLocalStorage("inyiceuser", null);
+    
     const navigate = useNavigate();
 
 
@@ -25,6 +29,40 @@ export const AuthProvider = ({ children }) => {
                 return Promise.reject(error);
             });
     }
+
+    // useEffect(() => {
+    //     checkUser(); 
+    // }, []);  
+
+
+//     export const AuthProvider = ({ children }) => {
+//         const [user, setUser] = useLocalStorage("inyiceuser", null);
+ 
+//         const dispatch = useDispatch();
+//         const navigate = useNavigate();
+
+//         // Call checkUser to fetch user data and update Redux and localStorage
+//         const checkUser = () => {
+//             const domainWithPort = import.meta.env.VITE_API_URL;
+//             return axios.get(`${domainWithPort}/checkUser`)
+//                .then(function (response) {
+//                     console.log(response)
+//                     const { name, email, uuid, user_type, userAuthorized, company_uuid ,imageurl } = response.data.data;
+//                     setUser("inyiceuser", { name, email, uuid, user_type, userAuthorized, company_uuid ,imageurl });
+//                     dispatch(getAllUser(response.data.data)); // Dispatch to Redux
+//                     return response.data.data;
+//                 })
+//                 .catch(function (error) {
+//                     setUser("inyiceuser", null);
+//                     dispatch(getAllUser(null)); // Clear Redux state
+//                     return Promise.reject(error);
+//                 });
+//         };
+        
+//  useEffect(() => {
+//         checkUser(); 
+//     }, []);  
+    
 
 
 

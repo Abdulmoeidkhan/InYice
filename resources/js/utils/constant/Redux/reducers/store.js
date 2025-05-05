@@ -7,7 +7,5 @@ import UserSlice from "./User/UserSlice"
 export const store = configureStore({
     reducer:{
         AllUsers:UserSlice,
-        
-    
     },
 })

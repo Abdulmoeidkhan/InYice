@@ -30,6 +30,7 @@ class ImageController extends BaseApiController
     // public function store(Request $request)
     public function store(Request $request)
     {
+        // return $request->all();
         try {
             // Validate the request
             $validator = Validator::make($request->all(), [
@@ -46,17 +47,20 @@ class ImageController extends BaseApiController
             }
 
             // Store the image in Cloudinary
-            $filename = $request->uid.'.'.$request->file('file')->getClientOriginalExtension();
-            $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'),$filename);
+            $filename = $request->uid . '.' . $request->file('file')->getClientOriginalExtension();
+            $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'), $filename);
             $imgDataUpdate = $imgSaved ? ImageCollection::updateOrCreate(
                 [
-                    'assoc_uuid' => $filename,
-                    'belongs_to' => $request->path.'-'.$filename,
-                    'path' => $request->path.'/'.$filename,
+                    'assoc_uuid' => $request->uid, // Matching attributes
                 ],
+                [
+                    'assoc_uuid' => $request->uid, // Matching attributes
+                    'belongs_to' => $request->path,
+                    'path' => $request->path . '/' . $filename,
+                ]
             ) : null;
             // $imgSaved = Storage::disk('local')->putFileAs($request->path, $request->file('file'),$filename);
-            return $imgSaved ? $this->sendResponse($request->path.'/'.$filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
+            return $imgSaved ? $this->sendResponse($request->path . '/' . $filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
         } catch (\Illuminate\Database\QueryException $ex) {
             if ($ex->getCode() == 23000) {
                 return $this->sendError('Database Error: Duplicate entry for role name.', $ex->getMessage(), 422);

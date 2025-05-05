@@ -10,32 +10,34 @@ const { Text } = Typography;
 
 
 const UserProfile = ({ userData,setMatchedUserName }) => {
-    console.log(userData)
+    // console.log(userData)
     const { company } = useParams();    
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [formData, setFormData] = useState(null);
     const [UserImageId, setUserImageId] = useState(null);
-
-
-
-    const dispatch = useDispatch();
-    const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
-    console.log(users)
-
-    const getUser = async () => {
-        const domanWithPort = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
-        const data = await response?.data;
-        dispatch(getAllUser(data));
-    };
     
-    // console.log(users);
+    console.log(UserImageId)
 
-    useEffect(() => {
+
+
+    // const dispatch = useDispatch();
+    // const users = useSelector((state) => state?.AllUsers?.AllUsers?.data);
+    // console.log(users)
+
+    // const getUser = async () => {
+    //     const domanWithPort = import.meta.env.VITE_API_URL;
+    //     const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
+    //     const data = await response?.data;
+    //     dispatch(getAllUser(data));
+    // };
+    
+    // // console.log(users);
+
+    // useEffect(() => {
         
-        getUser();
+    //     getUser();
         
-    }, []);
+    // }, []);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -50,6 +52,8 @@ const UserProfile = ({ userData,setMatchedUserName }) => {
                 const matchedUser = allUsers.find(
                     (item) => item.company_uuid?.toString() === company
                 );
+
+                console.log(matchedUser)
 
                 if (matchedUser) {
                   setFormData({
@@ -73,7 +77,7 @@ const UserProfile = ({ userData,setMatchedUserName }) => {
         };
 
         fetchUser();
-    }, [company]);
+    }, []);
 
 
     const handleOk = async () => {
@@ -174,7 +178,8 @@ const UserProfile = ({ userData,setMatchedUserName }) => {
             <h3>User Logo</h3>
             {/* <LogoUploader /> */}
 
-            {users && <LogoUploader path='userprofile' imageId={UserImageId} />}
+            {/* {users && <LogoUploader path='userprofile' imageId={UserImageId} />} */}
+             <LogoUploader path='userprofile' imageId={UserImageId} />
 
             
             <DynamicForm

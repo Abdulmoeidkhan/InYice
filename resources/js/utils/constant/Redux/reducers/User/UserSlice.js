@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const initialState ={
-    AllUsers: {},
+    AllUsers: [],
 }
 
 const UserSlice = createSlice({
@@ -11,7 +11,8 @@ const UserSlice = createSlice({
     reducers:{
         getAllUser:(state,{payload})=>{
             state.AllUsers = payload;
-        }
+        },
+
 
     }
 })

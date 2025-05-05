@@ -16,7 +16,7 @@ const LogoUploader = (props) => {
 
     const onPreview = async (file) => {
         let src = file.url;
-        
+
         if (!src) {
             src = await new Promise((resolve) => {
                 const reader = new FileReader();
@@ -29,7 +29,7 @@ const LogoUploader = (props) => {
         const imgWindow = window.open(src);
         imgWindow?.document.write(image.outerHTML);
     };
- 
+
 
     useEffect(() => {
         if (props.imageId) {
@@ -38,11 +38,13 @@ const LogoUploader = (props) => {
                     uid: "1",
                     name: props.imageId,
                     status: "done",
-                    url: `https://res.cloudinary.com/doluaubbn/image/upload/v${Date.now()}/${props.path}/${props.imageId}.jpg`, // Check the URL format
+                    url: `https://res.cloudinary.com/doluaubbn/image/upload/v${Date.now()}/${props.path}/${props.imageId}.jpg`,
                 },
             ]);
+        } else {
+            setFileList([]);
         }
-    }, [props.imageId, props.path])
+    }, [props.imageId, props.path]);
 
     return (
         <div style={{ width: "100%" }}>
@@ -74,7 +76,7 @@ const LogoUploader = (props) => {
                                         },
                                     }
                                 );
-                                console.log(res);
+                                
 
                                 onSuccess(res.data);
                             } catch (err) {

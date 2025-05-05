@@ -12,6 +12,10 @@ import Admin from "./Pages/Admin";
 import { useAuth, AuthProvider } from "./utils/hooks/useAuth";
 import { Spin, Flex, } from 'antd';
 import Settings from './Pages/Settings';
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUser } from './utils/constant/Redux/reducers/User/UserSlice';
+import axios from 'axios';
+// import { getAllUser } from "../../utils/constant/Redux/reducers/User/UserSlice";
 
 
 // Utility component for showing a loading spinner
@@ -28,20 +32,72 @@ const LoadingScreen = () => (
 );
 
 // Custom hook to centralize authentication logic
-const useAuthCheck = () => {
-    const { checkUser } = useAuth();
+// const useAuthCheck = () => {
+//     const { checkUser } = useAuth();
+//     const [authState, setAuthState] = useState(null);
+
+//     useEffect(() => {
+//         checkUser()
+//             .then((userChecked) => setAuthState(userChecked))
+//             .catch(() =>
+//                 setAuthState({ company_uuid: null, userAuthorized: false })
+//             );
+//     }, []);
+
+//     return authState;
+// };
+
+
+
+export const useAuthCheck = () => {
+    const dispatch = useDispatch();
+    const userData = useSelector((state) => state.AllUsers.AllUsers); // Fetching user from Redux state
     const [authState, setAuthState] = useState(null);
-
+  
     useEffect(() => {
-        checkUser()
-            .then((userChecked) => setAuthState(userChecked))
-            .catch(() =>
-                setAuthState({ company_uuid: null, userAuthorized: false })
-            );
-    }, []);
-
+      if (!userData || !userData.company_uuid) {
+        // Only fetch if data is not in Redux
+        const fetchUser = async () => {
+          const domain = import.meta.env.VITE_API_URL;
+          try {
+            const response = await axios.get(`${domain}/checkUser`);
+            console.log('api is running',response)
+            const data = response?.data?.data;
+            dispatch(getAllUser(data)); // Dispatch user data to Redux
+            setAuthState(data); // Set authState
+          } catch (error) {
+            setAuthState({ company_uuid: null, userAuthorized: false });
+          }
+        };
+  
+        fetchUser();
+      } else {
+        // If user data exists in Redux, directly use it
+        setAuthState(userData);
+      }
+    }, [userData, dispatch]); // Dependencies array
+  
     return authState;
-};
+  };
+
+// const useAuthCheck = () => {
+//     const userData = useSelector((state) => state.AllUsers.AllUsers);
+//     // console.log(user)
+//     const [authState, setAuthState] = useState(null);
+
+//     useEffect(() => {
+//         if (userData) {
+//             setAuthState(userData);
+//         } else {
+//             setAuthState({ company_uuid: null, userAuthorized: false });
+//         }
+//     }, [userData]);
+
+//     return authState;
+// };
+
+// export default useAuthCheck;
+
 
 // Protected Route: Validates company UUID
 const ProtectedRoute = ({ children }) => {

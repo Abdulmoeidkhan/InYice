@@ -21,16 +21,16 @@
 
         // user && console.log(user);   
 
-        const dispatch = useDispatch();
-        const users = useSelector((state) => state?.AllUsers?.AllUsers?.data );
+        // const dispatch = useDispatch();
+        // const users = useSelector((state) => state.AllUsers.AllUsers );
         // console.log(users)
 
-        const getUser = async () => {
-            const domanWithPort = import.meta.env.VITE_API_URL;
-            const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
-            const data = await response?.data;
-            dispatch(getAllUser(data));
-        };
+        // const getUser = async () => {
+        //     const domanWithPort = import.meta.env.VITE_API_URL;
+        //     const response = await axios.get(`${domanWithPort}/${"checkUser"}`);
+        //     const data = await response?.data;
+        //     dispatch(getAllUser(data));
+        // };
 
 
 
@@ -66,9 +66,9 @@
             };
 
             fetchCompany();
-            getUser();
+            // getUser();
             
-        }, [company]);
+        }, []);
 
 
 
@@ -106,7 +106,7 @@
 
         const formFields = [
             { label: "Organization Name", name: "orgName", type: "text", rule: { required: true, message: "Please enter organization name!" }, placeholder: "Enter Organization Name"  },
-            { label: "Industry", name: "industry", type: "select", rule: { required: true, message: "Please select industry!" }, placeholder: "Select Industry", options: ["Information Tech", "Finance", "Healthcare", "Education"] },
+            { label: "Industry", name: "industry", type: "select", rule: { required: true, message: "Please select industry!" }, placeholder: "Select Industry", options: ["Information Tech", "Finance", "Healthcare", "Education","Aviation"] },
             { label: "Business Type", name: "businessType", type: "select", rule: { required: true, message: "Please select business type!" }, placeholder: "Select Business Type", options: ["Private", "Public", "NGO"] },
             { label: "Location", name: "location", type: "select", rule: { required: true, message: "Please select location!" }, placeholder: "Select Location", options: ["USA", "UK", "India", "Pakistan"] },
             { label: "Address", name: "orgAddress", type: "text", rule: { required: true, message: "Please enter address!" }, placeholder: "Enter Address" },
@@ -119,13 +119,12 @@
 
         return (
             <div>
-                <Text>Org Name : {userData?.company_name}</Text>
+                {/* <Text>Org Name : {userData?.company_name}</Text> */}
                 <h3>Organization Logo</h3>
 
-                {/* {users && <LogoUploader path='organization' imageId={users.uuid} />} */}
 
-                {users && <LogoUploader path='organization'  imageId={companyLogoId} />}
-
+                {/* {users && <LogoUploader path='organization'  imageId={companyLogoId} />} */}
+                 <LogoUploader path='organization'  imageId={companyLogoId} />
                 <DynamicForm formFields={formFields} onSubmit={handleFormSubmit} initialValues={formData} />
 
                 <Modal
