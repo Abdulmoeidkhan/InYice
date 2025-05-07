@@ -11,19 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::create('consumers', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
             $table->uuid('user_uuid')->unique();
-            $table->uuid('company_uuid');
-            $table->string('designation');
-            $table->integer('wage')->default(0);
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-            $table->string('remarks')->nullable();
+            $table->string('consumer_contact')->nullable();
+            $table->string('consumer_email')->nullable();
+            $table->string('supplier_uids');
+            $table->string('consumer_remarks')->nullable();
+            $table->string('supplier_remarks')->nullable();
             $table->timestamps();
-            $table->foreign('company_uuid')->references('uuid')->on('companies')
-                ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_uuid')->references('uuid')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('staff');
+        Schema::dropIfExists('consumers');
     }
 };

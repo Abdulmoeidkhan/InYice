@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Staff extends Model
+class Consumer extends Model
 {
     use HasFactory;
 
@@ -17,11 +17,11 @@ class Staff extends Model
      */
     protected $fillable = [
         'user_uuid',
-        'company_uuid',
-        'designation',
-        'wage',
-        'timing',
-        'remarks',
+        'consumer_contact',
+        'consumer_email',
+        'supplier_uids',
+        'consumer_remarks',
+        'supplier_remarks',
     ];
 
     /**

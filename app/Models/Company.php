@@ -45,7 +45,7 @@ class Company extends Model
     {
         static::creating(function ($company) {
             $company->uuid = (string) Str::uuid(); // Generate a UUID
-            $company->user_uuid = $company->uuid; // Generate a UUID
+            $company->user_uuid = (string) Str::uuid(); // Generate a UUID
         });
 
         static::creating(function ($company) {

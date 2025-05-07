@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\BaseApiController as BaseApiController;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
-use App\Models\Staff;
+use App\Models\Consumer;
 
-class StaffController extends BaseApiController
+class ConsumerController extends BaseApiController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $req, $staff = '')
+    public function index(Request $req, $consumer = '')
     {
-        $staffs = fetchDataAsPerAuthority(Staff::class, [], $req, $staff, 'uuid');
+        $staffs = fetchDataAsPerAuthority(Consumer::class, [], $req, $consumer, 'uuid');
         // $companies = Company::all();
         return $this->sendResponse(UserResource::collection($staffs), 'Staff retrieved successfully.');
     }
@@ -38,7 +38,7 @@ class StaffController extends BaseApiController
     /**
      * Display the specified resource.
      */
-    public function show(Staff $staff)
+    public function show(Consumer $consumer)
     {
         //
     }
@@ -46,7 +46,7 @@ class StaffController extends BaseApiController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Staff $staff)
+    public function edit(Consumer $consumer)
     {
         //
     }
@@ -54,7 +54,7 @@ class StaffController extends BaseApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Staff $staff)
+    public function update(Request $request, Consumer $consumer)
     {
         //
     }
@@ -62,7 +62,7 @@ class StaffController extends BaseApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Staff $staff)
+    public function destroy(Consumer $consumer)
     {
         //
     }
