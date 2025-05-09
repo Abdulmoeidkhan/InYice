@@ -33,6 +33,8 @@ class User extends Authenticatable implements LaratrustUser
         'uuid',
         'email',
         'password',
+        'contact',
+        'image', 
     ];
 
     /**
@@ -79,5 +81,15 @@ class User extends Authenticatable implements LaratrustUser
                 $user->uuid = (string) Str::uuid();
             }
         });
+    }
+
+    public function staff()
+    {
+        return $this->hasOne(Staff::class,'user_uuid', 'uuid');
+    }
+
+    public function consumer()
+    {
+        return $this->hasOne(Consumer::class,'user_uuid', 'uuid');
     }
 }

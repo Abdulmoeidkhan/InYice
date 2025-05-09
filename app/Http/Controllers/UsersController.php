@@ -24,7 +24,7 @@ class UsersController extends BaseApiController
         $sortedUsers = [];
         // return $users;
         foreach ($users as $key => $user) {
-            $requiredKeys = ['uuid', 'name', 'email', 'company_name', 'company_uuid', 'user_type','role_id'];
+            $requiredKeys = ['uuid', 'name', 'email', 'company_name', 'company_uuid', 'user_type', 'role_id'];
 
             // Filter the user's data
             $sortedData = array_intersect_key($user->toArray(), array_flip($requiredKeys));
@@ -57,7 +57,8 @@ class UsersController extends BaseApiController
 
     public function index(Request $req, $company)
     {
-        $relationships = ['roles', 'permissions'];
+
+        $relationships = ['roles', 'permissions', 'staff', 'consumer'];
         $users = fetchDataAsPerAuthority(ModelsUser::class, $relationships, $req, $company);
         $sortedUsers = $this->dataSortingForAPIResponse($users);
         // foreach ($users as $key => $user) {
@@ -88,46 +89,31 @@ class UsersController extends BaseApiController
         return $this->sendResponse(UserResource::collection($sortedUsers), 'Users retrieved successfully.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $request['company_name'] = $request->user()->company_name;
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'company_name' => 'required|string|min:5|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
+            'contact' => 'nullable|string',
             'branch_id' => 'required|integer',
-            'permission_name' => 'required|integer',
-            'role_name' => 'required|integer',
+            'permission_id' => 'required|integer',
+            'role_id' => 'required|integer',
         ]);
-        // return $request->all();
-        // return $validator->validated();
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         } else {
             try {
-                if ($request->user()->company_name) {
-                    // return $validator->validated();
-                    // return bcrypt(Str::random(8));
-                    // return ['company_uuid' => $request->user()->company_uuid, ...$validator->validated()];
-                    $user = ModelsUser::create(['company_uuid' => $request->user()->company_uuid, ...$validator->validated(), 'password' => bcrypt(Str::random(8))]);
-                    $team = Team::where('id', $request->branch_id)->first();
-                    $role = Role::where('id', $request->role_name)->first();
-                    $permission = Permission::where('id', $request->permission_name)->first();
-                    $user->addRole($role, $team);
-                    $user->givePermission($permission, $team);
-                    return $this->sendResponse($user, 'User register successfully.');
-                }
+                $user = ModelsUser::create([...$validator->validated(), 'password' => bcrypt(Str::random(8))]);
+                $team = Team::where('id', $request->branch_id)->first();
+                $role = Role::where('id', $request->role_id)->first();
+                $permission = Permission::where('id', $request->permission_id)->first();
+                $user->addRole($role, $team);
+                $user->givePermission($permission, $team);
+                return $this->sendResponse($user, 'User register successfully.');
             } catch (\Illuminate\Database\QueryException $ex) {
                 // Handle specific database errors
                 if ($ex->getCode() == 23000) { // Duplicate entry error (unique constraint violation)
@@ -151,14 +137,6 @@ class UsersController extends BaseApiController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $company, string $id)
@@ -174,36 +152,36 @@ class UsersController extends BaseApiController
             'role_id' => 'nullable|min:1',
             'permission_id' => 'nullable|min:1',
         ]);
-        
+
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors(), 422);
         }
-        
+
         if (!$request->has('branch_id') || empty($request->branch_id)) {
-            $request['branch_id']=$request->user()->roles[0]->team_id;
+            $request['branch_id'] = $request->user()->roles[0]->team_id;
         }
 
         if (!$request->has('role_id') || empty($request->role_id)) {
-            $request['role_id']=$request->user()->roles[0]->role_id;
+            $request['role_id'] = $request->user()->roles[0]->role_id;
         }
 
         if (!$request->has('permission_id') || empty($request->permission_id)) {
-            $request['permission_id']=$request->user()->permissions[0]->permission_id;
+            $request['permission_id'] = $request->user()->permissions[0]->permission_id;
         }
 
         $team = Team::where('id', $request->branch_id)->orWhere('display_name', $request->branch_id)->first();
         $role = Role::where('id', $request->role_id)->orWhere('display_name', $request->role_display_name)->first();
         $permission = Permission::where('id', $request->permission_id)->orWhere('display_name', $request->permission_display_name)->first();
 
-// return $request->user();
+        // return $request->user();
         if (is_null($team) || is_null($role) || is_null($permission)) {
             return $this->sendError('Validation Error.', 'Invalid team, role, or permission.', 422);
         }
 
 
         try {
-            $user->update(['name' => $request['name'], 'email' => $request['email']]);
+            $user->update(['name' => $request['name'], 'email' => $request['email'], 'contact' => $request['contact']]);
             $user->roles()->detach();
             $user->permissions()->detach();
             $user->addRole($role, $team);
@@ -236,6 +214,5 @@ class UsersController extends BaseApiController
         } catch (\Exception $ex) {
             return $this->sendError('An error occurred while deleting the user.', $ex->getMessage(), 422);
         }
-        // return $request->all();
     }
 }

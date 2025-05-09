@@ -12,7 +12,7 @@ if (!function_exists('fetchDataAsPerAuthority')) {
      * @param string $uuid The UUID to check against.
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    function fetchDataAsPerAuthority(string $modelClass, array $relationship = [], ?object $req = null, ?string $company = '', ?string $uuidIdentifier = 'company_uuid',)
+    function fetchDataAsPerAuthority(string $modelClass, array $relationship = [], ?object $req = null, ?string $company = '', ?string $identifier = 'company_uuid',)
     {
 
         // Check if the provided class is a valid model
@@ -22,6 +22,7 @@ if (!function_exists('fetchDataAsPerAuthority')) {
 
         // Search Parameter 
         $dataToBeCheck = Company::where('name', 'inyice-coorporation')->first('uuid');
+        // $user
         $user = null;
         if ($req) {
             $user = $req->user();
@@ -30,19 +31,19 @@ if (!function_exists('fetchDataAsPerAuthority')) {
         }
 
         // Handle data fetching based on user type
-        if ($user->company_uuid === $dataToBeCheck->uuid) {
+        if ($company === $dataToBeCheck->uuid) {
 
             $validCompanyData = strlen($company) > 0 ? Company::where('uuid', $company)->first('uuid') : false;
             // Fetch all data for primary users
             if ($validCompanyData) {
-                return $relationship ? $modelClass::with($relationship)->where($uuidIdentifier, $company)->get() : $modelClass::where($uuidIdentifier, $company)->get();
+                return $relationship ? $modelClass::with($relationship)->where($identifier, $company)->get() : $modelClass::where($identifier, $company)->get();
             } else {
                 return $relationship ? $modelClass::with($relationship)->get() : $modelClass::all();
             }
         } else {
             // Fetch selective data for other users
-            return $relationship ? $modelClass::where($uuidIdentifier, $user->company_uuid)->with($relationship)->get() : $modelClass::where($uuidIdentifier, $user->company_uuid)->get();
-            // return $modelClass::where($uuidIdentifier, $dataToBeCheck->uuid)->get();
+            return $relationship ? $modelClass::where($identifier, $company)->with($relationship)->get() : $modelClass::where($identifier, $company)->get();
+            // return $modelClass::where($identifier, $dataToBeCheck->uuid)->get();
         }
     }
 }

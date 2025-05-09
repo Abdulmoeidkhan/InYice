@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use App\Models\Company;
-use App\Models\ImageCollection;
 use App\Models\Role;
 use App\Models\Staff;
 use App\Models\Team;
@@ -37,19 +36,16 @@ class RegisterController extends BaseApiController
         if ($request->user()) {
             $data = (object)[];
             $user = $request->user();
-            $data->user = $user;
-            if ($user->user_type === 0) {
-                $data->staff = Staff::where('user_uuid', $user->uuid)->first();
-                $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
-                unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
-                unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
-                unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
-            }
+            // $data->user = $user;
+            $data = User::where('uuid', $user->uuid)->with(['staff', 'consumer', 'roles', 'permissions'])->first();
+            $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
+            // if ($user->user_type === 0) {
+            //     $data->staff = Staff::where('user_uuid', $user->uuid)->first();
+            //     unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
+            //     unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
+            //     unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
+            // }
             $data->userAuthorized = $data->company->name === 'inyice-coorporation';
-            $data->user->profilePicture = ImageCollection::where('assoc_uuid', $user->uuid)->where('belongs_to', 'userprofile')->first(['image_uuid', 'path']);
-            $data->company->profilePicture = ImageCollection::where('assoc_uuid', $data->staff->company_uuid)
-                ->where('belongs_to', 'organization')
-                ->first(['image_uuid', 'path']) ?? null;
             return $this->sendResponse($data, 'Authenticated user retrieved successfully.');
         } else {
             return $this->sendError('No User Found.', ['error' => 'Unable to Find User'], 401);
@@ -93,7 +89,7 @@ class RegisterController extends BaseApiController
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'company_name' => 'required|string|min:5|max:255|unique:users,company_name',
+            'company_name' => 'required|string|min:5|max:255|unique:companies,name',
             'email' => 'required|email',
             'password' => 'required|min:8',
             'c_password' => 'required|same:password',
@@ -108,18 +104,19 @@ class RegisterController extends BaseApiController
                 $input['password'] = bcrypt($input['password']);
                 $company = Company::create(['name' => strtolower(str_replace(' ', '-', $input['company_name'])), 'display_name' => $input['company_name'], 'email' => $input['email']]);
                 if ($company) {
-                    $user = User::create(['uuid' => $company->user_uuid, ...$validator->validated(), 'password' => $input['password']]);
+                    $user = User::create(['uuid' => $company->owner_uuid, ...$validator->validated(), 'password' => $input['password']]);
                     if ($user) {
                         $team = Team::firstOrCreate(['name' => 'main', 'display_name' => 'Main']);
-                        $staffData = Staff::firstOrCreate(['designation' => 'Director', 'user_uuid' => $company->user_uuid, 'company_uuid' => $company->uuid]);
                         $adminRole = Role::firstOrCreate(['name' => 'owner', 'display_name' => 'Owner']);
                         $adminPermission = Permission::firstOrCreate(['name' => 'all-access', 'display_name' => 'All Access']);
                         $user->addRole($adminRole, $team);
                         $user->givePermission($adminPermission, $team);
+                        $staffData = Staff::firstOrCreate(['designation' => 'Director', 'email' => $input['email'], 'user_uuid' => $company->owner_uuid, 'company_uuid' => $company->uuid]);
                         // $success['user'] =  ['name' => $user->name, 'email' => $user->email, 'uuid' => $company->user_uuid];
                         // $success['company'] =  ['company_name' => $company->display_name, 'code' => $company->code, 'uuid' => $company->uuid];
                         // $success['staff'] =  ['designation' => $staffData->designation, 'uuid' => $staffData->uuid];
-                        $loginData=$this->login($request);
+                        // return $loginData;
+                        $loginData = $this->login($request);
                         $loginDataArray = json_decode($loginData->getContent(), true);
                         return $this->sendResponse($loginDataArray['data'], 'User register successfully.');
                     }
@@ -127,7 +124,7 @@ class RegisterController extends BaseApiController
             } catch (\Illuminate\Database\QueryException $ex) {
                 // Handle specific database errors
                 if ($ex->getCode() == 23000) { // Duplicate entry error (unique constraint violation)
-                    return $this->sendError('Database Error: Duplicate entry for role name.', $ex, 422);
+                    return $this->sendError('Database Error: Something Went Wrong', $ex, 422);
                 }
 
                 // General database error
@@ -154,16 +151,24 @@ class RegisterController extends BaseApiController
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $data = (object)[];
                 $user = Auth::user();
-                $data->user = $user;
-                if ($user->user_type === 0) {
-                    $data->staff = Staff::where('user_uuid', $user->uuid)->first();
-                    $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
-                    unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
-                    unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
-                    unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
-                }
-                // elseif($user->user_type === 1){
+                // $data->user = $user;
+                $data = User::where('uuid', $user->uuid)->with(['staff', 'consumer', 'roles', 'permissions'])->first();
+                $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
+                
+                // return $data;
 
+                // if ($user->user_type === 0) {
+                //     $data->staff = Staff::where('user_uuid', $user->uuid)->first();
+                //     unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
+                //     unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
+                //     unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
+                // }
+                // elseif($user->user_type === 1){
+                //     $data->staff = Staff::where('user_uuid', $user->uuid)->first();
+                //     $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
+                //     unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
+                //     unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
+                //     unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
                 // };
 
 
@@ -171,14 +176,10 @@ class RegisterController extends BaseApiController
                 if ($request->hasSession()) {
                     $request->session()->regenerate();
                 } else {
-                    $user->token =  $user->createToken($user->name)->plainTextToken;
+                    $data->token =  $user->createToken($user->name)->plainTextToken;
                 }
 
                 $data->userAuthorized = $data->company->name === 'inyice-coorporation';
-                $data->user->profilePicture = ImageCollection::where('assoc_uuid', $user->uuid)->where('belongs_to', 'userprofile')->first(['image_uuid', 'path']);
-                $data->company->profilePicture = ImageCollection::where('assoc_uuid', $data->staff->company_uuid)
-                    ->where('belongs_to', 'organization')
-                    ->first(['image_uuid', 'path']) ?? null;
                 return $this->sendResponse($data, 'User login successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);

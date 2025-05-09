@@ -19,13 +19,6 @@ class BusinessKeywordsController  extends BaseApiController
         return $this->sendResponse(UserResource::collection($businessKeywords), 'Business Keywords retrieved successfully.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -63,13 +56,6 @@ class BusinessKeywordsController  extends BaseApiController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BusinessKeywords $businessKeywords)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

@@ -19,13 +19,6 @@ class PermissionsController extends BaseApiController
         return $this->sendResponse(UserResource::collection($permissions), 'Permissions retrieved successfully.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -64,13 +57,6 @@ class PermissionsController extends BaseApiController
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

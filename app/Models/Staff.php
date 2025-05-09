@@ -19,6 +19,9 @@ class Staff extends Model
         'user_uuid',
         'company_uuid',
         'designation',
+        'email',
+        'contact',
+        'status',
         'wage',
         'timing',
         'remarks',
@@ -39,5 +42,11 @@ class Staff extends Model
         static::creating(function ($staff) {
             $staff->uuid = (string) Str::uuid(); // Generate a UUID
         });
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_uuid', 'uuid');
     }
 }

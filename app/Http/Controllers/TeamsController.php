@@ -10,21 +10,13 @@ use App\Models\Team;
 
 class TeamsController extends BaseApiController
 {
-   /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $teams = Team::all();
         return $this->sendResponse(UserResource::collection($teams), 'Teams retrieved successfully.');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -60,14 +52,6 @@ class TeamsController extends BaseApiController
      * Display the specified resource.
      */
     public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
     {
         //
     }

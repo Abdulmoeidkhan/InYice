@@ -15,16 +15,19 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->uuid('user_uuid')->unique();
-            $table->uuid('company_uuid');
+            $table->uuid('company_uuid')->nullable();
             $table->string('designation');
+            $table->string('email')->unique();
+            $table->string('contact')->nullable();
             $table->integer('wage')->default(0);
+            $table->integer('status')->default(1);
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
-            $table->foreign('company_uuid')->references('uuid')->on('companies')
-                ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_uuid')->references('uuid')->on('users')
+                ->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('company_uuid')->references('uuid')->on('companies')
                 ->onUpdate('cascade')->onDelete('cascade');
         });
     }

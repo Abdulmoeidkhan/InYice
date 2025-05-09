@@ -6,23 +6,12 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\BaseApiController as BaseApiController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserResource;
-use App\Models\ImageCollection;
-
-
-
-
-
 use Illuminate\Http\Request;
+use App\Models\Company;
+use App\Models\User;
 
 class ImageController extends BaseApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,18 +38,15 @@ class ImageController extends BaseApiController
             // Store the image in Cloudinary
             $filename = $request->uid . '.' . $request->file('file')->getClientOriginalExtension();
             $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'), $filename);
-            $imgDataUpdate = $imgSaved ? ImageCollection::updateOrCreate(
-                [
-                    'assoc_uuid' => $request->uid, // Matching attributes
-                ],
-                [
-                    'assoc_uuid' => $request->uid, // Matching attributes
-                    'belongs_to' => $request->path,
-                    'path' => $request->path . '/' . $filename,
-                ]
-            ) : null;
+            // Update only the image column in the users table
+            $imgUpdate = (object)[];
+            if ($imgSaved && $request->path == 'usersCompanies') {
+                $imgUpdate = User::where('uuid', $request->uid)->update(['image' => $request->path . '/' . $filename]);
+            } elseif ($imgSaved &&  $request->path == 'usersCompanies') {
+                $imgUpdate = Company::where('uuid', $request->uid)->update(['image' => $request->path . '/' . $filename]);
+            }
             // $imgSaved = Storage::disk('local')->putFileAs($request->path, $request->file('file'),$filename);
-            return $imgSaved ? $this->sendResponse($request->path . '/' . $filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
+            return $imgSaved && $imgUpdate ? $this->sendResponse($request->path . '/' . $filename, 'Image updated successfully.') : $this->sendError('something Went Wrong');
         } catch (\Illuminate\Database\QueryException $ex) {
             if ($ex->getCode() == 23000) {
                 return $this->sendError('Database Error: Duplicate entry for role name.', $ex->getMessage(), 422);
@@ -69,19 +55,4 @@ class ImageController extends BaseApiController
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

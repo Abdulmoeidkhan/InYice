@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->uuid('user_uuid')->unique();
+            $table->uuid('owner_uuid')->unique();
             $table->string('name')->unique();
             $table->string('display_name')->unique();
             $table->string('email')->unique();
+            $table->string('image')->nullable();
             $table->string('contact')->nullable();
             $table->string('industry')->nullable();
             $table->string('code')->nullable();

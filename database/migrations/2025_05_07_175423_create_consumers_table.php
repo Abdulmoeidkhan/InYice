@@ -14,12 +14,9 @@ return new class extends Migration
         Schema::create('consumers', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->uuid('user_uuid')->unique();
+            $table->uuid('user_uuid')->nullable();
             $table->string('consumer_contact')->nullable();
             $table->string('consumer_email')->nullable();
-            $table->string('supplier_uids');
-            $table->string('consumer_remarks')->nullable();
-            $table->string('supplier_remarks')->nullable();
             $table->timestamps();
             $table->foreign('user_uuid')->references('uuid')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');
