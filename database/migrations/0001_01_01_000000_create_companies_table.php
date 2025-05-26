@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

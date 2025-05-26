@@ -38,14 +38,8 @@ class RegisterController extends BaseApiController
             $user = $request->user();
             // $data->user = $user;
             $data = User::where('uuid', $user->uuid)->with(['staff', 'consumer', 'roles', 'permissions'])->first();
-            $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
-            // if ($user->user_type === 0) {
-            //     $data->staff = Staff::where('user_uuid', $user->uuid)->first();
-            //     unset($data->staff->user_uuid, $data->staff->company_uuid, $data->staff->created_at, $data->staff->updated_at);
-            //     unset($data->company->user_uuid, $data->company->created_at, $data->company->updated_at);
-            //     unset($data->user->email_verified_at, $data->user->created_at, $data->user->updated_at);
-            // }
-            $data->userAuthorized = $data->company->name === 'inyice-coorporation';
+            $data->company = isset($data->staff) ? Company::where('uuid', $data->staff->company_uuid)->first() : [];
+            $data->userAuthorized = isset($data->company->name) ? $data->company->name === 'inyice-coorporation' : false;
             return $this->sendResponse($data, 'Authenticated user retrieved successfully.');
         } else {
             return $this->sendError('No User Found.', ['error' => 'Unable to Find User'], 401);
@@ -105,13 +99,13 @@ class RegisterController extends BaseApiController
                 $company = Company::create(['name' => strtolower(str_replace(' ', '-', $input['company_name'])), 'display_name' => $input['company_name'], 'email' => $input['email']]);
                 if ($company) {
                     $user = User::create(['uuid' => $company->owner_uuid, ...$validator->validated(), 'password' => $input['password']]);
-                    if ($user) {
+                    $staffData = $user ? Staff::firstOrCreate(['designation' => 'Director', 'email' => $input['email'], 'user_uuid' => $company->owner_uuid, 'company_uuid' => $company->uuid]) : null;
+                    if ($staffData) {
                         $team = Team::firstOrCreate(['name' => 'main', 'display_name' => 'Main']);
                         $adminRole = Role::firstOrCreate(['name' => 'owner', 'display_name' => 'Owner']);
                         $adminPermission = Permission::firstOrCreate(['name' => 'all-access', 'display_name' => 'All Access']);
                         $user->addRole($adminRole, $team);
                         $user->givePermission($adminPermission, $team);
-                        $staffData = Staff::firstOrCreate(['designation' => 'Director', 'email' => $input['email'], 'user_uuid' => $company->owner_uuid, 'company_uuid' => $company->uuid]);
                         // $success['user'] =  ['name' => $user->name, 'email' => $user->email, 'uuid' => $company->user_uuid];
                         // $success['company'] =  ['company_name' => $company->display_name, 'code' => $company->code, 'uuid' => $company->uuid];
                         // $success['staff'] =  ['designation' => $staffData->designation, 'uuid' => $staffData->uuid];
@@ -153,9 +147,9 @@ class RegisterController extends BaseApiController
                 $user = Auth::user();
                 // $data->user = $user;
                 $data = User::where('uuid', $user->uuid)->with(['staff', 'consumer', 'roles', 'permissions'])->first();
-                $data->company = Company::where('uuid', $data->staff->company_uuid)->first();
-                
-                // return $data;
+                // return $user;
+
+
 
                 // if ($user->user_type === 0) {
                 //     $data->staff = Staff::where('user_uuid', $user->uuid)->first();
@@ -178,8 +172,9 @@ class RegisterController extends BaseApiController
                 } else {
                     $data->token =  $user->createToken($user->name)->plainTextToken;
                 }
-
-                $data->userAuthorized = $data->company->name === 'inyice-coorporation';
+                $data->company = isset($data->staff) ? Company::where('uuid', $data->staff->company_uuid)->first() : [];
+                $data->userAuthorized = isset($data->company->name) ? $data->company->name === 'inyice-coorporation' : false;
+                // $data->userAuthorized = $data->company->name === 'inyice-coorporation';
                 return $this->sendResponse($data, 'User login successfully.');
             } else {
                 return $this->sendError('Unauthorised.', ['error' => 'Invalid Credentials']);

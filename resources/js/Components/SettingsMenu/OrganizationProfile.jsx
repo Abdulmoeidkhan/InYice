@@ -38,7 +38,7 @@
             const fetchCompany = async () => {
                 try {
                     const domain = import.meta.env.VITE_API_URL;
-                    const response = await axios.get(`${domain}/usersCompanies`);
+                    const response = await axios.get(`${domain}/companies`);
                     const allCompanies = response.data?.data || [];
                     console.log(allCompanies)
                     const matchedCompany = allCompanies.find((item) => item.uuid?.toString() === company);
@@ -88,7 +88,7 @@
                 };
                 console.log(payload)
 
-                const response = await axios.put(`${domain}/usersCompanies/${company}`, payload);
+                const response = await axios.put(`${domain}/companies/${company}`, payload);
                 console.log(response) 
 
                 console.log("Update success:", response.data);

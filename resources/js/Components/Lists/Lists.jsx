@@ -243,7 +243,7 @@ useEffect(() => {
                                     actions={[
                                         props.route === "usersRoles" ||
                                         props.route === "usersPermissions" ||
-                                        props.route === "usersCompanies" ||
+                                        props.route === "companies" ||
                                         props.route === "usersTeams" ||
                                         props.route === "usersPermissions" ||
                                         props.route === "usersPermissions" ? (

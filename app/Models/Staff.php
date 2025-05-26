@@ -23,7 +23,8 @@ class Staff extends Model
         'contact',
         'status',
         'wage',
-        'timing',
+        'start_time',
+        'end_time',
         'remarks',
     ];
 
@@ -48,5 +49,10 @@ class Staff extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_uuid', 'uuid');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_uuid', 'uuid');
     }
 }

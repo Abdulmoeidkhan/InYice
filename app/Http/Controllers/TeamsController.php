@@ -53,7 +53,8 @@ class TeamsController extends BaseApiController
      */
     public function show(string $id)
     {
-        //
+        $teams = Team::where('id', $id)->get();
+        return $this->sendResponse(UserResource::collection($teams), 'Teams retrieved successfully.');
     }
 
     /**
@@ -68,8 +69,8 @@ class TeamsController extends BaseApiController
         }
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:teams,name,' . $id . ',id',
-            'display_name' => 'string|min:3|unique:teams,display_name,' . $id . ',id',
+            'name' => 'sometimes|string|max:255|unique:teams,name,' . $id . ',id',
+            'display_name' => 'sometimes|string|min:3|unique:teams,display_name,' . $id . ',id',
             'description' => 'nullable|string|min:10',
         ]);
 

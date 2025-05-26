@@ -24,12 +24,12 @@ Route::controller(RegisterController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('checkUser', [RegisterController::class, 'validateUser'])->name('checkUser');
     Route::post('logout', [RegisterController::class, 'logout']);
-    Route::resource('/{company}/users', UsersController::class);
+    Route::resource('/users', UsersController::class);
     Route::resource('/{company}/staffs', StaffController::class);
     Route::resource('/{company}/consumers', ConsumerController::class);
     Route::resource('usersRoles', RolesController::class);
     Route::resource('usersPermissions', PermissionsController::class);
     Route::resource('usersTeams', TeamsController::class);
-    Route::resource('usersCompanies', CompanyController::class);
+    Route::resource('companies', CompanyController::class);
     Route::resource('foreignImages', ImageController::class);
 });

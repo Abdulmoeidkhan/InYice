@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->uuid('user_uuid')->nullable();
-            $table->string('consumer_contact')->nullable();
-            $table->string('consumer_email')->nullable();
+            $table->string('consumer_name');
+            $table->string('consumer_contact');
+            $table->integer('status')->default(1);
+            $table->string('consumer_email')->unique();
             $table->timestamps();
             $table->foreign('user_uuid')->references('uuid')->on('users')
                 ->onUpdate('cascade')->onDelete('cascade');

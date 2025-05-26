@@ -20,6 +20,7 @@ class Consumer extends Model
      */
     protected $fillable = [
         'user_uuid',
+        'consumer_name',
         'consumer_contact',
         'consumer_email',
     ];

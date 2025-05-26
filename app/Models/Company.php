@@ -59,6 +59,15 @@ class Company extends Model
      */
     public function consumer()
     {
-        return $this->belongsToMany(Consumer::class, 'company_consumers', 'consumer_id', 'company_id');
+        
+        return $this->belongsToMany(Consumer::class, 'company_consumers', 'company_id', 'consumer_id');
+    }
+
+    /**
+     * The Staff that belong to the companies.
+     */
+    public function staff()
+    {
+        return $this->hasOne(Staff::class, 'company_uuid', 'uuid');
     }
 }

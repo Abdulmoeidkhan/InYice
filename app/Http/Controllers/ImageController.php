@@ -40,9 +40,9 @@ class ImageController extends BaseApiController
             $imgSaved = Storage::disk('cloudinary')->putFileAs($request->path, $request->file('file'), $filename);
             // Update only the image column in the users table
             $imgUpdate = (object)[];
-            if ($imgSaved && $request->path == 'usersCompanies') {
+            if ($imgSaved && $request->path == 'companies') {
                 $imgUpdate = User::where('uuid', $request->uid)->update(['image' => $request->path . '/' . $filename]);
-            } elseif ($imgSaved &&  $request->path == 'usersCompanies') {
+            } elseif ($imgSaved &&  $request->path == 'companies') {
                 $imgUpdate = Company::where('uuid', $request->uid)->update(['image' => $request->path . '/' . $filename]);
             }
             // $imgSaved = Storage::disk('local')->putFileAs($request->path, $request->file('file'),$filename);

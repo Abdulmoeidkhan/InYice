@@ -177,7 +177,7 @@ const App = () => {
                                 withUri='client/auth'
                                 withPicture={false}
                                 listTitle='Company'
-                                route='usersCompanies'
+                                route='companies'
                                 parentState={refreshData}
                                 fieldsToRender={['uuid', 'name', 'display_name', 'email', 'contact', 'dashboard']}
                                 deleteComponentEssentials={{ func: deleteData }}
