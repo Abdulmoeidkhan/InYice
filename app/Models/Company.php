@@ -30,6 +30,7 @@ class Company extends Model
         'industry',
         'city',
         'address',
+        'status',
     ];
 
     /**
