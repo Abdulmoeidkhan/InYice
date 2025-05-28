@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Breadcrumb, Layout, theme } from 'antd';
+import Itinerary from '../utils/constant/PNRextract/Itinerary';
 const { Content } = Layout;
 
 
@@ -41,6 +42,8 @@ const App = () => {
                 }}
             >
                 About
+
+                <Itinerary/>
             </Content>
         </Layout>
     );

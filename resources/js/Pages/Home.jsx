@@ -1,5 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Layout, theme } from 'antd';
+import PNRconverter from '../utils/constant/PNRextract/PNRconverter';
 const { Content } = Layout;
 
 
@@ -42,6 +43,8 @@ const App = () => {
                 }}
             >
                 Home
+
+                <PNRconverter/>
             </Content>
         </Layout>
     );
