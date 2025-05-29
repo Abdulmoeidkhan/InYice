@@ -51,7 +51,7 @@ class Company extends Model
         });
 
         static::creating(function ($company) {
-            $company->code = strtoupper(Str::random(2)) . str_pad(mt_rand(0, 99999999), 8, '0', STR_PAD_LEFT);
+            $company->code = strtoupper(Str::random(2)) . str_pad(mt_rand(0, 99999999), 4, '0', STR_PAD_LEFT);
         });
     }
 

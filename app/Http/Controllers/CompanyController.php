@@ -106,7 +106,6 @@ class CompanyController extends BaseApiController
     public function update(Request $req, string $uid)
     {
 
-        // Working on this started
         $company = Company::where('uuid', $uid)->first();
 
 

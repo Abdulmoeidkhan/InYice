@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ConsumerController;
 use App\Http\Controllers\ImageController;
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('checkUser', [RegisterController::class, 'validateUser'])->name('checkUser');
     Route::post('logout', [RegisterController::class, 'logout']);
     Route::resource('/users', UsersController::class);
+    Route::resource('/buyers', BuyerController::class);
     Route::resource('/{company}/staffs', StaffController::class);
     Route::resource('/{company}/consumers', ConsumerController::class);
     Route::resource('usersRoles', RolesController::class);
